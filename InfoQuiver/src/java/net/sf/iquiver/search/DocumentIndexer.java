@@ -89,32 +89,48 @@ public class DocumentIndexer
     private org.apache.lucene.document.Document convertDocument( Document doc )
     {
         org.apache.lucene.document.Document lDoc = new org.apache.lucene.document.Document();
+        StringBuffer sb = new StringBuffer();
 
         lDoc.add( Field.Keyword( "uid", doc.getUID() ) );
+        sb.append( doc.getUID());
+        sb.append(" ");
 
         if (doc.getAuthor() != null)
         {
             lDoc.add( Field.Text( "author", doc.getAuthor() ) );
+            sb.append( doc.getAuthor());
+            sb.append(" ");            
         }
         if (doc.getName() != null)
         {
             lDoc.add( Field.Text( "name", doc.getName() ) );
+            sb.append( doc.getName());
+            sb.append(" ");                        
         }
         if (doc.getTitle() != null)
         {
             lDoc.add( Field.Text( "title", doc.getTitle() ) );
+            sb.append( doc.getTitle());
+            sb.append(" ");                                    
         }
         if (doc.getKeywords() != null)
-        {
+        {            
             lDoc.add( Field.Text( "keywords", doc.getKeywords() ) );
+            sb.append( doc.getKeywords());
+            sb.append(" ");                                                
         }
         if (doc.getShortDescription() != null)
         {
             lDoc.add( Field.Text( "descr", doc.getShortDescription() ) );
+            sb.append( doc.getShortDescription());
+            sb.append(" ");                                                
+            
         }
         if (doc.getInfoURL() != null)
         {
             lDoc.add( Field.Keyword( "infourl", doc.getInfoURL().toString() ) );
+            sb.append( doc.getInfoURL().toString() );
+            sb.append(" ");                                                            
         }
         if (doc.getDateOfCreation() != null)
         {
@@ -127,6 +143,8 @@ public class DocumentIndexer
         if (doc.getFileName() != null)
         {
             lDoc.add( Field.Keyword( "filename", doc.getFileName() ) );
+            sb.append( doc.getFileName() );
+            sb.append(" ");                                                                        
         }
 
         if (doc.getRawContent() != null)
@@ -138,7 +156,9 @@ public class DocumentIndexer
                 {
                     String stripped = parser.getStripped( doc.getRawContent() );
                     if( stripped != null )
-                    lDoc.add( Field.Text( "contents",  stripped ) );
+                    {
+                        sb.append( stripped );
+                    }
                 }
             }
             catch ( UnsupportedContentTypeException e )
@@ -150,6 +170,8 @@ public class DocumentIndexer
                 logger.warn( "Can't add raw content to lucene index!", e );
             }
         }
+        
+        lDoc.add( Field.UnStored( "complete", sb.toString() ));
 
         return lDoc;
     }
@@ -194,6 +216,7 @@ public class DocumentIndexer
      */
     private synchronized void deleteDocument( Document doc, IndexReader reader ) throws IOException
     {
+        logger.debug("Trying to delete document: " + doc.getUID());
         reader.delete( new Term( "uid", doc.getUID() ) );
         if (doc.hasChildren())
         {

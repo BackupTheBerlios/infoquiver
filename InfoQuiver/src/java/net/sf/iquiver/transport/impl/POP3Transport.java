@@ -123,6 +123,7 @@ public class POP3Transport implements Fetcher
                     doc.setDateOfCreation( messages[i].getSentDate() );
                     doc.setDateOfLastModification( messages[i].getReceivedDate() );
                     doc.setShortDescription( messages[i].getSubject() );
+                    doc.setTitle( doc.getShortDescription() );
                     documents.add( doc );
                 }
                 catch ( Exception e )

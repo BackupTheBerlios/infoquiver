@@ -2,8 +2,8 @@
  * DocumentUtil.java
  * created on 24.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/metaformat/impl/DocumentUtil.java,v $
- * $Date: 2004/10/24 16:28:09 $
- * $Revision: 1.1 $
+ * $Date: 2004/11/20 12:30:49 $
+ * $Revision: 1.2 $
  *********************************************************************/
 
 package net.sf.iquiver.metaformat.impl;
@@ -85,10 +85,10 @@ public class DocumentUtil
         StringBuffer sb = new StringBuffer();
         sb.append( "<Document>\n" );
         appendXmlIfNotNull( sb, "Name", doc.getName() );
-        appendXmlIfNotNull( sb, "FileName", doc.getFileName() );
+        appendCDATAIfNotNull( sb, "FileName", doc.getFileName() );
         appendXmlIfNotNull( sb, "Created", doc.getDateOfCreation() );
         appendXmlIfNotNull( sb, "Modified", doc.getDateOfLastModification() );
-        appendXmlIfNotNull( sb, "InfoUrl", doc.getInfoURL() );
+        appendCDATAIfNotNull( sb, "InfoUrl", doc.getInfoURL() );
         appendXmlIfNotNull( sb, "Title", doc.getTitle() );
         appendXmlIfNotNull( sb, "Keywords", doc.getKeywords() );
         appendXmlIfNotNull( sb, "Description", doc.getShortDescription() );
@@ -96,8 +96,8 @@ public class DocumentUtil
         appendXmlIfNotNull( sb, "Encoding", doc.getEncoding() );
         appendXmlIfNotNull( sb, "Locale", doc.getLocale() );
         appendXmlIfNotNull( sb, "ContentType", doc.getContentTypeStr() );
-        appendXmlIfNotNull( sb, "Score", new Float( doc.getScore() ) );
-        sb.append( "</Document>" );
+        appendXmlIfNotNull( sb, "Score", String.valueOf( doc.getScore() ).substring(0,5) );
+        sb.append( "</Document>\n" );
 
         return sb.toString();
     }
@@ -263,4 +263,25 @@ public class DocumentUtil
 
         sb.append( "\n" );
     }
+    
+    private static void appendCDATAIfNotNull( StringBuffer sb, String name, Object value )
+    {
+        sb.append( "<" );
+        sb.append( name );
+        if (value != null)
+        {
+            sb.append( "><![CDATA[" );            
+            sb.append( value );
+            sb.append( "]]></" );
+            sb.append( name );
+            sb.append( ">" );
+        }
+        else
+        {
+            sb.append( "/>" );
+        }
+
+        sb.append( "\n" );
+    }
+    
 }

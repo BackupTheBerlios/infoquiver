@@ -4,6 +4,7 @@
 package net.sf.iquiver.transport.impl;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -142,7 +143,8 @@ public class HTTPTransport implements Fetcher
                 }
             }
 
-            doc.setFileName( ((GetMethod) _method).getPath() );
+            doc.setFileName( _method.getURI().getPath() );
+            doc.setInfoURL( new URL( _method.getURI().getURI() ) );
             documents.add( doc );
         }
         catch ( UnsupportedEncodingException ue )

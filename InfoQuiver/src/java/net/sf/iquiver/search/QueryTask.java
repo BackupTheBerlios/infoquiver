@@ -4,6 +4,7 @@
 package net.sf.iquiver.search;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.MultiSearcher;
@@ -107,7 +109,10 @@ public class QueryTask
         Analyzer analyzer = new StandardAnalyzer();
         try
         {
-            Query query = MultiFieldQueryParser.parse( searchCriteria, SEARCH_FIELDS, analyzer );
+            //Query query = MultiFieldQueryParser.parse( searchCriteria, SEARCH_FIELDS, analyzer );
+            QueryParser parser = new QueryParser( "complete", analyzer );
+            parser.setPhraseSlop(3);
+            Query query = parser.parse( searchCriteria );
             contents = hits2Documents( is.search( query ) );
         }
         finally
@@ -148,7 +153,9 @@ public class QueryTask
                 if (tmp != null && !tmp.isEmpty())
                 {
                     Content content = (Content) tmp.get( 0 );
-                    content.setScore( hits.score( i ) );
+                    BigDecimal dc = new BigDecimal( hits.score( i ) * 100 );
+                    dc.setScale(2, BigDecimal.ROUND_HALF_UP);                    
+                    content.setScore( dc.floatValue() );
                     contents.add( content );
                 }
                 else
