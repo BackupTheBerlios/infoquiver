@@ -2,24 +2,22 @@
  * IQuiverDelegate.java
  * created on 28.11.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/infoquiver-web/WEB-INF/src/net/sf/iquiver/web/IQuiverDelegate.java,v $
- * $Date: 2004/12/01 00:09:37 $
- * $Revision: 1.3 $
+ * $Date: 2004/12/01 19:40:09 $
+ * $Revision: 1.4 $
 *********************************************************************/
 
 package net.sf.iquiver.web;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import net.sf.iquiver.configuration.impl.DefaultProperiesConfiguration;
-import net.sf.iquiver.util.ObjectSerializer;
-import net.sf.iquiver.util.om.SimpleCriteria;
-
-import org.apache.commons.configuration.Configuration;
 import org.apache.torque.om.ComboKey;
+import org.apache.torque.util.Criteria;
 import org.apache.velocity.tools.view.context.ViewContext;
 import org.apache.velocity.tools.view.tools.ViewTool;
 import org.apache.xmlrpc.XmlRpcClient;
@@ -48,8 +46,9 @@ public class IQuiverDelegate implements ViewTool
 
             try
             {
-                Configuration config = new DefaultProperiesConfiguration(path + "/WEB-INF/iquiver-web.properties");
-                rpcClient = new XmlRpcClient(config.getString("host"), config.getInt("port") );
+                Properties properties = new Properties();
+                properties.load( new FileInputStream( path + "/WEB-INF/iquiver-web.properties") );
+                rpcClient = new XmlRpcClient(properties.getProperty("host"), Integer.parseInt( properties.getProperty("port") ) );
             }
             catch ( IOException e )
             {
@@ -108,12 +107,12 @@ public class IQuiverDelegate implements ViewTool
      * @throws IOException
      * @throws DocumentException
      */
-    public Document doSelect( String objectType, SimpleCriteria criteria ) throws XmlRpcException, IOException, DocumentException
+    public Document doSelect( String objectType, Criteria criteria ) throws XmlRpcException, IOException, DocumentException
     {
         Vector params = new Vector(3);
         params.add( rpcSessionId );
         params.add( objectType );
-        params.add( ObjectSerializer.objectToXml( criteria ) );
+        params.add( IQuiverUtil.objectToXml( criteria ) );
         return execute( "doSelect", params );        
     }
     
@@ -161,7 +160,7 @@ public class IQuiverDelegate implements ViewTool
         Vector params = new Vector(3);
         params.add( rpcSessionId );
         params.add( objectType );
-        params.add( ObjectSerializer.objectToXml( key ) );
+        params.add( IQuiverUtil.objectToXml( key ) );
         return execute( "retrieveByPk", params );                
     }
     
@@ -178,7 +177,7 @@ public class IQuiverDelegate implements ViewTool
         Vector params = new Vector(3);
         params.add( rpcSessionId );
         params.add( objectType );
-        params.add( ObjectSerializer.objectToXml( keys ) );
+        params.add( IQuiverUtil.objectToXml( keys ) );
         return execute( "retrieveByPks", params );        
     }
     
@@ -199,5 +198,5 @@ public class IQuiverDelegate implements ViewTool
         }
         
         return null;
-    }
+    }    
 }
