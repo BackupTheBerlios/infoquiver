@@ -3,15 +3,12 @@
  */
 package net.sf.iquiver.transport.impl;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.iquiver.metaformat.Document;
-import net.sf.iquiver.metaformat.impl.DefaultDocument;
 import net.sf.iquiver.metaformat.impl.MetaFormatFactory;
 import net.sf.iquiver.om.ContentSource;
 import net.sf.iquiver.transport.Fetcher;
@@ -20,7 +17,6 @@ import net.sf.iquiver.transport.TransportConfigurationException;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpRecoverableException;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;

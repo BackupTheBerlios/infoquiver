@@ -6,15 +6,14 @@ package net.sf.iquiver.test.junit;
 
 import java.util.List;
 
-import org.apache.torque.TorqueException;
-import org.apache.torque.util.Criteria;
-
 import net.sf.iquiver.metaformat.Document;
 import net.sf.iquiver.om.ContentSource;
 import net.sf.iquiver.om.ContentSourcePeer;
 import net.sf.iquiver.transport.TransportConfigurationException;
 import net.sf.iquiver.transport.impl.HTTPTransport;
-import junit.framework.TestCase;
+
+import org.apache.torque.TorqueException;
+import org.apache.torque.util.Criteria;
 
 /**
  * @author netseeker aka Michael Manske

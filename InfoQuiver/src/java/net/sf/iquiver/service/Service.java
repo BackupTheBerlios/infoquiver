@@ -6,7 +6,6 @@ package net.sf.iquiver.service;
 
 import org.apache.avalon.framework.activity.Startable;
 import org.apache.avalon.framework.activity.Suspendable;
-import org.apache.avalon.framework.service.Serviceable;
 
 /**
  * @author netseeker aka Michael Manske

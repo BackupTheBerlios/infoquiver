@@ -6,13 +6,13 @@ package net.sf.iquiver.test.junit;
 
 import java.io.IOException;
 
-import org.apache.avalon.framework.configuration.ConfigurationException;
-
 import junit.framework.TestCase;
 import net.sf.iquiver.IQuiver;
 import net.sf.iquiver.configuration.Configuration;
 import net.sf.iquiver.configuration.ConfigurationConstants;
 import net.sf.iquiver.configuration.impl.DefaultProperiesConfiguration;
+
+import org.apache.avalon.framework.configuration.ConfigurationException;
 
 /**
  * @author netseeker aka Michael Manske
