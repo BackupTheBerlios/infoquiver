@@ -13,7 +13,6 @@ import net.sf.iquiver.transport.TransportConfigurationException;
 import net.sf.iquiver.transport.impl.HTTPTransport;
 
 import org.apache.torque.TorqueException;
-import org.apache.torque.util.Criteria;
 
 /**
  * @author netseeker aka Michael Manske
@@ -31,13 +30,13 @@ public class HTTPTransportTest extends BaseIQuiverTestCase
     
     public void testFetch()
     {
-        ContentSource source = null;
-        Criteria crit = new Criteria();
-        crit.add(ContentSourcePeer.CONTENT_SOURCE_ID, 0);
+        ContentSource sourceHtml = null;
+        ContentSource sourcePdf = null;
         
         try
         {
-            source = (ContentSource)ContentSourcePeer.doSelect(crit).get(0);
+            sourceHtml = ContentSourcePeer.retrieveByPK(101);
+            sourcePdf = ContentSourcePeer.retrieveByPK(102);
         }
         catch ( TorqueException e )
         {
@@ -47,9 +46,12 @@ public class HTTPTransportTest extends BaseIQuiverTestCase
         HTTPTransport transport = new HTTPTransport();        
         try
         {
-            transport.setFetchLocation(source);
+            transport.setFetchLocation(sourceHtml);
             List list = transport.fetch();
-            Document doc = (Document)list.get(0);
+            Document doc = (Document)list.get(0);            
+            transport.setFetchLocation(sourcePdf);
+            list = transport.fetch();
+            doc = (Document)list.get(0);
         }
         catch ( TransportConfigurationException e1 )
         {

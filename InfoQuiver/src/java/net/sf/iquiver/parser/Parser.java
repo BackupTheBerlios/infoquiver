@@ -4,17 +4,16 @@
  */
 package net.sf.iquiver.parser;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import net.sf.iquiver.metaformat.Document;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.VFS;
 
 /**
  * @author netseeker aka Michael Manske
@@ -39,20 +38,25 @@ public abstract class Parser
         
         return doc;
     }
-
+    
     /**
-     * @param source
+     * @param in
      * @return
      * @throws ParsingException
-     * @throws IOException
      */
-    public Document parse( byte[] source ) throws ParsingException, IOException
+    public Document parse( InputStream in ) throws ParsingException
     {
-        InputStream in = new ByteArrayInputStream(source);
         startParseMonitoring();
-        Document doc = parse( in );
+        Document doc = null;
+        try
+        {
+            doc = parse( IOUtils.toByteArray( in ) );
+        }
+        catch ( Exception e )
+        {
+            throw new ParsingException( e.getMessage(), -1);
+        }
         stopParseMonitoring();
-        in.close();
         
         return doc;
     }
@@ -65,26 +69,15 @@ public abstract class Parser
      */
     public Document parse( File source ) throws ParsingException, IOException
     {
-        return parse( VFS.getManager().toFileObject(source) );
+        return parse( new FileInputStream(source) );
     }
-    
+       
     /**
      * @param source
      * @return
      * @throws ParsingException
      * @throws IOException
      */
-    public Document parse( FileObject source) throws ParsingException, IOException
-    {
-        InputStream in = source.getContent().getInputStream();
-        startParseMonitoring();
-        Document doc = parse( in );
-        stopParseMonitoring();
-        in.close();
-        
-        return doc;
-    }
-    
     public Document parse( Document source) throws ParsingException, IOException
     {
         return parse(source.getRawContent());
@@ -110,6 +103,6 @@ public abstract class Parser
         parseEndTime = System.currentTimeMillis();
         logger.debug("Parsing finished at " + parseEndTime);        
     }
-    
-    protected abstract Document parse( InputStream in ) throws ParsingException;    
+       
+    public abstract Document parse ( byte[] rawContent ) throws ParsingException;
  }
