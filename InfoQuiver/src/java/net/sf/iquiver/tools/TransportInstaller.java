@@ -1,6 +1,10 @@
-/*
- * Created on 13.07.2004
- */
+/*********************************************************************
+ * TransportInstaller.java
+ * created on 18.07.2004 by netseeker
+ * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/tools/TransportInstaller.java,v $
+ * $Date: 2004/07/18 15:55:38 $
+ * $Revision: 1.3 $
+ *********************************************************************/
 package net.sf.iquiver.tools;
 
 import java.net.URL;
@@ -61,7 +65,7 @@ public class TransportInstaller
 
                     if (transports != null && !transports.isEmpty())
                     {
-                        System.out.println( "Existing parser found, install failed." );
+                        System.out.println( "Existing transport found, install failed." );
                         System.exit( 1 );
                     }
                     else
