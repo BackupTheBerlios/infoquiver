@@ -3,9 +3,6 @@
  */
 package net.sf.iquiver.metaformat.impl;
 
-import java.net.FileNameMap;
-import java.net.URLConnection;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -22,7 +19,7 @@ public class ContentTypeFactory
      */
     private static final Log logger = LogFactory.getLog( ContentTypeFactory.class );
 
-    private static FileNameMap _fnMap = URLConnection.getFileNameMap();
+    private static ContentTypeFileTypeMap _fnMap = new ContentTypeFileTypeMap();
 
     public static final String CT_TEXT_PLAIN = "text/plain";
     public static final String CT_TEXT_HTML = "text/html";
@@ -49,9 +46,6 @@ public class ContentTypeFactory
             CT_TEXT_TAB_SEPARATED, CT_APPLICATION_RTF, CT_APPLICATION_PS, CT_APPLICATION_XSHAR, CT_APPLICATION_XTROFF,
             CT_APPLICATION_XTROFF_MS, CT_APPLICATION_XTEX, CT_APPLICATION_XLATEX };
 
-    private static final String[] BINARY_CTS = new String[] { CT_APPLICATION_PDF, CT_MULTIPART_MIXED,
-            CT_APPLICATION_OCTET_STREAM, CT_APPLICATION_ZIP };
-
     private static final String[] NOT_SUPPORTET_CTS = new String[]{};
     
     /**
@@ -62,7 +56,7 @@ public class ContentTypeFactory
      */
     public static String getContentTypeForFile( String filename )
     {
-        String cType = _fnMap.getContentTypeFor( filename );
+        String cType = _fnMap.getContentType( filename );
 
         if (logger.isDebugEnabled())
         {
@@ -94,7 +88,7 @@ public class ContentTypeFactory
      */
     public static boolean isBinaryBasedContentType( String contentType )
     {
-        return ArrayUtil.contains( BINARY_CTS, contentType );
+        return !ArrayUtil.contains( TEXT_CTS, contentType );
     }
 
     /**

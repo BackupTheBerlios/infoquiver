@@ -1,11 +1,11 @@
-# This file controls how mime types ( content types )
+﻿# This file controls how mime types ( content types )
 # are mapped to file extensions and vice versa.
 # All the credits go to the Apache folks because this
 # file is based on their mime.types file.
 
-# MIME type = Extensions
+# MIME	type    Extensions
 application/activemessage
-application/andrew-inset = ez
+application/andrew-inset=ez
 application/applefile
 application/atomicmail
 application/batch-smtp
@@ -34,54 +34,54 @@ application/index.vnd
 application/iotp
 application/ipp
 application/isup
-application/mac-binhex40 = hqx
-application/mac-compactpro = cpt
+application/mac-binhex40=hqx
+application/mac-compactpro=cpt
 application/macwriteii
 application/marc
 application/mathematica
-application/mathml+xml = mathml
-application/msword = doc
+application/mathml+xml=mathml
+application/msword=doc
 application/news-message-id
 application/news-transmission
 application/ocsp-request
 application/ocsp-response
-application/octet-stream = bin,dms,lha,lzh,exe,class,so,dll,dmg
-application/oda = oda
-application/ogg = ogg
+application/octet-stream=bin,dms,lha,lzh,exe,class,so,dll,dmg
+application/oda=oda
+application/ogg=ogg
 application/parityfec
-application/pdf = pdf
-application/pgp-encrypted = pgp
-application/pgp-keys = key
-application/pgp-signature = sig
-application/pkcs10 = pkcs
+application/pdf=pdf
+application/pgp-encrypted=pgp
+application/pgp-keys=key
+application/pgp-signature=sig
+application/pkcs10=pkcs
 application/pkcs7-mime
-application/pkcs7-signature = sig
-application/pkix-cert = cert
+application/pkcs7-signature=sig
+application/pkix-cert=cert
 application/pkix-crl
 application/pkixcmp
-application/postscript = ps,ai,eps
+application/postscript=ps,ai,eps
 application/prs.alvestrand.titrax-sheet
 application/prs.cww
 application/prs.nprend
 application/prs.plucker
 application/qsig
-application/rdf+xml = rdf
+application/rdf+xml=rdf
 application/reginfo+xml
 application/remote-printing
 application/riscos
-application/rtf = rtf,rttf
+application/rtf=rtf,rttf
 application/sdp
 application/set-payment
 application/set-payment-initiation
 application/set-registration
 application/set-registration-initiation
-application/sgml = sgml
+application/sgml=sgml
 application/sgml-open-catalog
 application/sieve
 application/slate
-application/smil = smi,smil
-application/srgs = gram
-application/srgs+xml = grxml
+application/smil=smi,smil
+application/srgs=gram
+application/srgs+xml=grxml
 application/timestamp-query
 application/timestamp-reply
 application/tve-trigger
@@ -95,9 +95,9 @@ application/vnd.accpac.simply.aso
 application/vnd.accpac.simply.imp
 application/vnd.acucobol
 application/vnd.acucorp
-application/vnd.adobe.xfdf = fdf
+application/vnd.adobe.xfdf=fdf
 application/vnd.aether.imp
-application/vnd.amiga.ami = ami
+application/vnd.amiga.ami=ami
 application/vnd.anser-web-certificate-issue-initiation
 application/vnd.anser-web-funds-transfer-initiation
 application/vnd.audiograph
@@ -219,7 +219,7 @@ application/vnd.mediastation.cdkey
 application/vnd.meridian-slingshot
 application/vnd.micrografx.flo
 application/vnd.micrografx.igx
-application/vnd.mif = mif
+application/vnd.mif=mif
 application/vnd.minisoft-hp3000-save
 application/vnd.mitsubishi.misty-guard.trustweb
 application/vnd.mobius.daf
@@ -238,16 +238,16 @@ application/vnd.motorola.flexsuite.gotap
 application/vnd.motorola.flexsuite.kmr
 application/vnd.motorola.flexsuite.ttc
 application/vnd.motorola.flexsuite.wem
-application/vnd.mozilla.xul+xml = xul
+application/vnd.mozilla.xul+xml=xul
 application/vnd.ms-artgalry
-application/vnd.ms-asf = asf
-application/vnd.ms-excel = xls,csv
+application/vnd.ms-asf=asf
+application/vnd.ms-excel=xls,csv
 application/vnd.ms-lrm
-application/vnd.ms-powerpoint = ppt
+application/vnd.ms-powerpoint=ppt
 application/vnd.ms-project
 application/vnd.ms-tnef
 application/vnd.ms-works
-application/vnd.ms-wpl = wpl
+application/vnd.ms-wpl=wpl
 application/vnd.mseq
 application/vnd.msign
 application/vnd.music-niff
@@ -317,9 +317,9 @@ application/vnd.vividence.scriptfile
 application/vnd.vsf
 application/vnd.wap.sic
 application/vnd.wap.slc
-application/vnd.wap.wbxml = wbxml
-application/vnd.wap.wmlc = wmlc
-application/vnd.wap.wmlscriptc = wmlsc
+application/vnd.wap.wbxml=wbxml
+application/vnd.wap.wmlc=wmlc
+application/vnd.wap.wmlscriptc=wmlsc
 application/vnd.webturbo
 application/vnd.wrq-hp3000-labelled
 application/vnd.wt.stf
@@ -330,58 +330,58 @@ application/vnd.yamaha.hv-dic
 application/vnd.yamaha.hv-script
 application/vnd.yamaha.hv-voice
 application/vnd.yellowriver-custom-menu
-application/voicexml+xml = vxml
+application/voicexml+xml=vxml
 application/watcherinfo+xml
 application/whoispp-query
 application/whoispp-response
 application/wita
 application/wordperfect5.1
-application/x-bcpio = bcpio
-application/x-cdlink = vcd
-application/x-chess-pgn = pgn
+application/x-bcpio=bcpio
+application/x-cdlink=vcd
+application/x-chess-pgn=pgn
 application/x-compress
-application/x-cpio = cpio
-application/x-csh = csh
-application/x-director = dcr,dir,dxr
-application/x-dvi = dvi
-application/x-futuresplash = spl
-application/x-gtar = gtar
-application/x-gzip = gz
-application/x-hdf = hdf
-application/x-javascript = js
-application/x-koan = skp,skd,skt,skm
-application/x-latex = latex
-application/x-netcdf = nc,cdf
-application/x-sh = sh
-application/x-shar = shar
-application/x-shockwave-flash = swf
-application/x-stuffit = sit
-application/x-sv4cpio = sv4cpio
-application/x-sv4crc = sv4crc
-application/x-tar = tar
-application/x-tcl = tcl
-application/x-tex = tex
-application/x-texinfo = texinfo,texi
-application/x-troff = t,tr,roff
-application/x-troff-man = man
-application/x-troff-me = me
-application/x-troff-ms = ms
-application/x-ustar = ustar
-application/x-wais-source = src
+application/x-cpio=cpio
+application/x-csh=csh
+application/x-director=dcr,dir,dxr
+application/x-dvi=dvi
+application/x-futuresplash=spl
+application/x-gtar=gtar
+application/x-gzip=gz
+application/x-hdf=hdf
+application/x-javascript=js
+application/x-koan=skp,skd,skt,skm
+application/x-latex=latex
+application/x-netcdf=nc,cdf
+application/x-sh=sh
+application/x-shar=shar
+application/x-shockwave-flash=swf
+application/x-stuffit=sit
+application/x-sv4cpio=sv4cpio
+application/x-sv4crc=sv4crc
+application/x-tar=tar
+application/x-tcl=tcl
+application/x-tex=tex
+application/x-texinfo=texinfo,texi
+application/x-troff=t,tr,roff
+application/x-troff-man=man
+application/x-troff-me=me
+application/x-troff-ms=ms
+application/x-ustar=ustar
+application/x-wais-source=src
 application/x400-bp
-application/xhtml+xml = xhtml,xht
-application/xslt+xml = xslt
-application/xml = xml,xsl
-application/xml+rss = xml,rdf,rss
-application/xml+atom = xml
-application/xml+opml = xml,opml
-application/xml-dtd = dtd
+application/xhtml+xml=xhtml,xht
+application/xslt+xml=xslt
+application/xml=xml,xsl
+application/xml+rss=xml,rdf,rss
+application/xml+atom=xml
+application/xml+opml=xml,opml
+application/xml-dtd=dtd
 application/xml-external-parsed-entity
-application/zip = zip
+application/zip=zip
 audio/32kadpcm
 audio/amr
 audio/amr-wb
-audio/basic = au,snd
+audio/basic=au,snd
 audio/cn
 audio/dat12
 audio/dsr-es201108
@@ -406,11 +406,11 @@ audio/l16
 audio/l20
 audio/l24
 audio/lpc
-audio/midi = mid,midi,kar
+audio/midi=mid,midi,kar
 audio/mpa
 audio/mpa-robust
 audio/mp4a-latm
-audio/mpeg = mpga,mp2,mp3
+audio/mpeg=mpga,mp2,mp3
 audio/parityfec
 audio/pcma
 audio/pcmu
@@ -437,31 +437,31 @@ audio/vnd.octel.sbc
 audio/vnd.qcelp
 audio/vnd.rhetorex.32kadpcm
 audio/vnd.vmx.cvsd
-audio/x-aiff = aif,aiff,aifc
+audio/x-aiff=aif,aiff,aifc
 audio/x-alaw-basic
-audio/x-mpegurl = m3u
-audio/x-pn-realaudio = ram,ra
+audio/x-mpegurl=m3u
+audio/x-pn-realaudio=ram,ra
 audio/x-pn-realaudio-plugin
-application/vnd.rn-realmedia = rm
-audio/x-wav = wav
-chemical/x-pdb = pdb
-chemical/x-xyz = xyz
-image/bmp = bmp
-image/cgm = cgm
+application/vnd.rn-realmedia=rm
+audio/x-wav=wav
+chemical/x-pdb=pdb
+chemical/x-xyz=xyz
+image/bmp=bmp
+image/cgm=cgm
 image/g3fax
-image/gif = gif
-image/ief = ief
-image/jpeg = jpeg,jpg,jpe
+image/gif=gif
+image/ief=ief
+image/jpeg=jpeg,jpg,jpe
 image/naplps
-image/png = png
+image/png=png
 image/prs.btif
 image/prs.pti
-image/svg+xml = svg
+image/svg+xml=svg
 image/t38
-image/tiff = tiff,tif
+image/tiff=tiff,tif
 image/tiff-fx
 image/vnd.cns.inf2
-image/vnd.djvu = djvu,djv
+image/vnd.djvu=djvu,djv
 image/vnd.dwg
 image/vnd.dxf
 image/vnd.fastbidsheet
@@ -474,18 +474,18 @@ image/vnd.mix
 image/vnd.ms-modi
 image/vnd.net-fpx
 image/vnd.svf
-image/vnd.wap.wbmp = wbmp
+image/vnd.wap.wbmp=wbmp
 image/vnd.xiff
-image/x-cmu-raster = ras
-image/x-icon = ico
-image/x-portable-anymap = pnm
-image/x-portable-bitmap = pbm
-image/x-portable-graymap = pgm
-image/x-portable-pixmap = ppm
-image/x-rgb = rgb
-image/x-xbitmap = xbm
-image/x-xpixmap = xpm
-image/x-xwindowdump = xwd
+image/x-cmu-raster=ras
+image/x-icon=ico
+image/x-portable-anymap=pnm
+image/x-portable-bitmap=pbm
+image/x-portable-graymap=pgm
+image/x-portable-pixmap=ppm
+image/x-rgb=rgb
+image/x-xbitmap=xbm
+image/x-xpixmap=xpm
+image/x-xwindowdump=xwd
 message/delivery-status
 message/disposition-notification
 message/external-body
@@ -496,8 +496,8 @@ message/rfc822
 message/s-http
 message/sip
 message/sipfrag
-model/iges = igs,iges
-model/mesh = msh,mesh,silo
+model/iges=igs,iges
+model/mesh=msh,mesh,silo
 model/vnd.dwf
 model/vnd.flatland.3dml
 model/vnd.gdl
@@ -507,7 +507,7 @@ model/vnd.mts
 model/vnd.parasolid.transmit.binary
 model/vnd.parasolid.transmit.text
 model/vnd.vtu
-model/vrml = wrl,vrml
+model/vrml=wrl,vrml
 multipart/alternative
 multipart/appledouble
 multipart/byteranges
@@ -521,20 +521,20 @@ multipart/related
 multipart/report
 multipart/signed
 multipart/voice-message
-text/calendar = ics,ifb
-text/css = css
+text/calendar=ics,ifb
+text/css=css
 text/directory
-text/enriched = rtf
-text/html = html,htm
+text/enriched=rtf
+text/html=html,htm
 text/parityfec
-text/plain = txt,asc
+text/plain=txt,asc
 text/prs.lines.tag
 text/rfc822-headers
-text/richtext = rtx,rtf
-text/rtf = rtf
-text/sgml = sgml,sgm
+text/richtext=rtx,rtf
+text/rtf=rtf
+text/sgml=sgml,sgm
 text/t140
-text/tab-separated-values = tsv
+text/tab-separated-values=tsv
 text/uri-list
 text/vnd.abc
 text/vnd.curl
@@ -552,10 +552,10 @@ text/vnd.net2phone.commcenter.command
 text/vnd.sun.j2me.app-descriptor
 text/vnd.wap.si
 text/vnd.wap.sl
-text/vnd.wap.wml = wml
-text/vnd.wap.wmlscript = wmls
-text/x-setext = etx
-text/xml = xml
+text/vnd.wap.wml=wml
+text/vnd.wap.wmlscript=wmls
+text/x-setext=etx
+text/xml=xml
 text/xml-external-parsed-entity
 video/bmpeg
 video/bt656
@@ -571,50 +571,48 @@ video/mp2p
 video/mp2t
 video/mp4v-es
 video/mpv
-video/mpeg = mpeg,mpg,mpe
+video/mpeg=mpeg,mpg,mpe
 video/nv
 video/parityfec
 video/pointer
-video/quicktime = qt,mov
+video/quicktime=qt,mov
 video/smpte292m
 video/vnd.fvt
 video/vnd.motorola.video
 video/vnd.motorola.videop
-video/vnd.mpegurl = mxu,m4u
+video/vnd.mpegurl=mxu,m4u
 video/vnd.nokia.interleaved-multimedia
 video/vnd.objectvideo
 video/vnd.vivo
-video/x-msvideo = avi
-video/x-sgi-movie = movie
-x-conference/x-cooltalk = ice
-
-# netseekers extensions
-text/x-java-source = java
-text/java = java
-text/x-java = java
-application/ms-java = java
-application/x-compressed-tar = tar.gz
-x-gzipped/tar = tar.gz
-application/rar = rar
-application/x-compressed = rar
-application/x-rar = rar
-application/x-rar-compressed = rar
-application/x-rar-compressed = rar
-compressed/rar = rar
-application/x-rar-compressed = rar
-magnus-internal/cold-fusion = cfm,cfml
-text/comma-separated-values = csv
-text/csv = csv
-application/csv = csv
-text/anytext = csv
-application/vnd.msexcel = xls,csv
-application/soffice =
-application/x-soffice =
-application/msoutlook = msg
-application/x-msg = msg
-message/rfc822 = msg
-zz-application/zz-winassoc-MSG = msg
-application/medhlp = chm
-application/bat = bat
-application/x-bat = bat
-application/x-msdos-program = bat
+video/x-msvideo=avi
+video/x-sgi-movie=movie
+x-conference/x-cooltalk=ice
+text/x-java-source=java
+text/java=java
+text/x-java=java
+application/ms-java=java
+application/x-compressed-tar=tar.gz
+x-gzipped/tar=tar.gz
+application/rar=rar
+application/x-compressed=rar
+application/x-rar=rar
+application/x-rar-compressed=rar
+application/x-rar-compressed=rar
+compressed/rar=rar
+application/x-rar-compressed=rar
+magnus-internal/cold-fusion=cfm,cfml
+text/comma-separated-values=csv
+text/csv=csv
+application/csv=csv
+text/anytext=csv
+application/vnd.msexcel=xls,csv
+application/soffice=
+application/x-soffice=
+application/msoutlook=msg
+application/x-msg=msg
+message/rfc822=msg
+zz-application/zz-winassoc-MSG=msg
+application/medhlp=chm
+application/bat=bat
+application/x-bat=bat
+application/x-msdos-program=bat
