@@ -6,10 +6,7 @@ package net.sf.iquiver.metaformat;
 
 import java.net.URL;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-
-import net.sf.iquiver.om.Content;
 
 /**
  * @author netseeker aka Michael Manske

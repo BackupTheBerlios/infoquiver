@@ -4,7 +4,6 @@
  */
 package net.sf.iquiver.metaformat;
 
-import java.util.List;
 import java.util.Map;
 
 /**

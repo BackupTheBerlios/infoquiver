@@ -4,8 +4,6 @@
 package net.sf.iquiver.metaformat.impl;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashSet;
-import java.util.Set;
 
 import net.sf.iquiver.metaformat.Document;
 import net.sf.iquiver.parser.UnsupportedContentTypeException;

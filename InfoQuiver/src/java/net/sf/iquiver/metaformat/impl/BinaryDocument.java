@@ -4,10 +4,10 @@
  */
 package net.sf.iquiver.metaformat.impl;
 
+import net.sf.iquiver.metaformat.AbstractDocument;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import net.sf.iquiver.metaformat.AbstractDocument;
 
 /**
  * @author netseeker aka Michael Manske

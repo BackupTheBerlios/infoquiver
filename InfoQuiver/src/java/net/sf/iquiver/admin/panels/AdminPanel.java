@@ -6,6 +6,8 @@
  */
 package net.sf.iquiver.admin.panels;
 
+import java.awt.LayoutManager;
+
 import javax.swing.JPanel;
 
 
@@ -15,7 +17,7 @@ import javax.swing.JPanel;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-public abstract class AdminPanel extends JPanel
+public class AdminPanel extends JPanel
 {
     private long buildStart;
     private long buidlEnd;
@@ -48,5 +50,38 @@ public abstract class AdminPanel extends JPanel
     public void setBuildStart(long buildStart)
     {
         this.buildStart = buildStart;
+    }
+
+    /**
+     * 
+     */
+    public AdminPanel()
+    {
+        super();
+    }
+    
+    /**
+     * @param arg0
+     */
+    public AdminPanel(boolean arg0)
+    {
+        super(arg0);
+    }
+    
+    /**
+     * @param arg0
+     */
+    public AdminPanel(LayoutManager arg0)
+    {
+        super(arg0);
+    }
+
+    /**
+     * @param arg0
+     * @param arg1
+     */
+    public AdminPanel(LayoutManager arg0, boolean arg1)
+    {
+        super(arg0, arg1);
     }
 }
