@@ -74,7 +74,8 @@ public class HTTPTransport implements Fetcher
         {
             // execute the method.
             client.executeMethod( method);
-            String encoding = ((GetMethod)method).getResponseCharSet(); 
+            String encoding = ((GetMethod)method).getResponseCharSet();
+            Header header = ((GetMethod)method).getResponseHeader("Content-Type");
             DefaultDocument doc = new DefaultDocument(method.getResponseBody(), encoding);           
             documents.add(doc);
         }
