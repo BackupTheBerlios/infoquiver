@@ -26,6 +26,9 @@ public abstract class BaseService implements Service
 
     private int _state = ServiceStateListener.ST_STOPPED;
     
+    private int _restartCount = 0;
+    private long _startTime;    
+    
     /* (non-Javadoc)
      * @see net.sf.iquiver.service.Service#addServiceStateListener(net.sf.iquiver.service.ServiceStateListener)
      */
@@ -114,12 +117,51 @@ public abstract class BaseService implements Service
         notifyServiceStateListeners(new ServiceStateChangedEvent(this, oldState, newState));
         
         return oldState;
+    }        
+    
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.service.Service#getState()
+     */
+    public int getState()
+    {
+        return this._state;
     }
     
-    public abstract long getStartTime();
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.activity.Startable#start()
+     */
+    public void start()
+    {
+        this._startTime = System.currentTimeMillis();
+        this._restartCount++;        
+        doStart();
+        setState(ServiceStateListener.ST_STARTED);
+    }
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.activity.Startable#stop()
+     */
+    public void stop()
+    {
+        doStop();
+        setState(ServiceStateListener.ST_STOPPED);
+    }
+    
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.service.Service#getStartTime()
+     */
+    public long getStartTime()
+    {
+        return this._startTime;
+    }
 
     /* (non-Javadoc)
      * @see net.sf.iquiver.service.Service#getRestartCount()
      */
-    public abstract int getRestartCount();
+    public int getRestartCount()
+    {
+        return _restartCount;
+    }
+    
+    protected abstract void doStart();
+    protected abstract void doStop();    
 }

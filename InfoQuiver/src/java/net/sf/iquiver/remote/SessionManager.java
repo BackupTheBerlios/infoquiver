@@ -30,9 +30,6 @@ public class SessionManager extends BaseService
      */
     public static final int DEFAULT_MAX_SESSIONS = 10;
 
-    private int restartCount = -1;
-    private long startTime;
-    private boolean isRunning = false;
     private SessionPool sessions;
     private long idCounter = 0;
     private long timeout;
@@ -59,49 +56,23 @@ public class SessionManager extends BaseService
         this.maxSessions = maxSessions;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.sf.iquiver.service.Service#getStartTime()
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.service.BaseService#doStart()
      */
-    public long getStartTime()
-    {
-        return this.startTime;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.sf.iquiver.service.Service#getRestartCount()
-     */
-    public int getRestartCount()
-    {
-        return this.restartCount;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.avalon.framework.activity.Startable#start()
-     */
-    public void start() throws Exception
+    protected void doStart()
     {
         logger.info( "Starting Session Manager" );
         sessions = new SessionPool( new SessionPoolFactory( this.timeout ), maxSessions );
-        isRunning = true;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.avalon.framework.activity.Startable#stop()
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.service.BaseService#doStop()
      */
-    public void stop() throws Exception
+    protected void doStop()
     {
         logger.info( "Stopping SessionManager" );
         sessions.dispose();
         idCounter = 0;
-        isRunning = false;
     }
 
     /**

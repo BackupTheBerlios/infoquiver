@@ -4,8 +4,9 @@
 package net.sf.iquiver.remote.xmlrpc;
 
 import net.sf.iquiver.configuration.Configuration;
-import net.sf.iquiver.remote.IServer;
+import net.sf.iquiver.configuration.Reconfigurable;
 import net.sf.iquiver.service.BaseRemoteService;
+import net.sf.iquiver.service.ServiceStateListener;
 
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.commons.logging.Log;
@@ -17,7 +18,7 @@ import org.apache.xmlrpc.WebServer;
  * server demon via XML-RPC.
  * @author netseeker aka Michael Manske
  */
-public class XmlRpcServer extends BaseRemoteService implements IServer
+public class XmlRpcServer extends BaseRemoteService implements Reconfigurable
 {
     /**
      * Commons Logger for this class
@@ -26,9 +27,6 @@ public class XmlRpcServer extends BaseRemoteService implements IServer
         
     private WebServer webServer;
     private int port = 80;
-    private boolean isRunning = false;
-    private int restartCount = -1;
-    private long startTime;
     
     
     /* (non-Javadoc)
@@ -44,39 +42,37 @@ public class XmlRpcServer extends BaseRemoteService implements IServer
      */
     public void reconfigure( Configuration config ) throws ConfigurationException
     {        
-        boolean restart = isRunning;
-        if(restart)
+        boolean restart = false;
+        if(getState() == ServiceStateListener.ST_STARTED)
         {
-            stop();
+            super.stop();
+            restart = true;
         }
         configure( config );
         if( restart)
         {
-            start();
+            super.start();
         }
     }
     
     /* (non-Javadoc)
      * @see net.sf.iquiver.remote.IServer#start(net.sf.iquiver.configuration.Configuration)
      */
-    public void start( )
+    protected void doStart( )
     {
         logger.info( "Starting XmlRpcServer at port " + port);
-        this.startTime = System.currentTimeMillis();
         webServer = new WebServer( port );
         webServer.addHandler("default", this);
-        isRunning = true;
-        this.restartCount++;
         logger.info( "XmlRpcServer running at port " + port );
     }
 
     /* (non-Javadoc)
      * @see net.sf.iquiver.remote.IServer#stop()
      */
-    public void stop()
+    public void doStop()
     {
         logger.info( "Stopping XmlRpcServer");
-        if( isRunning && webServer != null )
+        if( webServer != null )
         {
             try
             {
@@ -91,24 +87,6 @@ public class XmlRpcServer extends BaseRemoteService implements IServer
         else
         {
             logger.warn( "XmlRpcServer was not running!");
-        }
-        
-        isRunning = false;
-    }
-
-    /* (non-Javadoc)
-     * @see net.sf.iquiver.service.BaseService#getStartTime()
-     */
-    public long getStartTime()
-    {
-        return this.startTime;
-    }
-
-    /* (non-Javadoc)
-     * @see net.sf.iquiver.service.BaseService#getRestartCount()
-     */
-    public int getRestartCount()
-    {
-        return restartCount;
+        }        
     }
 }

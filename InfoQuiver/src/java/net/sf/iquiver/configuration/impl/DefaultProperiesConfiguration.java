@@ -6,6 +6,7 @@ package net.sf.iquiver.configuration.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 import net.sf.iquiver.configuration.Configuration;
 
@@ -18,19 +19,17 @@ public class DefaultProperiesConfiguration extends PropertiesConfiguration imple
 {
     public Configuration getSubset( String key )
     {
-        DefaultProperiesConfiguration config = null;
-        try
+        DefaultProperiesConfiguration config = new DefaultProperiesConfiguration();
+        org.apache.commons.configuration.Configuration source = super.subset( key );
+        for (Iterator it = source.getKeys(); it.hasNext();)
         {
-            config = new DefaultProperiesConfiguration(super.subset( key));
+            String id = (String) it.next();
+            config.addProperty( id, source.getProperty( id ) );
         }
-        catch ( IOException e )
-        {            
-            e.printStackTrace();
-        }
-        
+
         return config;
     }
-    
+
     /**
      *  
      */
@@ -43,19 +42,19 @@ public class DefaultProperiesConfiguration extends PropertiesConfiguration imple
      * @param arg0
      * @throws java.io.IOException
      */
-    public DefaultProperiesConfiguration( org.apache.commons.configuration.Configuration arg0 ) throws IOException
+    public DefaultProperiesConfiguration(org.apache.commons.configuration.Configuration conf) throws IOException
     {
-        super( arg0 );
+        super( conf );
     }
 
     /**
      * @param arg0
      * @throws java.io.IOException
      */
-    public DefaultProperiesConfiguration( String arg0 ) throws IOException
+    public DefaultProperiesConfiguration(String arg0) throws IOException
     {
         super( arg0 );
-        setFileName(new File(arg0).getName());
+        setFileName( new File( arg0 ).getName() );
     }
 
     /**
@@ -63,10 +62,11 @@ public class DefaultProperiesConfiguration extends PropertiesConfiguration imple
      * @param arg1
      * @throws java.io.IOException
      */
-    public DefaultProperiesConfiguration( String arg0, org.apache.commons.configuration.Configuration arg1 ) throws IOException
+    public DefaultProperiesConfiguration(String arg0, org.apache.commons.configuration.Configuration arg1)
+            throws IOException
     {
         super( arg0, arg1 );
-        setFileName(new File(arg0).getName());
+        setFileName( new File( arg0 ).getName() );
     }
 
     /**
@@ -74,27 +74,29 @@ public class DefaultProperiesConfiguration extends PropertiesConfiguration imple
      * @param arg1
      * @throws java.io.IOException
      */
-    public DefaultProperiesConfiguration( String arg0, String arg1 ) throws IOException
+    public DefaultProperiesConfiguration(String arg0, String arg1) throws IOException
     {
         super( arg0, arg1 );
-        setFileName(new File(arg0).getName());
+        setFileName( new File( arg0 ).getName() );
     }
-    
+
     public String getFileName()
     {
         return super.fileName;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.configuration.Configuration#getFilePath()
      */
     public String getFilePath()
     {
-        if(getBasePath() != null && getFileName() != null)
-        {    
+        if (getBasePath() != null && getFileName() != null)
+        {
             return getBasePath() + File.separator + getFileName();
         }
-        
+
         return null;
     }
 }

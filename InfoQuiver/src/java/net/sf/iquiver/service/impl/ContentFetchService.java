@@ -16,7 +16,6 @@ import net.sf.iquiver.om.ContentSource;
 import net.sf.iquiver.om.ContentSourcePeer;
 import net.sf.iquiver.om.Transport;
 import net.sf.iquiver.service.BaseService;
-import net.sf.iquiver.service.ServiceStateListener;
 import net.sf.iquiver.transport.Fetcher;
 import net.sf.iquiver.transport.TransportConfigurationException;
 
@@ -39,20 +38,14 @@ public class ContentFetchService extends BaseService
      */
     private static final Log logger = LogFactory.getLog( ContentFetchService.class );
 
-    private int _restartCount = 0;
-    private long _startTime;
     private List _timers;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.sf.iquiver.service.BaseService#start()
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.service.BaseService#doStart()
      */
-    public void start() throws Exception
+    protected void doStart()
     {
         logger.info( "Starting..." );
-        this._startTime = System.currentTimeMillis();
-        this._restartCount++;
         this._timers = new ArrayList();
 
         List transports = _getTransports();
@@ -69,46 +62,20 @@ public class ContentFetchService extends BaseService
             Timer timer = new Timer();
             timer.scheduleAtFixedRate( thread, 1000, interval );
             _timers.add(timer);
-        }
-        
-        setState(ServiceStateListener.ST_STARTED);
+        }                
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.sf.iquiver.service.BaseService#stop()
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.service.BaseService#doStop()
      */
-    public void stop() throws Exception
+    protected void doStop()
     {        
         //shut down all timers
         for(Iterator it = _timers.iterator(); it.hasNext();)
         {
             ((Timer)it.next()).cancel();
         }
-        _timers = null;
-        
-        setState(ServiceStateListener.ST_STOPPED);        
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.sf.iquiver.service.BaseService#getStartTime()
-     */
-    public long getStartTime()
-    {
-        return this._startTime;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.sf.iquiver.service.BaseService#getRestartCount()
-     */
-    public int getRestartCount()
-    {
-        return _restartCount;
+        _timers = null;                        
     }
 
     /**

@@ -11,7 +11,7 @@
         InfoQuiver will be a server demon, which supports automatic querying and indexing of many kinds of information datasources.
         It will include build-in support for most diverse information formats and protocols as well as report generation and -dispatching.
         IQuiver fetches content from defined content sources, stores it in its own xml based format in a database and
-        will run user defined searches on the stored content.
+        will run user defined searches on the stored content.&lt;br /&gt;
         Searchresults will be created and dispatched as reports for each user, usergroup or client.
         Most of usual transports (HTTP and HTTPS, FTP and SFTP, WEBDAV, SOAP, POP, IMAP, SMPT, local file system, CIFS...)
         and formats (HTML, RSS, PDF as well as various open XML dialects and open Office formats) are discussed to become
@@ -37,7 +37,7 @@
         <developer>
             <name>Michael Manske</name>
             <id>netseeker</id>
-            <email>netseeker@manskes.de</email>
+            <email>netseeker at manskes dot de</email>
         </developer>
     </developers>
     <dependencies>

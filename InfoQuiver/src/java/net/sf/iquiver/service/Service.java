@@ -16,5 +16,6 @@ public interface Service extends Startable
     public void addServiceStateListener(ServiceStateListener listener);
     public void removeServiceStateListener(ServiceStateListener listener);
     public void addServiceExecutionListener(ServiceExecutionListener listener);
-    public void removeServiceExecutionListener(ServiceExecutionListener listener);   
+    public void removeServiceExecutionListener(ServiceExecutionListener listener);
+    public int getState ();
 }
