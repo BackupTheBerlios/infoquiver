@@ -2,14 +2,15 @@
  * User.java
  * created on 12.06.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/om/User.java,v $
- * $Date: 2004/11/26 23:42:19 $
- * $Revision: 1.7 $
+ * $Date: 2004/11/28 13:26:07 $
+ * $Revision: 1.8 $
  *********************************************************************/
 
 package net.sf.iquiver.om;
 
 import java.util.List;
 
+import net.sf.iquiver.IQuiver;
 import net.sf.iquiver.report.IReportSource;
 
 import org.apache.torque.TorqueException;
@@ -32,7 +33,7 @@ public class User extends net.sf.iquiver.om.BaseUser implements Persistent, IRep
      * @see net.sf.iquiver.report.IReportSource#getSearchQuerys()
      */
     public List getSearchQuerys() throws TorqueException
-    {        
+    {
         return getSearchQuerysRelatedByUserId();
     }
 
@@ -48,7 +49,7 @@ public class User extends net.sf.iquiver.om.BaseUser implements Persistent, IRep
 
         return ContentSourcePeer.doSelect( crit );
     }
-    
+
     /* (non-Javadoc)
      * @see net.sf.iquiver.util.Introspectable#getMemberNames()
      */
@@ -63,5 +64,40 @@ public class User extends net.sf.iquiver.om.BaseUser implements Persistent, IRep
     public Object getMemberValueByName( String name )
     {
         return getByName( name );
+    }
+
+    /**
+     * Looks for the prefered language for this user in this order:
+     * <ol>
+     *  <li>IQ_USER.USER_LANGUAGE</li>
+     *  <li>CLIENT.CLIENT_PREFERRED_LANGUAGE</li>
+     *  <li>iquiver.properties: <var>default.language</var></li>
+     * </ol>
+     * @return the iso form of the language to use for all text output for this user
+     */
+    public String getLanguageRecursive()
+    {
+        String language = new String( "" );
+        try
+        {
+            language = this.getUserLanguage() != null ? this.getUserLanguage() : this.getClient()
+                    .getClientPreferedLanguage() != null ? this.getClient().getClientPreferedLanguage() : IQuiver
+                    .getConfiguration().getString( "default.language" );
+        }
+        catch ( TorqueException e )
+        {
+            language = IQuiver.getConfiguration().getString( "default.language" );
+        }
+
+        return language;
     }    
+    
+    public List getUserGroupsRelatedByUserGroupLnk() throws TorqueException
+    {
+        Criteria crit = new Criteria();
+        crit.addJoin( UserGroupPeer.USER_GROUP_ID, UserGroupLnkPeer.USER_GROUP_ID );
+        crit.add( UserGroupLnkPeer.USER_ID, this.getUserId() );
+        
+        return UserGroupPeer.doSelect( crit );
+    }
 }
