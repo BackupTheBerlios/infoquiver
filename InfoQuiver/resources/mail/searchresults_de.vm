@@ -1,0 +1,32 @@
+#*	
+search result mailtemplates MUST return the following variables:
+$subject - used as the subject line of the email
+$personalReportName - used as the displayed name of the attachment containing the personal report file
+$clientwideReportName - used as the displayed name of the attachment containing the clientwide report file
+$usergroupReportPrefix - InfoQuiver will generate the displayed names of the attachments containing
+usergroupwide report files in this notation $usergroupReportPrefix[name of the usergroup]
+*#
+#set( $subject = "InfoQuiver SearchResults" )
+#set( $personalReportName = "personal_report" )
+#set( $clientwideReportName = "clientwide_report" )
+#set( $usergroupReportPrefix = "groupreport_of_" )
+#set( $firstName = $user.getUserFirstName() )
+#set( $lastName = $user.getUserLastName() )
+Sehr geehrter#if( $firstName ) $firstName#end#if( $lastName ) $lastName#end,
+		
+Sie erhalten diese Email weil zu einigen Ihrer Suchkriterien Treffer in
+InfoQuivers aktuellem Index gefunden wurden.
+
+Ihr persönlicher Suchreport => $personalReportName
+
+Suchreport für die mandantenweiten Suchkriterien Ihres Mandanten => $clientwideReportName
+
+Suchreports für die folgenden Benutzergruppen in denen Sie Mitglied sind:
+#foreach( $group in $usergroups  ) 
+$velocityCount $group.getUserGroupName() => $usergroupReportPrefix$group.getUserGroupName()
+#end
+ 
+mfg,
+InfoQuiver Development Team
+
+Diese Email wurde automatisch von InfoQuiver (http://developer.berlios.de/projects/infoquiver/) generiert.
