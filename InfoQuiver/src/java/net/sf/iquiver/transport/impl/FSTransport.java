@@ -3,7 +3,9 @@
  */
 package net.sf.iquiver.transport.impl;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,6 +24,8 @@ import net.sf.iquiver.transport.TransportConfigurationException;
 import net.sf.iquiver.transport.TransportException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -102,10 +106,11 @@ public class FSTransport implements Fetcher, Dispatcher
                     Document doc = MetaFormatFactory.createDocumentForContentType( ContentTypeFactory
                             .getContentTypeForFile( file.getName() ) );
                     doc.setName( file.getName() );
+                    doc.setFileName( file.getName() );
                     Date date = new Date( file.lastModified() );
                     doc.setDateOfCreation( date );
                     doc.setDateOfLastModification( date );
-                    doc.setRawContent( FileUtil.toByteArray( file ) );
+                    doc.setRawContent( FileUtil.fastToByteArray( file ) );
                     documents.add( doc );
                 }
                 catch ( UnsupportedContentTypeException e )
@@ -185,10 +190,24 @@ public class FSTransport implements Fetcher, Dispatcher
      * 
      * @see net.sf.iquiver.transport.Dispatcher#dispatch(java.util.List)
      */
-    public long[] dispatch( List docs )
+    public long[] dispatch( List docs ) throws TransportException
     {
-        // TODO Auto-generated method stub
-        return null;
+        long[] written = new long[docs.size()];
+        String dir = (String) this._fetchAttributes.get( ATTRIBUTE_FS_DIRECTORY );
+        File fDir = new File( dir );
+        if (!fDir.exists())
+        {
+            fDir.mkdir();
+        }
+
+        for (int i = 0; i < docs.size(); i++)
+        {
+            Document doc = (Document) docs.get( i );
+            writeFile( doc, fDir );
+
+        }
+
+        return written;
     }
 
     /*
@@ -196,9 +215,57 @@ public class FSTransport implements Fetcher, Dispatcher
      * 
      * @see net.sf.iquiver.transport.Dispatcher#dispatch(net.sf.iquiver.metaformat.Document)
      */
-    public long dispatch( Document doc )
+    public long dispatch( Document doc ) throws TransportException
     {
-        // TODO Auto-generated method stub
-        return 0;
+        String dir = (String) this._fetchAttributes.get( ATTRIBUTE_FS_DIRECTORY );
+        File fDir = new File( dir );
+        if (!fDir.exists())
+        {
+            fDir.mkdir();
+        }
+
+        return writeFile( doc, fDir );
+    }
+
+    /**
+     * @param doc
+     * @param fDir
+     * @param fName
+     * @return
+     * @throws TransportException
+     */
+    private long writeFile( Document doc, File fDir ) throws TransportException
+    {
+        long written = -1;
+        CountingOutputStream cout = null;
+        String fName = doc.getFileName();
+        
+        try
+        {
+            if (fName == null || fName.length() == 0)
+            {
+                fName = File.createTempFile( "iqv", ContentTypeFactory.getFirstFileType( doc.getContentTypeStr() ), fDir ).getName();
+            }
+
+            cout = new CountingOutputStream( new BufferedOutputStream( new FileOutputStream( fDir.getAbsolutePath()
+                    + File.pathSeparator + fName ) ) );
+            cout.write( doc.getRawContent() );
+            written = cout.getCount();
+        }
+        catch ( IOException e )
+        {
+            written = -1;
+            logger.error( "IO Error occured while saving file " + fName, e );
+            throw new TransportException( e );
+        }
+        finally
+        {
+            if (cout != null)
+            {
+                IOUtils.closeQuietly( cout );
+            }
+        }
+
+        return written;
     }
 }

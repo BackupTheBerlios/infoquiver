@@ -8,7 +8,7 @@ import org.apache.commons.logging.LogFactory;
 
 import de.netseeker.util.ArrayUtil;
 import de.netseeker.util.StringUtil;
-
+import de.netseeker.util.mime.ContentTypeFileTypeMap;
 /**
  * @author netseeker aka Michael Manske
  */
@@ -100,4 +100,21 @@ public class ContentTypeFactory
         return !ArrayUtil.contains( NOT_SUPPORTET_CTS, contentType );
     }
 
+    /**
+     * @param contentType
+     * @return
+     */
+    public static String[] getFileTypes( String contentType )
+    {
+        return _fnMap.getFileTypes( contentType );
+    }
+    
+    /**
+     * @param contentType
+     * @return
+     */
+    public static String getFirstFileType( String contentType )
+    {
+        return _fnMap.getFirstFileType( contentType );
+    }
 }
