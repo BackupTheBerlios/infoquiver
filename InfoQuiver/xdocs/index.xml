@@ -8,12 +8,13 @@
     <section name="InfoQuiver">
         <p> InfoQuiver will be a server demon, which supports automatic querying and indexing of many kinds of 
             information datasources. It will include build-in support for most diverse information formats and 
-            protocols as well as report generation and -dispatching. IQuiver fetches content from defined content 
-            sources, stores it in its metaformat in a database and will run user defined searches on the 
-            stored content.</p>
+            protocols as well as report generation and -dispatching. InfoQuiver fetches content from defined content 
+            sources, stores it in its metaformat in a database, adds the content per client to a lucene full-text search
+            index and will run user defined searches on the stored and indexed content.</p>
         <p> Searchresults will be produced in the form of customizable reports and dispatched for each user, usergroup
-            or client. Most of usual transports (HTTP and HTTPS, FTP and SFTP, WEBDAV, SOAP and XML-RPC, POP, IMAP, SMPT,
-            local file system, CIFS...) and formats (HTML, RSS, PDF as well as various open XML dialects and open office formats)
+            or client.</p>
+        <p> Most of usual transports (HTTP and HTTPS, FTP and SFTP, WEBDAV, SOAP and XML-RPC, POP, IMAP, SMPT,
+            local file system, CIFS...) and formats (HTML, RSS, PDF as well as various open XML dialects and office formats)
             are discussed to become medium-term to support.</p>
         <p> InfoQuiver runs on a lot of plattforms as well as with nearly every common database system.
             It uses <a href="http://db.apache.org/torque">Torque</a> as persistence layer with a simplified and 
@@ -23,12 +24,14 @@
             supplemented with extensions for:
             <ul>
                 <li>pdf documents (build on top of <a href="http://www.pdfbox.org/">PDFBox</a>)</li>
+                <li>MS Word .doc documents</li>
+                <li>MS Excel .xls documents</li>
                 <li>rss, opml and atom feeds (thanks to <a href="http://informa.sourceforge.net/">Informa</a>)</li>
                 <li>raw xml documents</li>
                 <li>binary data as well as multipart/mixed</li>
             </ul>
         </p>
-        <p>As for the moment InfoQuiver is in an early development stage even if some of the core services do already 
+        <p>As for the moment InfoQuiver is in an early development stage even if the core services do already 
            work very well.</p>
         <p><br/></p>
         <p align="center">

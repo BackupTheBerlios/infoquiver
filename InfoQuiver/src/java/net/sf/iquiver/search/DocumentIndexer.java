@@ -136,7 +136,9 @@ public class DocumentIndexer
                 Parser parser = ParserFactory.getParserForContentType( doc.getContentTypeStr() );
                 if (doc.getRawContent() != null)
                 {
-                    lDoc.add( Field.UnStored( "contents", parser.getStripped( doc.getRawContent() ) ) );
+                    String stripped = parser.getStripped( doc.getRawContent() );
+                    if( stripped != null )
+                    lDoc.add( Field.Text( "contents",  stripped ) );
                 }
             }
             catch ( UnsupportedContentTypeException e )

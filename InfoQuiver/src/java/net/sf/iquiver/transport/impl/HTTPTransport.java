@@ -85,6 +85,11 @@ public class HTTPTransport implements Fetcher
 
         try
         {
+            if( _method.hasBeenUsed() )
+            {
+                _method.recycle();
+            }
+            
             // execute the method.
             _client.executeMethod( _method );
             String encoding = ((GetMethod) _method).getResponseCharSet();
@@ -136,6 +141,7 @@ public class HTTPTransport implements Fetcher
                 }
             }
 
+            doc.setFileName( ((GetMethod) _method).getName() );
             documents.add( doc );
         }
         catch ( UnsupportedEncodingException ue )
@@ -149,8 +155,7 @@ public class HTTPTransport implements Fetcher
         finally
         {
             //always release the connection after we're done
-            _method.releaseConnection();
-            _method.recycle();
+            _method.releaseConnection();            
         }
 
         return documents;
