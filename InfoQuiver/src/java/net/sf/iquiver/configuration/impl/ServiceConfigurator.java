@@ -112,7 +112,7 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
                         long start = date.getHours() * 60 * 60 * 1000;
                         start += date.getMinutes() * 60 * 1000;
                         start += date.getSeconds() * 1000;
-                        startTime = now;
+                        startTime = now + start;
                         schedulePeriod = start;
                     }
                     else if (period.equalsIgnoreCase( "DAYLY" ))
@@ -123,6 +123,10 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
                         date.setMonth(today.getMonth());
                         date.setDate(today.getDate());
                         startTime = date.getTime();
+                        if( startTime < now)
+                        {
+                            startTime += 24 * 60 * 60 * 1000;
+                        }
                         schedulePeriod = 24 * 60 * 60 * 1000;
                     }
                     else if (period.equalsIgnoreCase( "WEEKLY" ))
@@ -133,6 +137,10 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
                         date.setMonth(today.getMonth());
                         date.setDate(today.getDate());
                         startTime = date.getTime();
+                        if( startTime < now)
+                        {
+                            startTime += 7 * 24 * 60 * 60 * 1000;
+                        }                        
                         schedulePeriod = 7 * 24 * 60 * 60 * 1000;
                     }
                     
