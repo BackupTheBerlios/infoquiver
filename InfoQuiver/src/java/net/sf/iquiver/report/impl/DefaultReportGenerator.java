@@ -2,8 +2,8 @@
  * DefaultReportGenerator.java
  * created on 24.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/impl/DefaultReportGenerator.java,v $
- * $Date: 2004/11/24 21:27:25 $
- * $Revision: 1.6 $
+ * $Date: 2004/11/24 21:45:38 $
+ * $Revision: 1.7 $
  *********************************************************************/
 
 package net.sf.iquiver.report.impl;
@@ -176,8 +176,7 @@ public class DefaultReportGenerator extends ReportGenerator
      * Either returns an already created template instance from the cache or returns a
      * new instance
      * @param xslPath path to the xsl file
-     * @param tFactory the TransformerFactory to use
-     * @return an instance of  
+     * @param tFactory the TransformerFactory to use 
      * @throws TransformerConfigurationException
      * @throws FileNotFoundException
      */
