@@ -15,6 +15,8 @@ public interface Service extends Startable, Suspendable
 {
     public long getStartTime();
     public int getRestartCount();
-    public long getSuccessfulExcecutionsCount();
-    public long getFailedExcecutionsCount();
+    public void addServiceStateListener(ServiceStateListener listener);
+    public void removeServiceStateListener(ServiceStateListener listener);
+    public void addServiceExecutionListener(ServiceExecutionListener listener);
+    public void removeServiceExecutionListener(ServiceExecutionListener listener);   
 }
