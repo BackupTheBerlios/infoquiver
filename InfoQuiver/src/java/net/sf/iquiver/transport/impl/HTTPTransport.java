@@ -75,7 +75,7 @@ public class HTTPTransport implements Fetcher
             // execute the method.
             client.executeMethod( method);
             String encoding = ((GetMethod)method).getResponseCharSet(); 
-            DefaultDocument doc = new DefaultDocument(method.getResponseBodyAsString(), encoding);           
+            DefaultDocument doc = new DefaultDocument(method.getResponseBodyAsString());           
             documents.add(doc);
         }
         catch ( UnsupportedEncodingException ue )
