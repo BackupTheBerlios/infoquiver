@@ -2,8 +2,8 @@
  * ContentSearchService.java
  * created on 15.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/ContentSearchService.java,v $
- * $Date: 2004/11/26 22:51:55 $
- * $Revision: 1.14 $
+ * $Date: 2004/11/26 23:42:19 $
+ * $Revision: 1.15 $
  *********************************************************************/
 
 package net.sf.iquiver.service.impl;
@@ -117,7 +117,7 @@ public class ContentSearchService extends BaseService
         for (int i = 0; i < contentSources.size(); i++)
         {
             ContentSource source = (ContentSource) contentSources.get( i );
-            String index = _indexDirectory + File.separator + String.valueOf( obj.getClientId() );
+            String index = _indexDirectory + File.separator + source.getContentSourceId();
             File testFile = new File( index );
             if (testFile.exists())
             {
