@@ -4,6 +4,7 @@
  */
 package net.sf.iquiver.service.impl;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -281,8 +282,8 @@ public class ContentFetchService extends BaseService
                         
                         if( !contentDocs.isEmpty() )
                         {
-	                        // Add the documents to the search index
-	                        IndexScheduler scheduler = IndexScheduler.getInstance( indexDir );
+	                        // Add the documents to the search index - we use one index per content source
+	                        IndexScheduler scheduler = IndexScheduler.getInstance( indexDir + File.separator + String.valueOf( source.getContentSourceId() ));
 	                        scheduler.scheduleForIndexing( contentDocs );
                         }
                     }

@@ -19,10 +19,13 @@ import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.MultiSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.Searchable;
 import org.apache.torque.TorqueException;
 
 /**
+ * TODO add support for caching query results 
  * @author netseeker aka Michael Manske
  */
 public class QueryTask
@@ -31,6 +34,12 @@ public class QueryTask
      * Commons Logger for this class
      */
     private static final Log logger = LogFactory.getLog( QueryTask.class );
+    
+    /**
+     * List of used search fields
+     */
+    public static final String[] SEARCH_FIELDS = { "author", "name", "title",
+            "keywords", "description", "url", "created", "modified", "contents" };
 
     /**
      * Searches all hits for the given search criteria on an existing lucene index
@@ -48,29 +57,13 @@ public class QueryTask
             logger.debug( "Starting search for \"" + searchCriteria + "\" on index \"" + index + "\"..." );
         }
 
-        List contents = new ArrayList();
+        List contents = null;
         IndexSearcher is = new IndexSearcher( index );
         Analyzer analyzer = new StandardAnalyzer();
         try
         {
-	        Query query = MultiFieldQueryParser.parse( searchCriteria, new String[] { "author", "name", "title",
-	                "keywords", "description", "url", "created", "modified", "contents" }, analyzer );
-	        Hits hits = is.search( query );
-	
-	        for (int i = 0; i < hits.length(); i++)
-	        {
-	            Document doc = hits.doc( i );
-	            String uid = doc.get( "uid" );
-	            try
-	            {
-	                Content content = ContentPeer.retrieveByUID( uid );
-	                contents.add( uid );
-	            }
-	            catch ( TorqueException e )
-	            {
-	                logger.error( "Fetching document with uid=" + uid + " failed!", e );
-	            }
-	        }
+	        Query query = MultiFieldQueryParser.parse( searchCriteria, SEARCH_FIELDS, analyzer );
+	        contents = hits2Documents( is.search( query ) );		
         }
         finally
         {
@@ -83,6 +76,77 @@ public class QueryTask
                     + contents.size() + " documents." );
         }
 
+        return contents;
+    }    
+    
+    /**
+     * Searches all hits for the given search criteria on multiple existing lucene indeces 
+     * @param indeces
+     * @param searchCriteria
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     */
+    public static List search( String[] indeces, String searchCriteria ) throws IOException, ParseException
+    {
+        if (logger.isDebugEnabled())
+        {
+            logger.debug( "Starting search for \"" + searchCriteria + "\" on indeces \"" + indeces + "\"..." );
+        }
+        
+        List contents = null;
+        Searchable[] searchers = new Searchable[indeces.length];
+        
+        for( int i = 0; i < indeces.length; i++ )
+        {
+            searchers[i] = new IndexSearcher( indeces[i]);
+        }
+        
+        MultiSearcher is = new MultiSearcher ( searchers );
+        Analyzer analyzer = new StandardAnalyzer();
+        try
+        {
+	        Query query = MultiFieldQueryParser.parse( searchCriteria, SEARCH_FIELDS, analyzer );
+	        contents = hits2Documents( is.search( query ) );	
+        }
+        finally
+        {
+            is.close();
+        }
+
+        if (logger.isDebugEnabled())
+        {
+            logger.debug( "Finished search for \"" + searchCriteria + "\" on index \"" + indeces + "\". Found "
+                    + contents.size() + " documents." );
+        }
+
+        return contents;        
+    }
+    
+    /**
+     * @param hits
+     * @return
+     * @throws IOException
+     */
+    private static List hits2Documents( Hits hits ) throws IOException
+    {
+        List contents = new ArrayList();
+        
+        for (int i = 0; i < hits.length(); i++)
+        {
+            Document doc = hits.doc( i );
+            String uid = doc.get( "uid" );
+            try
+            {
+                Content content = ContentPeer.retrieveByUID( uid );
+                contents.add( uid );
+            }
+            catch ( TorqueException e )
+            {
+                logger.error( "Fetching document with uid=" + uid + " failed!", e );
+            }
+        }
+        
         return contents;
     }
 }
