@@ -11,8 +11,11 @@ import java.util.Date;
 import org.apache.commons.io.IOUtils;
 
 import net.sf.iquiver.metaformat.Document;
+import net.sf.iquiver.metaformat.impl.ContentTypeFactory;
+import net.sf.iquiver.metaformat.impl.MetaFormatFactory;
 import net.sf.iquiver.parser.Parser;
 import net.sf.iquiver.parser.ParsingException;
+import net.sf.iquiver.parser.UnsupportedContentTypeException;
 
 /**
  * A parser implementation which delegates parsing to an external application and reads
@@ -27,6 +30,14 @@ public class DelegateParser extends Parser
     public Document parse( byte[] rawContent ) throws ParsingException
     {        	
         Document doc = null;
+        try
+        {
+            doc = MetaFormatFactory.createDocumentForContentType( ContentTypeFactory.CT_MULTIPART_MIXED );
+        }
+        catch ( UnsupportedContentTypeException e1 )
+        {
+            //can't happen because we are using an default content type
+        }
         
         if( getArguments() != null )
         {
