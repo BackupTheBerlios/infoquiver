@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://om.torque.apache.org">
    <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
-    <typeMapping
-      xmlns:ns="http://om.torque.apache.org"
-      qname="ns:ObjectKey"
-      type="java:org.apache.torqe.om.SimpleKey"
-      serializer="org.apache.axis.encoding.ser.castor.CastorSerializerFactory"
-      deserializer="org.apache.axis.encoding.ser.castor.CastorDeserializerFactory"
-      encodingStyle=""
-    />
+   <complexType name="ObjectKey">
+    <sequence/>
+   </complexType>
+   <complexType name="SimpleKey">
+    <sequence/>
+   </complexType>
+   
 </schema>
