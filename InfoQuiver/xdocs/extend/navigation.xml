@@ -11,7 +11,10 @@
         <item name="Front Page" href="/index.html"/>
         <item name="Install" href="/install.html"/>
         <item name="Getting Started" href="/getstarted/getstarted.html"/>
-        <item name="Extending InfoQuiver" href="/extend/index.html"/>
+        <item name="Extending InfoQuiver" href="/extend/index.html">
+            <item name="Custom Transports" href="/extend/transports.html"/>                    
+            <item name="Custom Parsers" href="/extend/parsers.html"/>
+        </item>
         <item name="FAQ" href="/faq.html"/>
     </menu>
     <menu name="Download">
