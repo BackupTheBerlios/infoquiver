@@ -10,14 +10,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
-import java.net.URL;
 
 import net.sf.iquiver.metaformat.Document;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.FileSystemException;
 import org.apache.commons.vfs.VFS;
 
 /**
@@ -31,15 +29,26 @@ public abstract class Parser
     private long parseEndTime;
     private long timeOut = 3000; 
     
-    public Document parse( String source ) throws ParsingException
+    /**
+     * @param source
+     * @return
+     * @throws ParsingException
+     */
+    public Document parse( String source ) throws ParsingException, IOException
     {
         startParseMonitoring();
-        Document doc = parse( new StringReader(source) );
+        Document doc = parse( source.getBytes() );
         stopParseMonitoring();
         
         return doc;
     }
 
+    /**
+     * @param source
+     * @return
+     * @throws ParsingException
+     * @throws IOException
+     */
     public Document parse( byte[] source ) throws ParsingException, IOException
     {
         InputStream in = new ByteArrayInputStream(source);
@@ -51,11 +60,23 @@ public abstract class Parser
         return doc;
     }
         
+    /**
+     * @param source
+     * @return
+     * @throws ParsingException
+     * @throws IOException
+     */
     public Document parse( File source ) throws ParsingException, IOException
     {
         return parse( VFS.getManager().toFileObject(source) );
     }
     
+    /**
+     * @param source
+     * @return
+     * @throws ParsingException
+     * @throws IOException
+     */
     public Document parse( FileObject source) throws ParsingException, IOException
     {
         InputStream in = source.getContent().getInputStream();
@@ -104,6 +125,5 @@ public abstract class Parser
         logger.debug("Parsing finished at " + parseEndTime);        
     }
     
-    protected abstract Document parse( InputStream in ) throws ParsingException, IllegalArgumentException;    
-    protected abstract Document parse( Reader in ) throws ParsingException, IllegalArgumentException;
-}
+    protected abstract Document parse( InputStream in ) throws ParsingException;    
+ }
