@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<document>
+
+  <properties>
+    <title>FAQ - Frequently Asked Questions</title>
+    <author email="netseeker@manskes.de">Michael Manske</author>
+  </properties>
+
+  <body>
+    <section name="FAQ - Frequently Asked Questions">
+      <p>
+        Please read this carefully before posting in the issue tracker
+      </p>
+      <a name="demon"/>
+      <subsection name="How can I install InfoQuiver as system demon?">
+        <p>
+            Use Quartz.
+        </p>
+      </subsection>
+      <subsection name="How can i avoid OutOfMemoryExceptions?">
+        <p>
+            Edit InfoQuivers start script (InfoQuiver.bat|InfoQuiver.sh) and incease the value for
+            the max. used memory:
+            <p>
+                <code>java -mx256m -cp %CC_CLASSPATH% net.sf.iquiver.DefaultIQuiverStarter</code>
+            </p>
+        </p>
+      </subsection>
+    </section>
+  </body>
+</document>

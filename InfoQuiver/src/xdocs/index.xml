@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Front Page</title>
+    <author email="netseeker@manskes.de">Michael Manske</author>
+  </properties>
+  <body>
+    <section name="InfoQuiver">
+        <p>
+        InfoQuiver will be a server demon, which supports automatic querying and indexing of many kinds of information datasources.
+        It will include build-in support for most diverse information formats and protocols as well as report generation and -dispatching.
+        IQuiver fetches content from defined content sources, stores it in its own xml based format in a database and
+        will run user defined searches on the stored content.
+        </p><p>
+        Searchresults will be created and dispatched as reports for each user, usergroup or client.
+        Most of usual transports (HTTP and HTTPS, FTP and SFTP, WEBDAV, SOAP, POP, IMAP, SMPT, local file system, CIFS...)
+        and formats (HTML, RSS, PDF as well as various open XML dialects and open Office formats) are discussed to become
+        medium-term to support.            
+        </p>
+    </section>
+  </body>
+</document>    

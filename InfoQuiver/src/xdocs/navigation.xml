@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="InfoQuiver">
+  <title>InfoQuiver</title>
+  <body>
+    <links>
+        <item name="netseeker" href="http://www.manskes.de"/>
+        <item name="@BerliOS" href="http://developer.berlios.de/projects/infoquiver/"/>
+    </links>
+    <menu name="Overview">
+        <item name="Front Page" href="/index.html"/>
+        <item name="Install" href="/install.html"/>
+        <item name="Getting Started" href="/getstarted/getstarted.html"/>
+        <item name="Extending InfoQuiver" href="/extend/extend.html"/>
+        <item name="FAQ" href="/faq.html"/>
+    </menu>
+    <menu name="Download">
+        <item name="Binaries" href="http://sourceforge.net/project/showfiles.php?group_id=36044"/>
+        <item name="Source" href="http://sourceforge.net/project/showfiles.php?group_id=36044"/>
+        <item name="CVS" href="http://sourceforge.net/cvs/?group_id=36044"/>
+    </menu>
+  </body>
+</project>
