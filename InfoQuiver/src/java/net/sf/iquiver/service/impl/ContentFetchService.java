@@ -40,6 +40,7 @@ public class ContentFetchService extends BaseService
 
     private int _restartCount = 0;
     private long _startTime;
+    private List _timers;
 
     /*
      * (non-Javadoc)
@@ -51,6 +52,7 @@ public class ContentFetchService extends BaseService
         logger.info( "Starting..." );
         this._startTime = System.currentTimeMillis();
         this._restartCount++;
+        this._timers = new ArrayList();
 
         List transports = _getTransports();
         for (Iterator it = transports.iterator(); it.hasNext();)
@@ -65,6 +67,7 @@ public class ContentFetchService extends BaseService
             ContentFetchThread thread = new ContentFetchThread( fetcher );
             Timer timer = new Timer();
             timer.scheduleAtFixedRate( thread, 1000, interval );
+            _timers.add(timer);
         }
     }
 
@@ -75,8 +78,12 @@ public class ContentFetchService extends BaseService
      */
     public void stop() throws Exception
     {
-        // TODO Auto-generated method stub
-
+        //shut down all timers
+        for(Iterator it = _timers.iterator(); it.hasNext();)
+        {
+            ((Timer)it.next()).cancel();
+        }
+        _timers = null;
     }
 
     /*
