@@ -20,10 +20,8 @@
 	</field>
 	<field name="ShortDescription" class="java.lang.String">
 	</field>
-	<variable name="Id" class="java.lang.Integer" resetType="Group" resetGroup="ResultGroup" calculation="System">
-		<variableExpression><![CDATA[new Integer($V{Id}.intValue() + 1)]]></variableExpression>
-		<initialValueExpression><![CDATA[new Integer(0)]]></initialValueExpression>
-	</variable>
+	<field name="Counter" class="java.lang.Integer">
+	</field>
 	<group name="ResultGroup" minHeightToStartNewPage="60">
 		<groupExpression><![CDATA[$F{Criteria}]]></groupExpression>
 		<groupHeader>
@@ -87,7 +85,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{FileName}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="#.##0.00 %">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00 %">
 				<reportElement key="textField" positionType="Float" mode="Opaque" x="465" y="0" width="46" height="15"/>
 				<textElement textAlignment="Right">
 					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -106,7 +104,7 @@
 				<textElement textAlignment="Right">
 					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[String.valueOf($V{Id}) + ". "]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[String.valueOf($F{Counter}) + ". "]]></textFieldExpression>
 			</textField>
 			<textField pattern="">
 				<reportElement key="textField" positionType="Float" mode="Opaque" x="25" y="16" width="488" height="53"/>
