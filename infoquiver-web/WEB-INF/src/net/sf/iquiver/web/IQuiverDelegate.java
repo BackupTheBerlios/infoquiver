@@ -2,14 +2,17 @@
  * IQuiverDelegate.java
  * created on 28.11.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/infoquiver-web/WEB-INF/src/net/sf/iquiver/web/IQuiverDelegate.java,v $
- * $Date: 2004/11/29 23:44:41 $
- * $Revision: 1.2 $
+ * $Date: 2004/12/01 00:09:37 $
+ * $Revision: 1.3 $
 *********************************************************************/
 
 package net.sf.iquiver.web;
 
 import java.io.IOException;
 import java.util.Vector;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import net.sf.iquiver.configuration.impl.DefaultProperiesConfiguration;
 import net.sf.iquiver.util.ObjectSerializer;
@@ -58,19 +61,43 @@ public class IQuiverDelegate implements ViewTool
     /**
      * @param login
      * @param password
-     * @param client
      * @return
      * @throws XmlRpcException
      * @throws IOException
      * @throws DocumentException
      */
-    public Document doLogin( String login, String password, String client) throws XmlRpcException, IOException, DocumentException
+    public Document doLogin( String login, String password, HttpServletRequest request ) throws XmlRpcException, IOException, DocumentException
     {
-        Vector params = new Vector(3);
+        Vector params = new Vector(2);
         params.add( login );
         params.add( password );
-        params.add( client );
-        return execute( "doLogin", params );
+        Document user = execute( "doLogin", params );
+        HttpSession session = request.getSession();
+        
+        if( user != null )
+        {
+            session.setAttribute("user", user );
+        }
+        
+        return user;
+    }
+    
+    /**
+     * @return
+     */
+    public boolean isLoggedIn( HttpServletRequest request )
+    {
+        HttpSession session = request.getSession(false);
+        return ( session != null && session.getAttribute("user") != null );
+    }
+    
+    /**
+     * @return
+     */
+    public Document getUser( HttpServletRequest request )
+    {
+        HttpSession session = request.getSession(false);
+        return session != null ? (Document)session.getAttribute("user") : null; 
     }
     
     /**
@@ -166,6 +193,11 @@ public class IQuiverDelegate implements ViewTool
     private Document execute( String method, Vector params ) throws XmlRpcException, IOException, DocumentException
     {
         String xml = (String)rpcClient.execute( method, params );
-        return DocumentHelper.parseText( xml );
+        if( xml != null && xml.length() > 0 )
+        {
+            return DocumentHelper.parseText( xml );
+        }
+        
+        return null;
     }
 }
