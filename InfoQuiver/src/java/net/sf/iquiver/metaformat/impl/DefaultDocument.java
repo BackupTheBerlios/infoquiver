@@ -25,7 +25,7 @@ public class DefaultDocument extends AbstractDocument
     public DefaultDocument()
     {
     }
-
+    
     /**
      * Constructs a new DefaultDocument and sets it's Content by calling
      * DefaultDocument( String rawContent ) with rawContent transformed into

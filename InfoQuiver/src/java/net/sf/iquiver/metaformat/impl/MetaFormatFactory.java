@@ -3,6 +3,7 @@
  */
 package net.sf.iquiver.metaformat.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,6 +39,28 @@ public class MetaFormatFactory
      * @param contentType
      * @return @throws UnsupportedContentTypeException
      */
+    public static String getDocumentClassForContentType( String contentType ) throws UnsupportedContentTypeException
+    {
+        if ( isTextBasedContentType( contentType) )
+        {
+            return DefaultDocument.class.getName();
+        }
+        else if ( isBinaryBasedContentType( contentType ) )
+        {
+            return BinaryDocument.class.getName();
+        }
+        else
+        {
+            throw new UnsupportedContentTypeException( "The supplied content type \"" + contentType
+                    + "\" is not supported yet." );
+        }
+    }
+    
+    /**
+     * @param contentType
+     * @return
+     * @throws UnsupportedContentTypeException
+     */
     public static Document createDocumentForContentType( String contentType ) throws UnsupportedContentTypeException
     {
         if ( isTextBasedContentType( contentType) )
@@ -52,14 +75,43 @@ public class MetaFormatFactory
         {
             throw new UnsupportedContentTypeException( "The supplied content type \"" + contentType
                     + "\" is not supported yet." );
-        }
+        }        
     }
-
+    
+    /**
+     * @param contentType
+     * @param content
+     * @return
+     * @throws UnsupportedEncodingException
+     * @throws UnsupportedContentTypeException
+     */
+    public static Document createDocumentForContentType( String contentType, byte[] content, String encoding ) throws UnsupportedEncodingException, UnsupportedContentTypeException
+    {
+        if ( isTextBasedContentType( contentType) )
+        {
+            return new DefaultDocument( content, encoding );
+        }
+        else if ( isBinaryBasedContentType( contentType ) )
+        {
+            return new BinaryDocument(content);
+        }
+        else
+        {
+            throw new UnsupportedContentTypeException( "The supplied content type \"" + contentType
+                    + "\" is not supported yet." );
+        }                
+    }
+    
+    public static Document createDocumentForContentType( String contentType, byte[] content ) throws UnsupportedEncodingException, UnsupportedContentTypeException
+    {
+        return createDocumentForContentType( contentType, content, Document.DEFAULT_ENCODING );
+    }
+    
     /**
      * @param contentType
      * @return
      */
-    private static boolean isTextBasedContentType( String contentType )
+    public static boolean isTextBasedContentType( String contentType )
     {
         return ArrayUtil.contains(TEXT_CTS, contentType);
     }
@@ -68,7 +120,7 @@ public class MetaFormatFactory
      * @param contentType
      * @return
      */
-    private static boolean isBinaryBasedContentType( String contentType )
+    public static boolean isBinaryBasedContentType( String contentType )
     {
         return ArrayUtil.contains(BINARY_CTS, contentType);
     }

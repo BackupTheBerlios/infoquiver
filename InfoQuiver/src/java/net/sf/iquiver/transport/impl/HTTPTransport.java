@@ -5,12 +5,14 @@ package net.sf.iquiver.transport.impl;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.iquiver.metaformat.Document;
 import net.sf.iquiver.metaformat.impl.DefaultDocument;
+import net.sf.iquiver.metaformat.impl.MetaFormatFactory;
 import net.sf.iquiver.om.ContentSource;
 import net.sf.iquiver.transport.Fetcher;
 import net.sf.iquiver.transport.TransportConfigurationException;
@@ -76,7 +78,8 @@ public class HTTPTransport implements Fetcher
             client.executeMethod( method);
             String encoding = ((GetMethod)method).getResponseCharSet();
             Header header = ((GetMethod)method).getResponseHeader("Content-Type");
-            DefaultDocument doc = new DefaultDocument(method.getResponseBody(), encoding);           
+            String contentType = header.getValue();
+            Document doc = MetaFormatFactory.createDocumentForContentType( contentType, method.getResponseBody(), encoding);
             documents.add(doc);
         }
         catch ( UnsupportedEncodingException ue )
