@@ -1,183 +1,206 @@
 <!-- ================================================================
+    buld.xml
     IQuiver Buildfile
-
-	You should not have to edit this file!
-	Edit build.properties instead.
+    You should not have to edit this file!
+    Edit build.properties instead. 
+    
+    $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/build.xml,v $
+    $Date: 2004/07/17 17:51:03 $
+    $Revision: 1.17 $
 ================================================================= -->
 
 <project name="iquiver" default="compile" basedir=".">
 
-	<property name="build.properties" value="build.properties" />
-	<property file="build.properties" />
-	<property name="build.properties" value="build.properties" />
+    <property name="build.properties" value="build.properties" />
+    <property file="build.properties" />
+    <property name="build.properties" value="build.properties" />
 
-	<path id="compile.classpath">
+    <path id="compile.classpath">
 
-		<pathelement location="${compile.dir}" />
+        <pathelement location="${compile.dir}" />
 
-		<fileset dir="${lib.dir}">
-			<include name="**/*.jar" />
-			<include name="**/*.zip" />
-		</fileset>
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar" />
+            <include name="**/*.zip" />
+        </fileset>
 
-	</path>
+    </path>
 
-	<taskdef name="package2path" classname="org.apache.torque.task.PackageAsPathTask" classpath="${compile.dir}">
-		<classpath refid="compile.classpath" />
-	</taskdef>
+    <taskdef name="package2path" classname="org.apache.torque.task.PackageAsPathTask" classpath="${compile.dir}">
+        <classpath refid="compile.classpath" />
+    </taskdef>
 
-	<!-- ================================================================================================= -->
-	<target name="prepare">
-		<tstamp />
-		<mkdir dir="${compile.dir}" />
-	</target>
+    <taskdef name="jrc" classname="dori.jasper.ant.JRAntCompileTask">
+        <classpath refid="compile.classpath" />
+    </taskdef>
 
-	<!-- ================================================================================================= -->
-	<target name="clean" description="Delete old build directories">
-		<delete dir="${compile.dir}" failonerror="false" />
-	</target>
+    <!-- ================================================================================================= -->
+    <target name="prepare">
+        <tstamp />
+        <mkdir dir="${compile.dir}" />
+    </target>
 
-
-	<!-- ================================================================================================= -->
-	<target name="compile" depends="prepare" description="Compile Java sources">
-
-		<mkdir dir="${compile.dir}" />
-
-		<javac srcdir="${java.dir}" destdir="${compile.dir}" debug="${compile.debug}" verbose="off" deprecation="${compile.deprecation}" optimize="${compile.optimize}">
-			<classpath refid="compile.classpath" />
-		</javac>
-
-		<copy todir="${compile.dir}" overwrite="true">
-			<fileset dir="${java.dir}" includes="**/*.xml,**/*.dtd, **/*.xsd" />
-		</copy>
-
-	</target>
+    <!-- ================================================================================================= -->
+    <target name="clean" description="Delete old build directories">
+        <delete dir="${compile.dir}" failonerror="false" />
+    </target>
 
 
-	<!-- ================================================================================================= -->
-	<target name="dist" depends="compile" description="Create binary distribution">
+    <!-- ================================================================================================= -->
+    <target name="compile" depends="prepare" description="Compile Java sources">
 
-		<mkdir dir="${dist.dir}" />
+        <mkdir dir="${compile.dir}" />
 
-		<delete file="${dist.dir}/iquiver.jar" failonerror="false" />
-		<jar jarfile="${dist.dir}/iquiver.jar" basedir="${compile.dir}">
-			<manifest>
-				<attribute name="Purpose" value="${project.name}" />
-				<attribute name="Version" value="0.1.1" />
-			</manifest>
-		</jar>
+        <javac srcdir="${java.dir}" destdir="${compile.dir}" debug="${compile.debug}" verbose="off" deprecation="${compile.deprecation}" optimize="${compile.optimize}">
+            <classpath refid="compile.classpath" />
+        </javac>
 
-	</target>
+        <copy todir="${compile.dir}" overwrite="true">
+            <fileset dir="${java.dir}" includes="**/*.xml,**/*.dtd, **/*.xsd" />
+        </copy>
 
-
-	<!-- ================================================================================================= -->
-	<target name="javadoc">
-		<javadoc destdir="${javadoc.dir}" access="public" use="true" notree="false" nonavbar="false" noindex="false" splitindex="true" author="true" version="true" nodeprecatedlist="false" nodeprecated="false" packagenames="net.sf.iquiver.*" sourcepath="${java.dir}" classpath="${build.dir}" doctitle="${project.name}">
-			<classpath refid="compile.classpath" />
-		</javadoc>
-	</target>
+    </target>
 
 
-	<!-- ================================================================================================= -->
-	<target name="generate_om" description="Creates the torque object model">
-		<!-- Run the task 'om' of build-torque.xml with the appropriate settings -->
-		<ant antfile="build-torque.xml" target="om" inheritAll="false" />
-		<!-- Delete the report file -->
-		<delete file="${java.dir}/report.${torque.project}.om.generation" />
-	</target>
+    <!-- ================================================================================================= -->
+    <target name="dist" depends="compile" description="Create binary distribution">
+
+        <mkdir dir="${dist.dir}" />
+
+        <delete file="${dist.dir}/iquiver.jar" failonerror="false" />
+        <jar jarfile="${dist.dir}/iquiver.jar" basedir="${compile.dir}">
+            <manifest>
+                <attribute name="Purpose" value="${project.name}" />
+                <attribute name="Version" value="0.1.1" />
+            </manifest>
+        </jar>
+
+    </target>
 
 
-	<!-- ================================================================================================= -->
-	<target name="id_table_init" description="Initializes the id-table for the torque id generator">
-		<delete dir="src/sql" failonerror="false" />
-		<ant antfile="build-torque.xml" target="id-table-init-sql" inheritAll="false" />
-		<ant antfile="build-torque.xml" target="insert-sql" inheritAll="false" />
-	</target>
+    <!-- ================================================================================================= -->
+    <target name="javadoc">
+        <javadoc destdir="${javadoc.dir}" access="public" use="true" notree="false" nonavbar="false" noindex="false" splitindex="true" author="true" version="true" nodeprecatedlist="false" nodeprecated="false" packagenames="net.sf.iquiver.*" sourcepath="${java.dir}" classpath="${build.dir}" doctitle="${project.name}">
+            <classpath refid="compile.classpath" />
+        </javadoc>
+    </target>
 
 
-	<!-- ================================================================================================= -->
-	<target name="create_db" description="Creates the database from your schema.xml">
-        <delete file="${torque.sql.dir}/${torque.project}-data.sql" failonerror="false"/>
+    <!-- ================================================================================================= -->
+    <target name="generate_om" description="Creates the torque object model">
+        <!-- Run the task 'om' of build-torque.xml with the appropriate settings -->
+        <ant antfile="build-torque.xml" target="om" inheritAll="false" />
+        <!-- Delete the report file -->
+        <delete file="${java.dir}/report.${torque.project}.om.generation" />
+    </target>
+
+
+    <!-- ================================================================================================= -->
+    <target name="id_table_init" description="Initializes the id-table for the torque id generator">
+        <delete dir="src/sql" failonerror="false" />
+        <ant antfile="build-torque.xml" target="id-table-init-sql" inheritAll="false" />
+        <ant antfile="build-torque.xml" target="insert-sql" inheritAll="false" />
+    </target>
+
+
+    <!-- ================================================================================================= -->
+    <target name="create_db" description="Creates the database from your schema.xml">
+        <delete file="${torque.sql.dir}/${torque.project}-data.sql" failonerror="false" />
         <ant antfile="build-torque.xml" target="sql" inheritAll="false" />
-		<ant antfile="build-torque.xml" target="create-db" inheritAll="false" />
-        <ant antfile="build-torque.xml" target="id-table-init-sql" inheritAll="false" />        
-		<ant antfile="build-torque.xml" target="insert-sql" inheritAll="false" />
+        <ant antfile="build-torque.xml" target="create-db" inheritAll="false" />
+        <ant antfile="build-torque.xml" target="id-table-init-sql" inheritAll="false" />
+        <ant antfile="build-torque.xml" target="insert-sql" inheritAll="false" />
         <delete failonerror="false">
-			<fileset dir="${torque.sql.dir}" includes="**/*.generation" excludes="**/*-data.sql,**/.cvsignore,**/*.map"/>
-		</delete>
-	</target>
+            <fileset dir="${torque.sql.dir}" includes="**/*.generation" excludes="**/*-data.sql,**/.cvsignore,**/*.map" />
+        </delete>
+    </target>
 
-	<!-- ================================================================================================= -->
-	<target name="datadump_export" description="Creates a complete xml data dump of your database">
-		<ant antfile="build-torque.xml" target="datadtd" inheritAll="false" />
-		<ant antfile="build-torque.xml" target="datadump" inheritAll="false">
-			<property name="outputDirectory" value="${torque.schema.dir}" />
-		</ant>
+    <!-- ================================================================================================= -->
+    <target name="datadump_export" description="Creates a complete xml data dump of your database">
+        <ant antfile="build-torque.xml" target="datadtd" inheritAll="false" />
+        <ant antfile="build-torque.xml" target="datadump" inheritAll="false">
+            <property name="outputDirectory" value="${torque.schema.dir}" />
+        </ant>
 
-		<move file="${torque.schema.dir}/${torque.project}-${torque.project}-all-data.xml" tofile="${torque.schema.dir}/${torque.project}-data.xml" />
-	</target>
+        <move file="${torque.schema.dir}/${torque.project}-${torque.project}-all-data.xml" tofile="${torque.schema.dir}/${torque.project}-data.xml" />
+    </target>
 
 
-	<!-- ================================================================================================= -->
-	<target name="datadump_import" description="Creates a complete xml data dump of your database">
+    <!-- ================================================================================================= -->
+    <target name="datadump_import" description="Creates a complete xml data dump of your database">
         <antcall target="xmldump2sql" />
         <ant antfile="build-torque.xml" target="insert-sql" inheritAll="false" />
-	</target>
+    </target>
 
     <!-- ================================================================================================= -->
     <target name="xmldump2sql" description="Creates a complete xml data dump of your database">
-	    <ant antfile="build-torque.xml" target="datasql" inheritAll="false">
-	        <property name="outputDirectory" value="${torque.sql.dir}" />
-	    </ant>
+        <ant antfile="build-torque.xml" target="datasql" inheritAll="false">
+            <property name="outputDirectory" value="${torque.sql.dir}" />
+        </ant>
     </target>
-    
-	<!-- ================================================================================================= -->
-	<target name="awk-direct" description="exec awk with direct script command">
-		<!-- this target uses the following properties:
+
+    <!-- ================================================================================================= -->
+    <target name="compile_reports" description="Compiles all jasper repo">
+        <jrc>
+            <src>
+                <fileset dir="src/reports" includes="**/*.jrxml" excludes="**/*.gif,**/*.jpg,**/*.png,**/*.class,**/*.jasper" />
+            </src>
+            <classpath>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>            
+        </jrc>
+    </target>
+
+
+    <!-- ================================================================================================= -->
+    <target name="awk-direct" description="exec awk with direct script command">
+        <!-- this target uses the following properties:
            awk.targetfile : the file which will be changed by this awk-task
            awk.script:      the script-command(s) (not the file)
    -->
 
-		<!-- name of temporary files -->
-		<property name="awk.tempfile.script" value="temp.awk" />
+        <!-- name of temporary files -->
+        <property name="awk.tempfile.script" value="temp.awk" />
 
-		<!-- creation of awk-script-file -->
-		<echo message="${awk.script}" file="${awk.tempfile.script}" />
+        <!-- creation of awk-script-file -->
+        <echo message="${awk.script}" file="${awk.tempfile.script}" />
 
-		<!-- execution of target "awk" -->
-		<echo level="info" message="Script:" />
-		<echo level="info" message="${awk.script}" />
+        <!-- execution of target "awk" -->
+        <echo level="info" message="Script:" />
+        <echo level="info" message="${awk.script}" />
 
-		<ant target="awk" inheritAll="false">
-			<property name="awk.scriptfile" value="${awk.tempfile.script}" />
-		</ant>
+        <ant target="awk" inheritAll="false">
+            <property name="awk.scriptfile" value="${awk.tempfile.script}" />
+        </ant>
 
-		<!-- delete the temporary files -->
-		<delete file="${awk.tempfile.script}" />
-	</target>
+        <!-- delete the temporary files -->
+        <delete file="${awk.tempfile.script}" />
+    </target>
 
-	<!-- ================================================================================================= -->
-	<target name="awk" description="exec awk">
-		<!-- this target uses the following properties:
+    <!-- ================================================================================================= -->
+    <target name="awk" description="exec awk">
+        <!-- this target uses the following properties:
            awk.targetfile : the file which will be changed by this awk-task
            awk.scriptfile : the script-file
    -->
 
-		<!-- name of temporary files -->
-		<property name="awk.tempfile.out" value="temp_out.txt" />
+        <!-- name of temporary files -->
+        <property name="awk.tempfile.out" value="temp_out.txt" />
 
-		<!-- execution of awk-script-file -->
-		<echo level="info" message="Running on: ${awk.targetfile} ..." />
-		<echo level="info" message="Scriptfile: ${awk.scriptfile}" />
-		<exec executable="gawk" output="${awk.tempfile.out}">
-			<arg line="-f ${awk.scriptfile} ${awk.targetfile}" />
-		</exec>
+        <!-- execution of awk-script-file -->
+        <echo level="info" message="Running on: ${awk.targetfile} ..." />
+        <echo level="info" message="Scriptfile: ${awk.scriptfile}" />
+        <exec executable="gawk" output="${awk.tempfile.out}">
+            <arg line="-f ${awk.scriptfile} ${awk.targetfile}" />
+        </exec>
 
-		<!-- copy the result of awk to the target file -->
-		<copy file="${awk.tempfile.out}" tofile="${awk.targetfile}" overwrite="true" />
+        <!-- copy the result of awk to the target file -->
+        <copy file="${awk.tempfile.out}" tofile="${awk.targetfile}" overwrite="true" />
 
-		<!-- delete the temporary files -->
-		<delete file="${awk.tempfile.out}" />
-	</target>
+        <!-- delete the temporary files -->
+        <delete file="${awk.tempfile.out}" />
+    </target>
 
 </project>
