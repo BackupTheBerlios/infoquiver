@@ -51,7 +51,6 @@ public class ContentFetchService extends BaseService
      */
     protected void doStart()
     {
-        logger.info( "Starting..." );
         this._timers = new ArrayList();
 
         List transports = _getTransports();
