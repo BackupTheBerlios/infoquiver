@@ -26,8 +26,7 @@ public abstract class Parser
     private static final Log logger = LogFactory.getLog(Parser.class);
     
     private long parseStartTime;
-    private long parseEndTime;
-    private long timeOut = 3000; 
+    private long parseEndTime;    
     
     /**
      * @param source
@@ -95,22 +94,6 @@ public abstract class Parser
     public long getLastParsingTimeExposure()
     {
         return parseEndTime - parseStartTime;
-    }
-    
-    /**
-     * @param millis
-     */
-    public void setParserTimeout(long millis)
-    {
-        this.timeOut = millis;
-    }
-    
-    /**
-     * @return
-     */
-    public long getParserTimeout() 
-    {
-        return this.timeOut;
     }
     
     private void startParseMonitoring()
