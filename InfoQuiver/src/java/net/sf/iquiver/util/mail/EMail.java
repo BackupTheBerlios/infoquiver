@@ -2,8 +2,8 @@
  * EMail.java
  * created on 16.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/util/mail/EMail.java,v $
- * $Date: 2004/11/27 20:43:48 $
- * $Revision: 1.4 $
+ * $Date: 2004/11/28 13:23:33 $
+ * $Revision: 1.5 $
  *********************************************************************/
 
 package net.sf.iquiver.util.mail;
@@ -188,6 +188,44 @@ public class EMail
         
         return mbp.getContentID();
     }    
+
+    /**
+     * Adds an attachement while adding the file specified by <var>filePath</var> using <var>targetName</var> as attachement name.
+     * @param filePath path to the file to add as attachment
+     * @param targetName name of the body part (attachment), can be null
+     * @param displayName the description of the attachment most clients will show this as attachment name, can be null
+     * @param cid the CID to use for the attachement, can be null
+     * @return the CID of the added attachment
+     * @throws MessagingException
+     */
+    public String addAttachment( String filePath, String targetName, String displayName, String cid ) throws MessagingException
+    {
+        MimeBodyPart mbp = new MimeBodyPart();
+        FileDataSource fds = new FileDataSource( filePath );
+        mbp.setDataHandler( new DataHandler( fds ) );
+        if( targetName != null )
+        {
+            mbp.setFileName( targetName );
+        }
+        
+        if( cid != null )
+        {
+            mbp.setContentID( cid );
+        }
+        else
+        {
+            mbp.setContentID( new UID().toString() );
+        }
+        
+        if( displayName != null )
+        {
+            mbp.setDescription( displayName );
+        }
+        
+        mp.addBodyPart( mbp );
+        
+        return mbp.getContentID();
+    }        
     
     /**
      * @return
