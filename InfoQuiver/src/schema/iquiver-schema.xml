@@ -12,6 +12,8 @@
         <column name="USER_DATE_OF_BIRTH" type="TIMESTAMP"/>        
         <column name="USER_PICTURE" type="LONGVARBINARY" size="4096"/>
         <column name="USER_LAST_LOGIN" primaryKey="false" type="BIGINT"/>
+        <column name="USER_LOCALE" primaryKey="false" type="VARCHAR" size="5"/>
+        <column name="USER_PREFERED_REPORT_FORMAT" primaryKey="false" type="VARCHAR" size="3"/>
         <column name="ADDRESS_ID" primaryKey="false" required="true" type="BIGINT"/>
         <column name="CLIENT_ID" primaryKey="false" required="true" type="INTEGER"/>
         <column name="CREATED" type="TIMESTAMP"/>            
