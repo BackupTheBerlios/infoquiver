@@ -119,15 +119,15 @@
         <column name="TRANSPORT_DESC" type="VARCHAR" size="255"/>
         <column name="TRANSPORT_START_TIMEOUT" type="TIMESTAMP"/>        
         <column name="TRANSPORT_IMPLEMENTATION" required="true" type="VARCHAR" size="255" description="complete name of corresponding java class"/>
-        <column name="IS_AUTHENTIFICATION_REQUIRED" type="BOOLEANCHAR" description="does the transport require authentification?"/>
+        <column name="IS_AUTHENTIFICATION_REQUIRED" type="BOOLEANINT" description="does the transport require authentification?"/>
     </table>
     <table name="iq_transport_attribute" javaName="TransportAttribute">
         <column name="TRANSPORT_ATTRIBUTE_ID" primaryKey="true" required="true" type="INTEGER"/>
         <column name="TRANSPORT_ID" required="true" type="INTEGER"/>
         <column name="TRANSPORT_ATTRIBUTE_NAME" required="true" type="VARCHAR" size="16"/>
         <column name="TRANSPORT_ATTRIBUTE_TYPE" required="true" type="VARCHAR" size="32" description="complete name of corresponding java type"/>
-        <column name="IS_PART_OF_AUTHENTIFICATION" type="BOOLEANCHAR" description="is the attribute needed by the transport authentification mechanism?"/>
-        <column name="IS_MANDATORY" type="BOOLEANCHAR"/>
+        <column name="IS_PART_OF_AUTHENTIFICATION" type="BOOLEANINT" description="is the attribute needed by the transport authentification mechanism?"/>
+        <column name="IS_MANDATORY" type="BOOLEANINT"/>
         <foreign-key foreignTable="iq_transport">
             <reference local="TRANSPORT_ID" foreign="TRANSPORT_ID" />
         </foreign-key>        
@@ -158,7 +158,7 @@
     <table name="iq_user_group_permission_lnk" javaName="UserGroupPermissionLnk" idMethod="none">
         <column name="USER_GROUP_ID" primaryKey="true" required="true" type="BIGINT"/>
         <column name="PERMISSION_ID" primaryKey="true" required="true" type="INTEGER"/>
-        <column name="IS_NEGATION" type="BOOLEANCHAR"/>
+        <column name="IS_NEGATION" type="BOOLEANINT"/>
         <unique name="IQ_USERGROUPPERMLNK_PKI">
             <unique-column name="USER_GROUP_ID"/>
             <unique-column name="PERMISSION_ID"/>
@@ -193,8 +193,8 @@
         <column name="PUBLISHER_ID" type="INTEGER"/>        
         <column name="CONTENT_SOURCE_NAME" type="VARCHAR" size="32"/>
         <column name="CONTENT_SOURCE_DESC" type="VARCHAR" size="255"/>
-        <column name="CONTENT_SOURCE_UPDATE_TIMESPAN" type="BIGINT" description="timespan between updates of this content source contents"/>
-        <column name="IS_AUTHENTIFICATION_REQUIRED" type="BOOLEANCHAR"/>
+        <column name="CONTENT_SOURCE_UPDATE_TIMESPAN" type="BIGINT" description="timespan between updates of this content source contents" default="1800000"/>
+        <column name="IS_AUTHENTIFICATION_REQUIRED" type="BOOLEANINT"/>
         <foreign-key foreignTable="iq_content_source_type">
             <reference local="CONTENT_SOURCE_TYPE_ID" foreign="CONTENT_SOURCE_TYPE_ID" />
         </foreign-key>
@@ -257,6 +257,7 @@
         <column name="CONTENT_INFO_URL" type="VARCHAR" size="32"/>
         <column name="CONTENT_AUTHOR" type="VARCHAR" size="32"/>
         <column name="CONTENT_CONTENT" type="LONGVARCHAR" size="16184"/>
+        <column name="CONTENT_TO_DELETE" type="BOOLEANINT"/>
         <foreign-key foreignTable="iq_content_source">
             <reference local="CONTENT_SOURCE_ID" foreign="CONTENT_SOURCE_ID" />
         </foreign-key>   
@@ -278,16 +279,5 @@
         <index name="IQ_CONTENT_AUTHOR_CKI">
             <index-column name="CONTENT_AUTHOR"/>
         </index>                                                     
-    </table>
-    <table name="iq_client_content_lnk" javaName="ClientContentLnk" idMethod="none">
-        <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>        
-        <column name="CONTENT_ID" primaryKey="true" required="true" type="BIGINT"/>
-        <column name="REQUEST_DATETIME" type="TIMESTAMP"/> 
-        <foreign-key foreignTable="iq_client">
-            <reference local="CLIENT_ID" foreign="CLIENT_ID" />
-        </foreign-key>
-        <foreign-key foreignTable="iq_content">
-            <reference local="CONTENT_ID" foreign="CONTENT_ID" />
-        </foreign-key>        
     </table>
 </database>

@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
 <!DOCTYPE dataset SYSTEM "file://iquiver-data.dtd">
 <dataset name="all">
-
-    <User UserId="0" UserPassword="root" UserLogin="root" UserFirstName="IQuivers" UserLastName="Root" UserDateOfBirth="2004-03-11 21:50:31.0" AddressId="0" ClientId="0"/>
-    <User UserId="1" UserPassword="test" UserLogin="test" UserFirstName="IQuivers" UserLastName="Testuser" UserDateOfBirth="2004-03-11 21:50:31.0" AddressId="1" ClientId="1"/>
-    <UserContentSourceLnk UserId="0" ContentSourceId="0"/>
-    <UserContentSourceLnk UserId="1" ContentSourceId="0"/>
-    <Client ClientId="0" ClientName="ROOT" AddressId="0"/>
-    <Client ClientId="1" ClientName="TEST" AddressId="1"/>
-    <ClientContentSourceLnk ClientId="0" ContentSourceId="0"/>
-    <ClientContentSourceLnk ClientId="1" ContentSourceId="0"/>
-    <Address AddressId="0" AddressName="DUMMY ADDRESS FOR ROOT" AddressStreet="None" AddressZip="00000" AddressEmail="netseeker@manskes.de"/>
-    <Address AddressId="1" AddressName="TEST" AddressStreet="Demo Square" AddressZip="00001" AddressPhone="+(49)711 123456" AddressEmail="netseeker@manskes.de" AddressNumber="41" AddressCountry="DE"/>
-    <UserGroup UserGroupId="0" UserGroupName="ROOT" UserGroupDesc="ROOT" ClientId="0"/>
-    <UserGroup UserGroupId="1" UserGroupName="TEST" UserGroupDesc="TEST" ClientId="1"/>
-    <UserGroupLnk UserGroupId="0" UserId="0"/>
-    <UserGroupLnk UserGroupId="1" UserId="1"/>
-    <UserGroupClientLnk ClientId="0" UserGroupId="0"/>
-    <UserGroupClientLnk ClientId="1" UserGroupId="1"/>
-    <Transport TransportId="0" TransportName="HTTPTransport" TransportType="0" TransportDesc="Simple HTTP Transport" TransportStartTimeout="2004-03-16 00:07:15.0" TransportImplementation="net.sf.iquiver.transport.impl.HTTPTransport"/>
-    <TransportAttribute TransportAttributeId="0" TransportId="0" TransportAttributeName="Server" TransportAttributeType="" IsPartOfAuthentification="N" IsMandatory="Y"/>
-    <TransportAttribute TransportAttributeId="1" TransportId="0" TransportAttributeName="Port" TransportAttributeType="" IsPartOfAuthentification="N" IsMandatory="N"/>
-    <TransportAttribute TransportAttributeId="2" TransportId="0" TransportAttributeName="Login" TransportAttributeType="" IsPartOfAuthentification="Y" IsMandatory="N"/>
-    <TransportAttribute TransportAttributeId="3" TransportId="0" TransportAttributeName="Password" TransportAttributeType="" IsPartOfAuthentification="Y" IsMandatory="N"/>
-    <Permission PermissionId="0" PermissionName=""/>
-    <ContentSource ContentSourceId="0" ContentSourceTypeId="0" TransportId="0" ContentSourceName="HTML Test Content Source" ContentSourceDesc="HTML Test Content Source" IsAuthentificationRequired="N"/>
-    <ContentSourceTransportConfig ContentSourceId="0" TransportAttributeId="0" TransportAttributeValue="http://www.manskes.de"/>
-    <ContentParser ContentParserId="0" ContentParserImplementation="net.sf.iquiver.parser.impl.TextParser" ContentParserName="Text Parser"/>
-    <ContentParser ContentParserId="1" ContentParserImplementation="net.sf.iquiver.parser.impl.HtmlParser" ContentParserName="HTML Parser"/>
-    <ContentType ContentTypeId="0" ContentTypeName="text/plain" ContentTypeDesc="Plain Text" ContentParserId="0"/>
-    <ContentType ContentTypeId="1" ContentTypeName="text/html" ContentTypeDesc="HTML" ContentParserId="1"/>
+    <User UserId="101" UserPassword="root" UserLogin="root" UserFirstName="IQuivers" UserLastName="Root" UserDateOfBirth="2004-07-08 17:58:39.0" AddressId="101" ClientId="101"/>
+    <User UserId="102" UserPassword="test" UserLogin="test" UserFirstName="IQuivers" UserLastName="Testuser" UserDateOfBirth="2004-07-08 17:58:43.0" AddressId="102" ClientId="102"/>
+    <UserContentSourceLnk UserId="101" ContentSourceId="101"/>
+    <UserContentSourceLnk UserId="102" ContentSourceId="101"/>
+    <Client ClientId="101" ClientName="ROOT" AddressId="101"/>
+    <Client ClientId="102" ClientName="TEST" AddressId="102"/>
+    <ClientContentSourceLnk ClientId="101" ContentSourceId="101"/>
+    <ClientContentSourceLnk ClientId="102" ContentSourceId="101"/>
+    <Address AddressId="101" AddressName="DUMMY ADDRESS FOR ROOT" AddressStreet="None" AddressZip="00000" AddressEmail="netseeker@manskes.de"/>
+    <Address AddressId="102" AddressName="TEST" AddressStreet="Demo Square" AddressZip="00001" AddressPhone="+(49)711 123456" AddressEmail="netseeker@manskes.de" AddressNumber="41" AddressCountry="DE"/>
+    <UserGroup UserGroupId="101" UserGroupName="ROOT" UserGroupDesc="ROOT" ClientId="101"/>
+    <UserGroup UserGroupId="102" UserGroupName="TEST" UserGroupDesc="TEST" ClientId="102"/>
+    <UserGroupLnk UserGroupId="101" UserId="101"/>
+    <UserGroupLnk UserGroupId="102" UserId="102"/>
+    <UserGroupClientLnk ClientId="101" UserGroupId="101"/>
+    <UserGroupClientLnk ClientId="102" UserGroupId="102"/>
+    <Transport TransportId="101" TransportName="HTTPTransport" TransportType="101" TransportDesc="Simple HTTP Transport" TransportStartTimeout="2004-07-08 17:57:44.0" TransportImplementation="net.sf.iquiver.transport.impl.HTTPTransport"/>
+    <TransportAttribute TransportAttributeId="101" TransportId="101" TransportAttributeName="Server" TransportAttributeType="" IsPartOfAuthentification="0" IsMandatory="1"/>
+    <TransportAttribute TransportAttributeId="102" TransportId="101" TransportAttributeName="Port" TransportAttributeType="" IsPartOfAuthentification="0" IsMandatory="0"/>
+    <TransportAttribute TransportAttributeId="103" TransportId="101" TransportAttributeName="Login" TransportAttributeType="" IsPartOfAuthentification="1" IsMandatory="0"/>
+    <TransportAttribute TransportAttributeId="104" TransportId="101" TransportAttributeName="Password" TransportAttributeType="" IsPartOfAuthentification="1" IsMandatory="0"/>
+    <Permission PermissionId="101" PermissionName=""/>
+    <ContentSourceType ContentSourceTypeId="101" ContentSourceTypeName="Internet"/>
+    <ContentSourceTypeTransportLnk ContentSourceTypeId="101" TransportId="101"/>
+    <ContentSource ContentSourceId="101" ContentSourceTypeId="101" TransportId="101" ContentSourceName="HTML Test Content Source" ContentSourceDesc="HTML Test Content Source" IsAuthentificationRequired="0"/>
+    <ContentSourceTransportConfig ContentSourceId="101" TransportAttributeId="101" TransportAttributeValue="http://www.manskes.de"/>
+    <ContentParser ContentParserId="101" ContentParserImplementation="net.sf.iquiver.parser.impl.TextParser" ContentParserName="Text Parser"/>
+    <ContentParser ContentParserId="102" ContentParserImplementation="net.sf.iquiver.parser.impl.HtmlParser" ContentParserName="HTML Parser"/>
+    <ContentType ContentTypeId="101" ContentTypeName="text/plain" ContentTypeDesc="Plain Text" ContentParserId="0"/>
+    <ContentType ContentTypeId="102" ContentTypeName="text/html" ContentTypeDesc="HTML" ContentParserId="1"/>
 </dataset>

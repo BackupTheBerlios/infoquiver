@@ -20,8 +20,7 @@
     ContentSourceTransportConfig|
     ContentParser|
     ContentType|
-    Content|
-    ClientContentLnk)*>
+    Content)*>
 <!ATTLIST dataset
     name CDATA #REQUIRED
 >
@@ -214,12 +213,6 @@
     ContentInfoUrl CDATA #IMPLIED
     ContentAuthor CDATA #IMPLIED
     ContentContent CDATA #IMPLIED
->
-
-<!ELEMENT ClientContentLnk EMPTY>
-<!ATTLIST ClientContentLnk
-    ClientId CDATA #REQUIRED
-    ContentId CDATA #REQUIRED
-    RequestDatetime CDATA #IMPLIED
+    ContentToDelete CDATA #IMPLIED
 >
 
