@@ -5,6 +5,9 @@
 package net.sf.iquiver.test.junit;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import junit.framework.TestCase;
 import net.sf.iquiver.IQuiver;
@@ -31,6 +34,19 @@ public class BaseIQuiverTestCase extends TestCase
             IQuiver iquiver = new IQuiver();
             Configuration configuration = new DefaultProperiesConfiguration( "src/conf/" + ConfigurationConstants.CONFIG_FILE_MAIN );
             configuration.addProperty(ConfigurationConstants.OVERWRITE_KEY_CONFIG_DIR, "src/conf");
+            
+            List toRemove = new ArrayList();
+            for(Iterator it = configuration.getKeys("service.ContentFetchService"); it.hasNext();)
+            {
+                toRemove.add(it.next());
+            }
+            
+            for(Iterator it = toRemove.iterator(); it.hasNext();)
+            {
+                configuration.clearProperty((String)it.next());
+            }
+                
+            
             iquiver.configure(configuration);
         }
         catch ( IOException e )

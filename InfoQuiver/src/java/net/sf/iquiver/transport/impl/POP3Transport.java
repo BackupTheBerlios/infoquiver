@@ -111,7 +111,12 @@ public class POP3Transport implements Fetcher
             {
                 try
                 {
-                    Document doc = MetaFormatFactory.createDocumentForContentType( messages[i].getContentType() );
+                    String contentType = messages[i].getContentType();
+                    if( contentType.indexOf(";") != -1)
+                    {
+                        contentType = contentType.substring( 0, contentType.indexOf(";") );
+                    }
+                    Document doc = MetaFormatFactory.createDocumentForContentType( contentType );
 
                     doc.setRawContent( IOUtils.toByteArray( messages[i].getInputStream() ) );
                     doc.setAuthor( InternetAddress.toString( messages[i].getFrom() ) );
