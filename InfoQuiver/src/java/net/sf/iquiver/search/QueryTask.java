@@ -41,7 +41,7 @@ public class QueryTask
      * @throws IOException
      * @throws ParseException
      */
-    public static synchronized List search( String index, String searchCriteria ) throws IOException, ParseException
+    public static List search( String index, String searchCriteria ) throws IOException, ParseException
     {
         if (logger.isDebugEnabled())
         {
@@ -51,26 +51,31 @@ public class QueryTask
         List contents = new ArrayList();
         IndexSearcher is = new IndexSearcher( index );
         Analyzer analyzer = new StandardAnalyzer();
-        Query query = MultiFieldQueryParser.parse( searchCriteria, new String[] { "author", "name", "title",
-                "keywords", "description", "url", "created", "modified", "contents" }, analyzer );
-        Hits hits = is.search( query );
-
-        for (int i = 0; i < hits.length(); i++)
+        try
         {
-            Document doc = hits.doc( i );
-            String uid = doc.get( "uid" );
-            try
-            {
-                Content content = ContentPeer.retrieveByUID( uid );
-                contents.add( uid );
-            }
-            catch ( TorqueException e )
-            {
-                logger.error( "Fetching document with uid=" + uid + " failed!", e );
-            }
+	        Query query = MultiFieldQueryParser.parse( searchCriteria, new String[] { "author", "name", "title",
+	                "keywords", "description", "url", "created", "modified", "contents" }, analyzer );
+	        Hits hits = is.search( query );
+	
+	        for (int i = 0; i < hits.length(); i++)
+	        {
+	            Document doc = hits.doc( i );
+	            String uid = doc.get( "uid" );
+	            try
+	            {
+	                Content content = ContentPeer.retrieveByUID( uid );
+	                contents.add( uid );
+	            }
+	            catch ( TorqueException e )
+	            {
+	                logger.error( "Fetching document with uid=" + uid + " failed!", e );
+	            }
+	        }
         }
-
-        is.close();
+        finally
+        {
+            is.close();
+        }
 
         if (logger.isDebugEnabled())
         {
