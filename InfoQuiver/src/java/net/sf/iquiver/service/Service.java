@@ -14,6 +14,7 @@ import org.apache.avalon.framework.service.Serviceable;
 public interface Service extends Startable, Suspendable
 {
     public long getStartTime();
+    public int getRestartCount();
     public long getSuccessfulExcecutionsCount();
     public long getFailedExcecutionsCount();
 }
