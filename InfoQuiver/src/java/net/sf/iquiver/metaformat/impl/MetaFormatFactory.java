@@ -1,0 +1,84 @@
+/*
+ * Created on 22.03.2004
+ */
+package net.sf.iquiver.metaformat.impl;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import net.sf.iquiver.metaformat.Document;
+import net.sf.iquiver.parser.UnsupportedContentTypeException;
+import net.sf.iquiver.util.ArrayUtil;
+
+/**
+ * @author netseeker aka Michael Manske
+ */
+public class MetaFormatFactory
+{
+    public static final String    CT_TEXT_PLAIN            = "text/plain";
+    public static final String    CT_TEXT_HTML             = "text/html";
+    public static final String    CT_TEXT_TAB_SEPARATED    = "text/tab-separated-values";
+    public static final String    CT_APPLICATION_RTF       = "application/rtf";
+    public static final String    CT_APPLICATION_PS        = "application/postscript";
+    public static final String    CT_APPLICATION_PDF       = "application/pdf";
+    public static final String    CT_APPLICATION_XSHAR     = "application/x-shar";
+    public static final String    CT_APPLICATION_XTROFF    = "application/x-troff";
+    public static final String    CT_APPLICATION_XTROFF_MS = "application/x-troff-ms";
+    public static final String    CT_APPLICATION_XTEX      = "application/x-tex";
+    public static final String    CT_APPLICATION_XLATEX    = "application/x-latex";
+
+    private static final String[] TEXT_CTS                 = new String[]{CT_TEXT_PLAIN, CT_TEXT_HTML,
+            CT_TEXT_TAB_SEPARATED, CT_APPLICATION_RTF, CT_APPLICATION_PS, CT_APPLICATION_XSHAR, CT_APPLICATION_XTROFF,
+            CT_APPLICATION_XTROFF_MS, CT_APPLICATION_XTEX, CT_APPLICATION_XLATEX};
+    
+    private static final String[] BINARY_CTS               = new String[] {CT_APPLICATION_PDF};
+
+    
+    /**
+     * @param contentType
+     * @return @throws UnsupportedContentTypeException
+     */
+    public static Document createDocumentForContentType( String contentType ) throws UnsupportedContentTypeException
+    {
+        if ( isTextBasedContentType( contentType) )
+        {
+            return new DefaultDocument();
+        }
+        else if ( isBinaryBasedContentType( contentType ) )
+        {
+            return new BinaryDocument();
+        }
+        else
+        {
+            throw new UnsupportedContentTypeException( "The supplied content type \"" + contentType
+                    + "\" is not supported yet." );
+        }
+    }
+
+    /**
+     * @param contentType
+     * @return
+     */
+    private static boolean isTextBasedContentType( String contentType )
+    {
+        return ArrayUtil.contains(TEXT_CTS, contentType);
+    }
+
+    /**
+     * @param contentType
+     * @return
+     */
+    private static boolean isBinaryBasedContentType( String contentType )
+    {
+        return ArrayUtil.contains(BINARY_CTS, contentType);
+    }
+        
+    /**
+     * @param contentType
+     * @return
+     */
+    public static boolean isSupportedContentType( String contentType )
+    {
+        return isTextBasedContentType(contentType) || isBinaryBasedContentType(contentType);
+    }
+}
