@@ -4,6 +4,7 @@
 package net.sf.iquiver.parser.impl;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 import net.sf.iquiver.metaformat.Document;
 import net.sf.iquiver.metaformat.impl.ContentTypeFactory;
@@ -30,6 +31,8 @@ public class TextParser extends Parser
         {
             doc = MetaFormatFactory.createDocumentForContentType( ContentTypeFactory.CT_TEXT_PLAIN );
             doc.setRawContent( rawContent );
+            doc.setDateOfCreation( new Date() );
+            doc.setDateOfLastModification( new Date() );
         }
         catch ( UnsupportedContentTypeException e )
         {
