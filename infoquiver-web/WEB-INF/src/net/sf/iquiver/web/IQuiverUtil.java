@@ -2,8 +2,8 @@
  * IQuiverUtil.java
  * created on 30.11.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/infoquiver-web/WEB-INF/src/net/sf/iquiver/web/IQuiverUtil.java,v $
- * $Date: 2004/11/30 22:42:53 $
- * $Revision: 1.2 $
+ * $Date: 2004/12/01 19:39:46 $
+ * $Revision: 1.3 $
  *********************************************************************/
 
 package net.sf.iquiver.web;
@@ -22,11 +22,16 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.velocity.app.Velocity;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+
 /**
  * @author netseeker aka Michael Manske
  */
 public class IQuiverUtil
-{
+{    
+    private static XStream xstream = new XStream( new DomDriver() );
+    
     /**
      * @param context
      */
@@ -84,5 +89,14 @@ public class IQuiverUtil
         }
 
         return locale;
+    }
+    
+    /**
+     * @param object
+     * @return
+     */
+    public static String objectToXml( Object object )
+    {
+        return xstream.toXML( object );
     }
 }
