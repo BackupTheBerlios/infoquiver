@@ -194,17 +194,11 @@ public class FSTransport implements Fetcher, Dispatcher
     public long[] dispatch( List docs ) throws TransportException
     {
         long[] written = new long[docs.size()];
-        String dir = (String) this._fetchAttributes.get( ATTRIBUTE_FS_DIRECTORY );
-        File fDir = new File( dir );
-        if (!fDir.exists())
-        {
-            fDir.mkdir();
-        }
 
         for (int i = 0; i < docs.size(); i++)
         {
             Document doc = (Document) docs.get( i );
-            written[i] = writeFile( doc, fDir );
+            written[i] = dispatch( doc );
 
         }
 
@@ -218,7 +212,7 @@ public class FSTransport implements Fetcher, Dispatcher
      */
     public long dispatch( Document doc ) throws TransportException
     {
-        String dir = (String) this._fetchAttributes.get( ATTRIBUTE_FS_DIRECTORY );
+        String dir = (String) this._dispatchAttributes.get( ATTRIBUTE_FS_DIRECTORY );
         File fDir = new File( dir );
         if (!fDir.exists())
         {
@@ -240,14 +234,14 @@ public class FSTransport implements Fetcher, Dispatcher
         long written = -1;
         CountingOutputStream cout = null;
         String fName = doc.getFileName();
-        
+
         try
         {
             if (fName == null || fName.length() == 0)
             {
                 fName = new UID().toString();
-                String ext = ContentTypeFactory.getFirstFileType( doc.getContentTypeStr() );                
-                if( ext != null && ext.length() > 0)
+                String ext = ContentTypeFactory.getFirstFileType( doc.getContentTypeStr() );
+                if (ext != null && ext.length() > 0)
                 {
                     fName += "." + ext;
                 }
