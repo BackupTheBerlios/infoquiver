@@ -10,19 +10,32 @@
             information datasources. It will include build-in support for most diverse information formats and 
             protocols as well as report generation and -dispatching. IQuiver fetches content from defined content 
             sources, stores it in its metaformat in a database and will run user defined searches on the 
-            stored content. </p>
+            stored content.</p>
         <p> Searchresults will be produced in the form of customizable reports and dispatched for each user, usergroup
-            or client. Most of usual transports (HTTP and HTTPS, FTP and SFTP, WEBDAV, SOAP, POP, IMAP, SMPT,
+            or client. Most of usual transports (HTTP and HTTPS, FTP and SFTP, WEBDAV, SOAP and XML-RPC, POP, IMAP, SMPT,
             local file system, CIFS...) and formats (HTML, RSS, PDF as well as various open XML dialects and open office formats)
-            are discussed to become medium-term to support. </p>
+            are discussed to become medium-term to support.</p>
         <p> InfoQuiver runs on a lot of plattforms as well as with nearly every common database system.
             It uses <a href="http://db.apache.org/torque">Torque</a> as persistence layer with a simplified and 
             powerful, <a 
             href="http://www.manskes.de/cms/front_content.php?idart=71&amp;idcat=32&amp;idcatart=&amp;lang=1">cluster 
-            aware caching solution.</a>.            
+            aware caching solution.</a> Full-text search is build on top of <a href="http://jakarta.apache.org/lucene/">Jakarta Lucene</a>
+            supplemented with extensions for 
+            <ul>
+                <li>pdf documents (build on top of <a href="http://www.pdfbox.org/">PDFBox</a></li>
+                <li>raw xml documents</li>
+                <li>rss, opml and atom feeds (thanks to <a href="http://informa.sourceforge.net/">Informa</a></li>
+            </ul>.            
         </p>
         <p>As for the moment InfoQuiver is in an early development stage even if some of the core services do already 
            work very well.</p>
+        <p><br/></p>
+        <p align="center">
+            <a href="http://jakarta.apache.org/turbine/maven/"><img src="images/maven.jpg" border="0" height="35" width="133" alt="Built with Maven"/></a>
+            <a href="http://jakarta.apache.org/ant/"><img src="images/ant_logo_small.gif" border="0" hspace="20" alt="Powered by Ant"/></a>
+            <a href="http://jakarta.apache.org/lucene/"><img src="images/lucene_green_150.gif" alt="Powered by Lucene"/></a>
+            <a href="http://www.mysql.com/"><img src="images/mysql.gif" border="0" alt="Works with MySQL"/></a>                        
+        </p>
     </section>
   </body>
 </document>    
