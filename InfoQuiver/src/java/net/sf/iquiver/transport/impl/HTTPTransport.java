@@ -95,7 +95,7 @@ public class HTTPTransport implements Fetcher
             //always release the connection after we're done
             method.releaseConnection();
         }
-
+        
         return documents;
     }
 
