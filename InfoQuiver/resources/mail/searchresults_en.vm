@@ -1,4 +1,15 @@
+#*	
+search result mailtemplates MUST return the following variables:
+$subject - used as the subject line of the email
+$personalReportName - used as the displayed name of the attachment containing the personal report file
+$clientwideReportName - used as the displayed name of the attachment containing the clientwide report file
+$usergroupReportPrefix - InfoQuiver will generate the displayed names of the attachments containing
+usergroupwide report files in this notation $usergroupReportPrefix[name of the usergroup]
+*#
 #set( $subject = "InfoQuiver SearchResults" )
+#set( $personalReportName = "personal_report" )
+#set( $clientwideReportName = "clientwide_report" )
+#set( $usergroupReportPrefix = "groupreport_of_" )
 #set( $firstName = $user.getUserFirstName() )
 #set( $lastName = $user.getUserLastName() )
 Dear#if( $firstName ) $firstName#end#if( $lastName ) $lastName#end,
@@ -6,12 +17,16 @@ Dear#if( $firstName ) $firstName#end#if( $lastName ) $lastName#end,
 you received this message because your search criterias
 matched one or more documents in InfoQuivers current index.
 
-Your personal search results: $user_report
-Clientwide Search Results: $client_report
+Your personal search results => $personalReportName
+
+Clientwide search results => $clientwideReportName
+
 Search results for the following usergroups you are member of:
-#foreach( $report in $usergroup_reports  ) 
-	$velocityCount $report.group: $report.usergroup_report
+#foreach( $group in $usergroups  ) 
+$velocityCount $group.getUserGroupName() => $usergroupReportPrefix$group.getUserGroupName()
 #end
  
 regards,
 InfoQuiver Development Team
+
+This mail was automatically created by InfoQuiver (http://developer.berlios.de/projects/infoquiver/).
