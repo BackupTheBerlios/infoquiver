@@ -10,6 +10,10 @@ import java.util.Iterator;
 import org.apache.torque.util.Criteria;
 
 /**
+ * Adds some useful features to Torques default criteria class:
+ * <li>Copy Constructor</li>
+ * <li>Overwritten clone method</li>
+ * <li>Handling of some custom criteria, eg. isNull
  * @author netseeker aka Michael Manske 
  */
 public class SimpleCriteria extends Criteria
@@ -94,10 +98,14 @@ public class SimpleCriteria extends Criteria
         return this;
     }
 
+    /**
+     * @param columnname
+     * @return
+     */
     public SimpleCriteria addLike( String columnname )
     {
-        String str = columnname + " is NULL";
-        super.add( columnname, (Object) "LIKE", Criteria.CUSTOM);
+        String str = columnname + " LIKE";
+        super.add( columnname, (Object) str, Criteria.CUSTOM);
         return this;
     }
 
