@@ -199,4 +199,12 @@ public  class Content
         this.setContentShortDescription(null);
         this.setContentTitle(null);
     }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#getEncoding()
+     */
+    public String getEncoding()
+    {
+        return "UTF-8";
+    }
 }

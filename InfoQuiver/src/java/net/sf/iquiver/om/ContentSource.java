@@ -33,7 +33,6 @@ public  class ContentSource
         Criteria crit = new Criteria();
         crit.addJoin(ContentSourceTransportConfigPeer.TRANSPORT_ATTRIBUTE_ID, TransportAttributePeer.TRANSPORT_ATTRIBUTE_ID);
         crit.add(TransportAttributePeer.IS_PART_OF_AUTHENTIFICATION, true);
-        
         return getContentSourceTransportConfigs(crit);
     }
     

@@ -18,6 +18,7 @@ public interface Document
 {
     public String getName();
     public void setName(String name);
+    public String getEncoding();
     public String getAuthor();
     public void setAuthor(String author);
     public String getTitle();
