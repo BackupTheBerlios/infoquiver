@@ -29,10 +29,9 @@ public class CacheBackedPeer extends BasePeer
     private static String[] excludeEnableAtStartUp;
     private static String[] excludeEnableCacheForCriteriaSelects;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.DefaultProperiesConfiguration)
+    /**
+     * Initializes and configures the cache
+     * @param configuration the subset ("cache") of the cache configuration file
      */
     public static final synchronized void configure( Configuration configuration )
     {
