@@ -2,8 +2,8 @@
  * ContentFetchThread.java
  * created on 22.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/ContentFetchThread.java,v $
- * $Date: 2004/10/17 16:07:44 $
- * $Revision: 1.3 $
+ * $Date: 2004/12/02 23:21:16 $
+ * $Revision: 1.4 $
  *********************************************************************/
 
 package net.sf.iquiver.service.impl;
@@ -30,6 +30,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.torque.TorqueException;
 import org.apache.torque.util.Criteria;
+
+import com.workingdogs.village.Record;
 
 /**
  * @author netseeker aka Michael Manske
@@ -232,28 +234,20 @@ class ContentFetchThread extends TimerTask
         boolean isFetchRequired = true;
         long fetchPeriod = new Date().getTime() - source.getContentSourceUpdateTimespan();
         Criteria crit = new Criteria();
-        crit.addSelectColumn( ContentPeer.CONTENT_ID );
         crit.add( ContentPeer.CONTENT_SOURCE_ID, source.getContentSourceId() );
         crit.add( ContentPeer.CONTENT_TO_DELETE, false );
+        crit.add( ContentPeer.CONTENT_RECEIVE_DATETIME, new Date( fetchPeriod ), Criteria.GREATER_THAN );
+        crit.addSelectColumn( "count(" + ContentPeer.CONTENT_ID + ") as size" );        
 
         try
         {
-            //first fetch for this content source?
-            isFetchRequired = ContentPeer.doSelectVillageRecords( crit ).isEmpty();
-            //already fetched this content source in past, check if update is neccessary
-            if (!isFetchRequired)
+            List results = ContentPeer.doSelectVillageRecords( crit );
+            if( !results.isEmpty() )
             {
-                crit.clear();
-                crit.addSelectColumn( ContentPeer.CONTENT_ID );
-                crit.add( ContentPeer.CONTENT_SOURCE_ID, source.getContentSourceId() );
-                crit.add( ContentPeer.CONTENT_TO_DELETE, false );
-                crit.add( ContentPeer.CONTENT_RECEIVE_DATETIME, new Date( fetchPeriod ), Criteria.GREATER_THAN );
-                crit.setDistinct();
-
-                isFetchRequired = ContentPeer.doSelectVillageRecords( crit ).isEmpty();
+                isFetchRequired = ( 0 == ((Record)results.get(0)).getValue(1).asLong() );
             }
         }
-        catch ( TorqueException e )
+        catch ( Exception e )
         {
             logger.error( "Error while fetching contents for content source " + source.getContentSourceName()
                     + " from database.", e );
