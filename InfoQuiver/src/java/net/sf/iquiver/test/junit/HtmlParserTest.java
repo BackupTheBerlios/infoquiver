@@ -28,7 +28,7 @@ public class HtmlParserTest extends BaseIQuiverTestCase
         try
         {
             URL url = new URL( "http://www.manskes.de/iquiver/" );
-            URLConnection connection = url.openConnection();
+            URLConnection connection = openConnection(url);
             DataInputStream input = new DataInputStream(connection.getInputStream());
             Document doc = parser.parse( IOUtils.toByteArray( input ) );
             input.close();
