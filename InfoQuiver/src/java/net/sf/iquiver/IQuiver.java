@@ -9,10 +9,10 @@ import java.io.IOException;
 import net.sf.iquiver.configuration.Configurable;
 import net.sf.iquiver.configuration.Configuration;
 import net.sf.iquiver.configuration.ConfigurationConstants;
-import net.sf.iquiver.configuration.Reconfigurable;
 import net.sf.iquiver.configuration.impl.DefaultProperiesConfiguration;
 import net.sf.iquiver.configuration.impl.LogConfigurator;
 import net.sf.iquiver.configuration.impl.PersistenceConfigurator;
+import net.sf.iquiver.configuration.impl.ServiceConfigurator;
 import net.sf.iquiver.util.om.CacheBackedPeer;
 
 import org.apache.avalon.framework.activity.Disposable;
@@ -32,22 +32,21 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
      * The one and only name
      */
     public static final String NAME = "InfoQuiver";
-    
+
     /**
      * The one and only version information
      */
     public static final String VERSION = "0.0.1";
 
     /**
-     * temporarily storage for all kinds of application wide variables and
-     * objects
+     * temporarily storage for all kinds of application wide variables and objects
      */
     private static DefaultContext context;
 
     /**
      * holds the currently active configuration
      */
-    private Configuration configuration;
+    private Configuration _configuration;
 
     /**
      * the configurable default logger
@@ -55,33 +54,31 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
     private static Log logger;
 
     /**
-     * for use when the default logger isn't initialized or not available
-     * anymore
+     * for use when the default logger isn't initialized or not available anymore
      */
     private static final SimpleLog log = new SimpleLog( "net.sf.iquiver" );
 
     /**
      * indicates if we are ready for configure()
      */
-    private boolean isInitialized;
+    private boolean _isInitialized;
 
     /**
      * indicates if we are already successfully configured
      */
-    private boolean isConfigured;
+    private boolean _isConfigured;
 
     /**
-     * indicates the path of the currently used configuration directory
-     * containing all configuration files
+     * indicates the path of the currently used configuration directory containing all configuration files
      */
-    private String configDir;
+    private String _configDir;
 
     /**
-     * a bunch of Configurators which are used to initialize the main
-     * application components and/or services
+     * a bunch of Configurators which are used to initialize the main application components and/or services
      */
-    private Reconfigurable logConfigurator;
-    private Reconfigurable persistConfigurator;
+    private LogConfigurator _logConfigurator;
+    private PersistenceConfigurator _persistConfigurator;
+    private ServiceConfigurator _serviceConfigurator;
 
     /**
      *  
@@ -104,14 +101,14 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
         {
             try
             {
-                sleep( 100);
+                sleep( 100 );
             }
             catch ( InterruptedException e )
             {
                 throw new RuntimeException( e );
             }
 
-            if ( isInterrupted() )
+            if (isInterrupted())
             {
                 break;
             }
@@ -125,35 +122,38 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
      */
     public void start()
     {
-        if ( !isAlive() )
+        if (!isAlive())
         {
-            if ( isInitialized && isConfigured )
+            if (_isInitialized && _isConfigured)
             {
                 super.start();
             }
-            else if ( !isInitialized )
+            else if (!_isInitialized)
             {
                 throw new IllegalStateException( "You must reinitialize IQuiver before restarting the server thread!" );
             }
-            else if ( !isConfigured ) { throw new IllegalStateException( 
-                    "You MUST configure IQuiver before starting the server thread." ); }
+            else if (!_isConfigured)
+            {
+                throw new IllegalStateException( "You MUST configure IQuiver before starting the server thread." );
+            }
         }
         else
         {
             throw new IllegalStateException( "IQuiver already running" );
         }
-        
+
         IQuiver iq = this;
     }
 
     private void initialize()
     {
         context = new DefaultContext();
-        this.logConfigurator = new LogConfigurator();
-        this.persistConfigurator = new PersistenceConfigurator();
-        this.configDir = ConfigurationConstants.DEFAULT_CONFIG_DIR;
-        this.isConfigured = false;
-        this.isInitialized = true;
+        this._logConfigurator = new LogConfigurator();
+        this._persistConfigurator = new PersistenceConfigurator();
+        this._serviceConfigurator = new ServiceConfigurator();
+        this._configDir = ConfigurationConstants.DEFAULT_CONFIG_DIR;
+        this._isConfigured = false;
+        this._isInitialized = true;
     }
 
     /*
@@ -163,13 +163,14 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
      */
     public void dispose()
     {
-        logger.info( "Shutting down...");
-        this.logConfigurator = null;
-        this.persistConfigurator = null;
-        this.configDir = null;
-        context = null;
-        this.isConfigured = false;
-        this.isInitialized = false;
+        logger.info( "Shutting down..." );
+        this._logConfigurator = null;
+        this._persistConfigurator.dispose();
+        this._serviceConfigurator.dispose();
+        this._configDir = null;
+        this._isConfigured = false;
+        this._isInitialized = false;
+        context = null;        
     }
 
     /*
@@ -179,33 +180,33 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
      */
     public void configure( Configuration conf ) throws ConfigurationException
     {
-        if ( this.isInitialized )
+        if (this._isInitialized)
         {
             //check if we should use a custom location to look for our
             // configuration files
-            if ( conf.containsKey( ConfigurationConstants.OVERWRITE_KEY_CONFIG_DIR) )
+            if (conf.containsKey( ConfigurationConstants.OVERWRITE_KEY_CONFIG_DIR ))
             {
-                this.configDir = conf.getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_DIR);
-                log.info( "Custom configuration directory \"" + this.configDir + "\" specified.");
+                this._configDir = conf.getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_DIR );
+                log.info( "Custom configuration directory \"" + this._configDir + "\" specified." );
             }
 
-            configureLogger( conf);
+            configureLogger( conf );
 
             //LogFactory should be configured now, so instanciate our default logger
-            logger = LogFactory.getLog( IQuiver.class);
+            logger = LogFactory.getLog( IQuiver.class );
 
-            configurePersistence( conf);
-            configureCache( conf);            
-
+            configurePersistence( conf );
+            configureCache( conf );
+            _serviceConfigurator.configure( conf.getSubset("service") );
             context.put( "net.sf.iquiver.IQuiver:CONFIGURATION", conf );
-            this.isConfigured = true;
+            this._isConfigured = true;
         }
         else
         {
             throw new ConfigurationException( "IQuiver must be successfully initialized before invoking configure" );
         }
     }
-    
+
     /**
      * @return
      */
@@ -220,40 +221,40 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
         boolean configured = false;
 
         //check if we should especially use a custom logger configuration file
-        if ( conf.containsKey( ConfigurationConstants.OVERWRITE_KEY_CONFIG_LOGGER) )
+        if (conf.containsKey( ConfigurationConstants.OVERWRITE_KEY_CONFIG_LOGGER ))
         {
             try
             {
                 logConfig = new DefaultProperiesConfiguration( conf
-                        .getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_LOGGER) );
-                this.logConfigurator.configure( logConfig);
+                        .getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_LOGGER ) );
+                this._logConfigurator.configure( logConfig );
                 configured = true;
             }
             catch ( ConfigurationException e )
             {
                 log.error( "Configuration of the logging mechanism with custom configuration file \""
-                        + conf.getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_LOGGER)
-                        + "\"failed. Will use default location instead", e);
+                        + conf.getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_LOGGER )
+                        + "\"failed. Will use default location instead", e );
             }
             catch ( IOException e )
             {
                 log.error( "Custom configuration file \""
-                        + conf.getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_LOGGER)
-                        + "\"does not exist. Will use default location instead", e);
+                        + conf.getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_LOGGER )
+                        + "\"does not exist. Will use default location instead", e );
             }
         }
 
-        if ( !configured )
+        if (!configured)
         {
             try
             {
-                logConfig = new DefaultProperiesConfiguration( this.configDir + "/"
+                logConfig = new DefaultProperiesConfiguration( this._configDir + "/"
                         + ConfigurationConstants.CONFIG_FILE_LOGGER );
-                this.logConfigurator.configure( logConfig);
+                this._logConfigurator.configure( logConfig );
             }
             catch ( IOException e )
             {
-                log.error( "Cache Configuration with default configuration file failed!", e);
+                log.error( "Cache Configuration with default configuration file failed!", e );
                 throw new ConfigurationException( e.getMessage() );
             }
         }
@@ -265,40 +266,40 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
         boolean configured = false;
 
         //check if we should especially use a custom cache configuration file
-        if ( conf.containsKey( ConfigurationConstants.OVERWRITE_KEY_CONFIG_CACHE) )
+        if (conf.containsKey( ConfigurationConstants.OVERWRITE_KEY_CONFIG_CACHE ))
         {
             try
             {
                 cacheConfig = new DefaultProperiesConfiguration( conf
-                        .getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_CACHE) );
+                        .getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_CACHE ) );
                 CacheBackedPeer.configure( cacheConfig.getSubset( "cache" ) );
                 configured = true;
             }
             catch ( IOException e )
             {
                 log.error( "Custom configuration file \""
-                        + conf.getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_CACHE)
-                        + "\"does not exist. Will use default location instead", e);
+                        + conf.getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_CACHE )
+                        + "\"does not exist. Will use default location instead", e );
             }
             catch ( Exception e )
             {
                 log.error( "Configuration of the caching mechanism with custom configuration file \""
-                        + conf.getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_CACHE)
-                        + "\"failed. Will use default location instead", e);
+                        + conf.getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_CACHE )
+                        + "\"failed. Will use default location instead", e );
             }
         }
 
-        if ( !configured )
+        if (!configured)
         {
             try
             {
-                cacheConfig = new DefaultProperiesConfiguration( this.configDir + "/"
+                cacheConfig = new DefaultProperiesConfiguration( this._configDir + "/"
                         + ConfigurationConstants.CONFIG_FILE_CACHE );
-                CacheBackedPeer.configure(cacheConfig.subset("cache") );
+                CacheBackedPeer.configure( cacheConfig.subset( "cache" ) );
             }
             catch ( Exception e )
             {
-                logger.error( "Cache Configuration with default configuration file failed!", e);
+                logger.error( "Cache Configuration with default configuration file failed!", e );
                 throw new ConfigurationException( e.getMessage() );
             }
         }
@@ -309,32 +310,32 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
         Configuration persistConfig = null;
 
         //check if we should especially use a custom cache configuration file
-        if ( conf.containsKey( ConfigurationConstants.OVERWRITE_KEY_CONFIG_PERSISTENCE) )
+        if (conf.containsKey( ConfigurationConstants.OVERWRITE_KEY_CONFIG_PERSISTENCE ))
         {
             try
             {
                 persistConfig = new DefaultProperiesConfiguration( conf
-                        .getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_PERSISTENCE) );
+                        .getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_PERSISTENCE ) );
             }
             catch ( IOException e )
             {
                 log.error( "Custom configuration file \""
-                        + conf.getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_PERSISTENCE)
-                        + "\"does not exist. Will use default location instead", e);
+                        + conf.getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_PERSISTENCE )
+                        + "\"does not exist. Will use default location instead", e );
             }
         }
 
-        if ( persistConfig == null )
+        if (persistConfig == null)
         {
             try
             {
-                persistConfig = new DefaultProperiesConfiguration( this.configDir + "/"
+                persistConfig = new DefaultProperiesConfiguration( this._configDir + "/"
                         + ConfigurationConstants.CONFIG_FILE_PERSISTENCE );
-                this.persistConfigurator.configure( persistConfig);
+                this._persistConfigurator.configure( persistConfig );
             }
             catch ( IOException e )
             {
-                logger.error( "Persistence Configuration with default configuration file failed!", e);
+                logger.error( "Persistence Configuration with default configuration file failed!", e );
                 throw new ConfigurationException( e.getMessage() );
             }
         }

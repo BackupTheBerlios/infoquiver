@@ -7,6 +7,7 @@ package net.sf.iquiver.configuration.impl;
 import net.sf.iquiver.configuration.Configuration;
 import net.sf.iquiver.configuration.Reconfigurable;
 
+import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,9 +16,9 @@ import org.apache.torque.Torque;
 /**
  * @author netseeker aka Michael Manske
  */
-public class PersistenceConfigurator implements Reconfigurable
+public class PersistenceConfigurator implements Reconfigurable, Disposable
 {
-    final public static Log logger = LogFactory.getLog(PersistenceConfigurator.class);
+    private static final Log logger = LogFactory.getLog(PersistenceConfigurator.class);
     
     /* (non-Javadoc)
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.DefaultProperiesConfiguration)
@@ -43,6 +44,14 @@ public class PersistenceConfigurator implements Reconfigurable
     {
         Torque.shutdown();
         configure(config);
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.activity.Disposable#dispose()
+     */
+    public void dispose()
+    {
+        Torque.shutdown();
     }
 
 }
