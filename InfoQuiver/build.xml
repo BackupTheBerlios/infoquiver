@@ -97,13 +97,15 @@
 
 	<!-- ================================================================================================= -->
 	<target name="create_db" description="Creates the database from your schema.xml">
-		<delete dir="src/sql" failonerror="false" />
+        <delete failonerror="false">
+            <fileset dir="${torque.sql.dir}" includes="**/*.sql,**/*.map"/>
+          </delete>
 		<ant antfile="build-torque.xml" target="sql" inheritAll="false" />
 		<ant antfile="build-torque.xml" target="create-db" inheritAll="false" />
 		<ant antfile="build-torque.xml" target="insert-sql" inheritAll="false" />
 		<antcall target="id_table_init" />
-		<delete>
-			<fileset dir="${torque.sql.dir}" includes="**/*.sql **/*.generation" />
+        <delete failonerror="false">
+			<fileset dir="" excludes="**/*-data.sql,**/.cvsignore,**/*.db.map" includes="**/*.sql **/*.generation" />
 		</delete>
 	</target>
 
