@@ -20,10 +20,13 @@ public abstract class AbstractDocument implements Document
     private Date dateOfLastModification;
     private String shortDescription;
     private URL infoURL;
-    private Locale locale; 
+    private Locale locale;
     private String encoding;
-    
-    /* (non-Javadoc)
+    private String contentTypeStr;
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#getName()
      */
     public String getName()
@@ -31,7 +34,9 @@ public abstract class AbstractDocument implements Document
         return this.name;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#setName(java.lang.String)
      */
     public void setName( String name )
@@ -39,7 +44,9 @@ public abstract class AbstractDocument implements Document
         this.name = name;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#getAuthor()
      */
     public String getAuthor()
@@ -47,7 +54,9 @@ public abstract class AbstractDocument implements Document
         return this.author;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#setAuthor(java.lang.String)
      */
     public void setAuthor( String author )
@@ -56,7 +65,9 @@ public abstract class AbstractDocument implements Document
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#getTitle()
      */
     public String getTitle()
@@ -64,7 +75,9 @@ public abstract class AbstractDocument implements Document
         return this.title;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#setTitle(java.lang.String)
      */
     public void setTitle( String title )
@@ -73,7 +86,9 @@ public abstract class AbstractDocument implements Document
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#getDateOfCreation()
      */
     public Date getDateOfCreation()
@@ -81,7 +96,9 @@ public abstract class AbstractDocument implements Document
         return this.dateOfCreation;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#setDateOfCreation(java.util.Date)
      */
     public void setDateOfCreation( Date date )
@@ -89,7 +106,9 @@ public abstract class AbstractDocument implements Document
         this.dateOfCreation = date;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#getDateOfLastModification()
      */
     public Date getDateOfLastModification()
@@ -97,7 +116,9 @@ public abstract class AbstractDocument implements Document
         return this.dateOfLastModification;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#setDateOfLastModification(java.util.Date)
      */
     public void setDateOfLastModification( Date date )
@@ -105,7 +126,9 @@ public abstract class AbstractDocument implements Document
         this.dateOfLastModification = date;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#getShortDescription()
      */
     public String getShortDescription()
@@ -113,7 +136,9 @@ public abstract class AbstractDocument implements Document
         return this.shortDescription;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#setShortDescription(java.lang.String)
      */
     public void setShortDescription( String desc )
@@ -121,7 +146,9 @@ public abstract class AbstractDocument implements Document
         this.shortDescription = desc;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#getInfoURL()
      */
     public URL getInfoURL()
@@ -129,7 +156,9 @@ public abstract class AbstractDocument implements Document
         return this.infoURL;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#setInfoURL(java.net.URL)
      */
     public void setInfoURL( URL url )
@@ -137,7 +166,9 @@ public abstract class AbstractDocument implements Document
         this.infoURL = url;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#getLocale()
      */
     public Locale getLocale()
@@ -145,15 +176,19 @@ public abstract class AbstractDocument implements Document
         return this.locale;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#setLocale(java.util.Locale)
      */
     public void setLocale( Locale locale )
     {
         this.locale = locale;
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#getEncoding()
      */
     public String getEncoding()
@@ -161,12 +196,27 @@ public abstract class AbstractDocument implements Document
         return this.encoding;
     }
 
-    public void setEncoding(String encoding)
+    public void setEncoding( String encoding )
     {
         this.encoding = encoding;
     }
-    
-    
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#getContentTypeStr()
+     */
+    public String getContentTypeStr()
+    {
+        return this.contentTypeStr;
+    }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#setContentTypeStr(java.lang.String)
+     */
+    public void setContentTypeStr( String contentTypeStr )
+    {
+        this.contentTypeStr = contentTypeStr;
+    }
+
     protected void clearDocumentMembers()
     {
         name = null;
@@ -176,16 +226,20 @@ public abstract class AbstractDocument implements Document
         dateOfLastModification = dateOfCreation;
         shortDescription = null;
         infoURL = null;
-        locale = Locale.getDefault();   
+        locale = Locale.getDefault();
         encoding = null;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#getRawContent()
      */
     public abstract byte[] getRawContent();
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#clear()
      */
     public abstract void clear();
