@@ -1,0 +1,19 @@
+<html>
+<head>
+  <title>$!page_title</title>
+  <link rel="stylesheet" type="text/css" href="/infoquiver/styles.css" />
+  <script language="javascript" src="/infoquiver/main.js"></script>
+</head>
+<body>
+	<table border="0" width="100%>
+    <tr>
+		<td>
+			
+		</td>
+	</tr>
+  	<tr>
+		<td>$screen_content</td>
+	</tr>
+	</table>
+</body>
+</html>

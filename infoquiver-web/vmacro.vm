@@ -1,0 +1,250 @@
+#**
+ * For displaying an alternate value when the primary one is "null".
+ * 
+ * @param the primary variable
+ * @param the alternate value or variable
+ * @author <a href="mailto:nathan@esha.com">Nathan Bubna</a>
+ *#
+#macro( altnull $variable $alternate )
+#if( "$!variable" == "" )$!alternate#else$variable#end##
+#end
+
+#**
+ * For truncating a variable's output at a specific length.
+ *
+ * Usage:
+ *   "#truncate( 'this is too long' 10 )" -> "this is to..."
+ * 
+ * @param the variable to be truncated
+ * @param the length of the output (not including the ellipses!)
+ * @author <a href="mailto:nathan@esha.com">Nathan Bubna</a>
+ *#
+#macro( truncate $stringVariable $length )
+#set( $truncateMe = "$!stringVariable" )
+#if( $truncateMe.length() <= $length)$truncateMe#else$!{truncateMe.substring(0,$length)}...#end##
+#end
+
+#**
+ * Sets the $page_title key, so if it ever changes,
+ * it need only be changed here.
+ *#
+#macro( title $string )
+#set( $page_title = $string )#end
+
+#*
+ * HTML velocimacros
+ * @author Ted Husted
+*#
+## Select control
+## $name The control name
+## $selected The selected value
+## $labels The list of labels for the options
+## $values The list of values for the options
+#macro (select $name $selected $labels $values)
+  ## The velocityCounter starts at 1 by default, so we use our own zero-based counter.
+  #set($s="NULL" )
+  #set($s=$selected )
+  #set($i=0 )
+  <select name="$name">
+  #foreach ($v in $values)
+  <option value="$v"#if("$v"=="$s") selected="selected"#end>$!labels.get($i)</option>
+  #set($i=1+$i)
+  #end
+  </select>
+#end
+
+## Select control
+## $name The control name
+## $selected The selected value
+## $values The list of values for the options
+#macro (selectValues $name $selected $values)
+  #set($s="NULL" )
+  #set($s=$selected )
+  <select name="$name">
+  #foreach ($v in $values)
+  <option #if("$v"=="$s") selected="selected"#end>$!v</option>
+  #end
+  </select>
+#end
+
+## Shorter version of selectValues
+## @author Lance Lavandowska
+#macro (selectValuesShort $name $selected $values)
+  #select($name $selected $values $values)
+#end
+
+## Select control using LabelValue objects (label property, value property)
+## $name The control name
+## $selected The selected value
+## $beans The collection of LabelValue beans
+#macro (selectList $name $selected $list )
+  #set($s="NULL" )
+  #set($s=$selected )
+  <select name="$name">
+  #foreach ($e in $list )
+  #set($v = $e.value )
+  <option value="$v"#if("$v"=="$s") selected="selected"#end>$e.label</option>
+  #end
+  </select>
+#end
+
+## Pager macro
+## author Serges Zubkov
+## Macro for pager control on velocity list pages
+## $skip The value of currentky skipping elements
+## $pager The value of elements situated on the page count 
+## $pagersize The value of the pages shown in the pager
+## $elementscount The overal elements count
+## $link The common link such as: "yoururl?param1=value1&param2=param2&" (the final '?' or '&' is required)
+## $cur "Label" of the pager.
+## 
+#macro (pager $skip $pagesize $pagersize $elementscount $link $cur )
+        <table border="0" cellpadding="2" cellspacing="1" width="100%">
+          <tr>
+            <td valign="center" align="left" width="30%">
+          #if ($elementscount > $pagesize)
+            #set ($curpage = $skip / $pagesize)
+            #set ($curpage = $curpage + 1)
+            #if ($curpage == 1)
+            #else
+              <a href="${link}skip=0">&lt;&lt;</a>
+              #set ($pg = $curpage - 2)
+              #set ($pg = $pg * $pagesize)
+              <a href="${link}skip=$pg">&lt;</a>
+            #end
+            #set ($semipagesize = $pagersize / 2)
+            #set ($minpage = $curpage - $semipagesize)
+            #set ($maxpage = $curpage + $semipagesize)
+            #set ($potentialmaxpage = $elementscount / $pagesize)
+            #set ($trunk = $elementscount % $pagesize)
+            #if ($trunk > 0)
+              #set ($potentialmaxpage = $potentialmaxpage + 1)
+            #end
+            #if ($minpage < 1)
+              #set ($minpage = 1)
+            #end
+            #if ($maxpage > $potentialmaxpage)
+              #set ($maxpage = $potentialmaxpage)
+            #end
+            #set ($pages = [$minpage .. $maxpage])
+            #foreach ($page in $pages)
+              #if ($page == $curpage)
+                $page
+              #else
+                #set ($pg = $page - 1)
+                #set ($pg = $pg * $pagesize)
+                  <a href="${link}skip=$pg">$page</a>
+              #end
+            #end
+            #if ($curpage == $potentialmaxpage)
+            #else
+              #set ($pg = $curpage * $pagesize)
+              <a href="${link}skip=$pg">&gt;</a>
+              #set ($pg = $potentialmaxpage - 1)
+              #set ($pg = $pg * $pagesize)
+              <a href="${link}skip=$pg">&gt;&gt;</a>
+            #end
+          #else
+            #set ($curpage = 1)
+            #set ($potentialmaxpage = 1)
+          #end
+          </td>
+          <td align="center" valign="center" width="30%">
+            #set ($firstElement = $curpage - 1)
+            #set ($firstElement = $firstElement * $pagesize)
+            #set ($firstElement = $firstElement + 1)
+            #set ($lastElement = $curpage * $pagesize)
+            #if ($curpage == $potentialmaxpage)
+              #set ($lastElement = $elementscount)
+            #end
+              $firstElement - $lastElement &#1080;&#1079; $elementscount
+          </td>
+          <form name="sizeform$cur" method="post" action="$link">
+            <td align="right" valign="center">
+              Page size:
+              #set ($str = "javascript:sizeform$cur")
+              #set ($str = "${str}.submit()")
+              <select name="size" onChange="$str" class="form">
+            #set ($values = [1..10])
+            #foreach ($value in $values)
+              #set ($optValue = $value * 10)
+              #if ($pagesize == $optValue)
+                <option value="$optValue" selected>$optValue</option>
+              #else
+                <option value="$optValue">$optValue</option>
+              #end
+            #end
+              </select>
+            </td>
+          </form>
+        </tr>
+       </table>
+#end
+
+## Pager for printable pages - one more pager
+## author Serget Zubkov
+#macro(printPager $skip $pagesize $pagersize $elementscount $link $cur)
+  <table border="0" cellpadding="2" cellspacing="0" width="100%" bordercolor="#FFFFFF">
+          <tr>
+            <td valign="center" align="left">            
+          #if ($elementscount > $pagesize)
+            #set ($curpage = $skip / $pagesize)
+            #set ($curpage = $curpage + 1)
+            #set ($semipagesize = $pagersize / 2)
+            #set ($minpage = $curpage - $semipagesize)
+            #set ($maxpage = $curpage + $semipagesize)
+            #set ($potentialmaxpage = $elementscount / $pagesize)
+            #set ($trunk = $elementscount % $pagesize)
+            #if ($trunk > 0)
+              #set ($potentialmaxpage = $potentialmaxpage + 1)
+            #end
+            #if ($minpage < 1)
+              #set ($minpage = 1)
+            #end
+            #if ($maxpage > $potentialmaxpage)
+              #set ($maxpage = $potentialmaxpage)
+            #end
+            #set ($firstElement = $curpage - 1)
+            #set ($firstElement = $firstElement * $pagesize)
+            #set ($firstElement = $firstElement + 1)
+            #set ($lastElement = $curpage * $pagesize)
+            #if ($curpage == $potentialmaxpage)
+              #set ($lastElement = $elementscount)
+            #end
+            #set ($pages = [$minpage .. $maxpage])
+            #if ($minpage > 1)
+              #set ($pghi = $pagesize)
+              #if ($pghi > $elementscount)
+                #set ($pghi = $elementscount)
+              #end
+              [<a href="${link}printSkip=0">1..$pghi</a>]..
+              #set ($pg = $curpage - 2)
+            #end
+            #foreach ($page in $pages)
+              #if ($page == $curpage)
+                [<b>$firstElement..$lastElement</b>]
+              #else
+                #set ($pg = $page - 1)
+                #set ($pg = $pg * $pagesize)
+                #set ($pghi = $pg + $pagesize)
+                #set ($pglo = $pg + 1)
+                #if ($pghi > $elementscount)
+                  #set ($pghi = $elementscount)
+                #end
+                  [<a href="${link}printSkip=$pg">$pglo..$pghi</a>]
+              #end
+            #end
+            #if ($maxpage < $potentialmaxpage)
+              #set ($pg = $potentialmaxpage - 1)
+              #set ($pg = $pg * $pagesize)
+              #set ($pglo = $pg + 1)
+              ..[<a href="${link}printSkip=$pg">$pglo..$elementscount</a>]
+            #end
+          #else
+            #set ($curpage = 1)
+            #set ($potentialmaxpage = 1)
+          #end
+          </td>
+        </tr>
+       </table>
+#end

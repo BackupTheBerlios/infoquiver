@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<toolbox>
+    <tool>
+        <key>date</key>
+        <scope>application</scope>
+        <class>org.apache.velocity.tools.generic.DateTool</class>
+    </tool>
+    <tool>
+        <key>math</key>
+        <scope>application</scope>
+        <class>org.apache.velocity.tools.generic.MathTool</class>
+    </tool>
+    <tool>
+        <key>link</key>
+        <scope>request</scope>
+        <class>org.apache.velocity.tools.view.tools.LinkTool</class>
+    </tool>
+    <tool>
+        <key>cookie</key>
+        <scope>request</scope>
+        <class>org.apache.velocity.tools.view.tools.CookieTool</class>
+    </tool>
+    <tool>
+        <key>params</key>
+        <scope>request</scope>
+        <class>org.apache.velocity.tools.view.tools.ParameterParser</class>
+    </tool>
+    <tool>
+        <key>iquiver</key>
+        <scope>session</scope>
+        <class>net.sf.iquiver.web.IQuiverDelegate</class>
+    </tool>
+</toolbox>
