@@ -14,6 +14,7 @@ import net.sf.iquiver.configuration.ConfigurationConstants;
 import net.sf.iquiver.configuration.impl.DefaultProperiesConfiguration;
 import net.sf.iquiver.configuration.impl.LogConfigurator;
 import net.sf.iquiver.configuration.impl.PersistenceConfigurator;
+import net.sf.iquiver.configuration.impl.RemoteInterfaceConfigurator;
 import net.sf.iquiver.configuration.impl.ServiceConfigurator;
 import net.sf.iquiver.util.om.CacheBackedPeer;
 
@@ -37,7 +38,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
     /**
      * The one and only version information
      */
-    public static final String VERSION = "0.9.0";
+    public static final String VERSION = "0.9.1";
 
     /**
      * temporarily storage for all kinds of application wide variables and objects
@@ -80,6 +81,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
     private LogConfigurator _logConfigurator;
     private PersistenceConfigurator _persistConfigurator;
     private ServiceConfigurator _serviceConfigurator;
+    private RemoteInterfaceConfigurator _remoteConfigurator;
 
     /**
      *  
@@ -152,6 +154,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
         this._logConfigurator = new LogConfigurator();
         this._persistConfigurator = new PersistenceConfigurator();
         this._serviceConfigurator = new ServiceConfigurator();
+        this._remoteConfigurator = new RemoteInterfaceConfigurator();
         this._configDir = ConfigurationConstants.DEFAULT_CONFIG_DIR;
         this._isConfigured = false;
         this._isInitialized = true;
@@ -168,6 +171,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
         this._logConfigurator = null;
         this._persistConfigurator.dispose();
         this._serviceConfigurator.dispose();
+        this._remoteConfigurator.dispose();
         this._configDir = null;
         this._isConfigured = false;
         this._isInitialized = false;
@@ -202,6 +206,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
             configurePersistence( conf );
             configureCache( conf );
             _serviceConfigurator.configure( conf.getSubset("service") );
+            _remoteConfigurator.configure( conf );
                         
             this._isConfigured = true;
         }

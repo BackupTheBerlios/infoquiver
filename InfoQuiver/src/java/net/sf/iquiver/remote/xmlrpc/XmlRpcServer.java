@@ -4,7 +4,6 @@
 package net.sf.iquiver.remote.xmlrpc;
 
 import net.sf.iquiver.configuration.Configuration;
-import net.sf.iquiver.configuration.Reconfigurable;
 import net.sf.iquiver.service.BaseRemoteService;
 import net.sf.iquiver.service.ServiceStateListener;
 
@@ -18,7 +17,7 @@ import org.apache.xmlrpc.WebServer;
  * server demon via XML-RPC.
  * @author netseeker aka Michael Manske
  */
-public class XmlRpcServer extends BaseRemoteService implements Reconfigurable
+public class XmlRpcServer extends BaseRemoteService
 {
     /**
      * Commons Logger for this class
@@ -63,6 +62,7 @@ public class XmlRpcServer extends BaseRemoteService implements Reconfigurable
         logger.info( "Starting XmlRpcServer at port " + port);
         webServer = new WebServer( port );
         webServer.addHandler("default", this);
+        webServer.start();
         logger.info( "XmlRpcServer running at port " + port );
     }
 

@@ -6,11 +6,11 @@ package net.sf.iquiver.service;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import net.sf.iquiver.configuration.Reconfigurable;
 import net.sf.iquiver.om.User;
 import net.sf.iquiver.om.UserPeer;
 import net.sf.iquiver.remote.RemoteException;
 import net.sf.iquiver.util.ObjectSerializer;
-import net.sf.iquiver.util.om.SimpleCriteria;
 
 import org.apache.torque.om.BaseObject;
 import org.apache.torque.om.ComboKey;
@@ -20,7 +20,7 @@ import org.apache.torque.util.Criteria;
  * The base class of all server side remote interfaces and server implementations
  * @author netseeker aka Michael Manske
  */
-public abstract class BaseRemoteService extends BaseService
+public abstract class BaseRemoteService extends BaseService implements Reconfigurable
 {
     /**
      * @param clientId
@@ -28,9 +28,9 @@ public abstract class BaseRemoteService extends BaseService
      * @param password
      * @return
      */
-    public String doLogin(long clientId, String login, String password )
+    public String doLogin(/* long clientId,*/ String login, String password )
     {
-        User user = UserPeer.doLogin( clientId, login, password );
+        User user = UserPeer.doLogin( /* clientId, */ login, password );
         if(user != null)
         {
             return ObjectSerializer.objectToXml( user );
@@ -110,7 +110,7 @@ public abstract class BaseRemoteService extends BaseService
     public String doSelect( String sessionId, String objectType, String criteria )
     {
         Object resultObject = null;
-        SimpleCriteria crit = (SimpleCriteria)ObjectSerializer.xmlToObject( criteria );
+        Criteria crit = (Criteria)ObjectSerializer.xmlToObject( criteria );
         
         try
         {
