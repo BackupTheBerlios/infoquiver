@@ -23,6 +23,7 @@ import org.apache.lucene.search.MultiSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searchable;
 import org.apache.torque.TorqueException;
+import org.apache.torque.util.Criteria;
 
 /**
  * TODO add support for caching query results 
@@ -138,16 +139,22 @@ public class QueryTask
             String uid = doc.get( "uid" );
             try
             {
-                Content content = ContentPeer.retrieveByUID( uid );
-                content.setScore( hits.score( i ));
-                if( content != null )
-                {
-                    contents.add( content );
-                }
-                else
-                {
-                    logger.warn( "No content found for uid " + uid );
-                }
+                Criteria crit = new Criteria();
+                crit.add( ContentPeer.CONTENT_UID, uid );
+                crit.add( ContentPeer.CONTENT_TO_DELETE, false );
+                
+                 List tmp = ContentPeer.doSelect( crit );
+                
+                 if( contents != null && !contents.isEmpty() )
+                 {
+                     Content content = ( Content )contents.get(0);
+                     content.setScore( hits.score( i ));
+                     contents.add( content );
+                 }
+                 else
+                 {
+                     logger.warn( "No current content found for uid " + uid );
+                 }                                      
             }
             catch ( TorqueException e )
             {
