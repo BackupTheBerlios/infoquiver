@@ -20,3 +20,4 @@ insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (119, '
 insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (120, 'iq_content_parser', 1000, 10);
 insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (121, 'iq_content_type', 1000, 10);
 insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (122, 'iq_content', 1000, 10);
+insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (123, 'iq_search_query', 1000, 10);

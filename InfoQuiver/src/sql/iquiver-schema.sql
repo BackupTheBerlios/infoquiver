@@ -18,7 +18,11 @@ CREATE TABLE iq_user
 		            USER_LAST_LOGIN BIGINT,
 		            ADDRESS_ID BIGINT NOT NULL,
 		            CLIENT_ID INTEGER NOT NULL,
+		            CREATED TIMESTAMP,
+		            CREATED_BY BIGINT,
     PRIMARY KEY(USER_ID),
+    FOREIGN KEY (CREATED_BY) REFERENCES iq_user (USER_ID)
+    ,
     FOREIGN KEY (CLIENT_ID) REFERENCES iq_client (CLIENT_ID)
     ,
     FOREIGN KEY (ADDRESS_ID) REFERENCES iq_address (ADDRESS_ID)
@@ -53,8 +57,12 @@ CREATE TABLE iq_client
 		            CLIENT_ID INTEGER NOT NULL,
 		            CLIENT_NAME VARCHAR (32),
 		            ADDRESS_ID BIGINT NOT NULL,
+		            CREATED TIMESTAMP,
+		            CREATED_BY BIGINT,
     PRIMARY KEY(CLIENT_ID),
     FOREIGN KEY (ADDRESS_ID) REFERENCES iq_address (ADDRESS_ID)
+    ,
+    FOREIGN KEY (CREATED_BY) REFERENCES iq_user (USER_ID)
     
 );
 
@@ -108,8 +116,12 @@ CREATE TABLE iq_user_group
 		            USER_GROUP_NAME VARCHAR (32),
 		            USER_GROUP_DESC VARCHAR (255),
 		            CLIENT_ID INTEGER NOT NULL,
+		            CREATED TIMESTAMP,
+		            CREATED_BY BIGINT,
     PRIMARY KEY(USER_GROUP_ID),
     FOREIGN KEY (CLIENT_ID) REFERENCES iq_client (CLIENT_ID)
+    ,
+    FOREIGN KEY (CREATED_BY) REFERENCES iq_user (USER_ID)
     
 );
 
@@ -221,7 +233,11 @@ CREATE TABLE iq_client_permission_lnk
 (
 		            CLIENT_ID INTEGER NOT NULL,
 		            PERMISSION_ID INTEGER NOT NULL,
-    PRIMARY KEY(CLIENT_ID,PERMISSION_ID)
+    PRIMARY KEY(CLIENT_ID,PERMISSION_ID),
+    FOREIGN KEY (CLIENT_ID) REFERENCES iq_client (CLIENT_ID)
+    ,
+    FOREIGN KEY (PERMISSION_ID) REFERENCES iq_permission (PERMISSION_ID)
+    
 );
 
 # -----------------------------------------------------------------------
@@ -235,6 +251,10 @@ CREATE TABLE iq_user_group_permission_lnk
 		            PERMISSION_ID INTEGER NOT NULL,
 		            IS_NEGATION INTEGER,
     PRIMARY KEY(USER_GROUP_ID,PERMISSION_ID),
+    FOREIGN KEY (USER_GROUP_ID) REFERENCES iq_user_group (USER_GROUP_ID)
+    ,
+    FOREIGN KEY (PERMISSION_ID) REFERENCES iq_permission (PERMISSION_ID)
+    ,
     UNIQUE (USER_GROUP_ID, PERMISSION_ID)
 );
 
@@ -261,6 +281,10 @@ CREATE TABLE iq_content_source_type_transport_lnk
 		            CONTENT_SOURCE_TYPE_ID INTEGER NOT NULL,
 		            TRANSPORT_ID INTEGER NOT NULL,
     PRIMARY KEY(CONTENT_SOURCE_TYPE_ID,TRANSPORT_ID),
+    FOREIGN KEY (CONTENT_SOURCE_TYPE_ID) REFERENCES iq_content_source_type (CONTENT_SOURCE_TYPE_ID)
+    ,
+    FOREIGN KEY (TRANSPORT_ID) REFERENCES iq_transport (TRANSPORT_ID)
+    ,
     UNIQUE (CONTENT_SOURCE_TYPE_ID, TRANSPORT_ID)
 );
 
@@ -296,6 +320,10 @@ CREATE TABLE iq_content_source
 		            CONTENT_SOURCE_DESC VARCHAR (255),
 		            CONTENT_SOURCE_UPDATE_TIMESPAN BIGINT default 1800000,
 		            IS_AUTHENTIFICATION_REQUIRED INTEGER,
+		            CREATED TIMESTAMP,
+		            CREATED_BY BIGINT,
+		            MODIFIED TIMESTAMP,
+		            MODIFIED_BY BIGINT,
     PRIMARY KEY(CONTENT_SOURCE_ID),
     FOREIGN KEY (CONTENT_SOURCE_TYPE_ID) REFERENCES iq_content_source_type (CONTENT_SOURCE_TYPE_ID)
     ,
@@ -304,6 +332,10 @@ CREATE TABLE iq_content_source
     FOREIGN KEY (CONTENT_TYPE_ID) REFERENCES iq_content_type (CONTENT_TYPE_ID)
     ,
     FOREIGN KEY (PUBLISHER_ID) REFERENCES iq_publisher (PUBLISHER_ID)
+    ,
+    FOREIGN KEY (CREATED_BY) REFERENCES iq_user (USER_ID)
+    ,
+    FOREIGN KEY (MODIFIED_BY) REFERENCES iq_user (USER_ID)
     ,
     INDEX IQ_CONTENTSOURCE_TYPE_FKI (CONTENT_SOURCE_TYPE_ID),
     INDEX IQ_CONTENTSOURCE_TRANSPORT_FKI (TRANSPORT_ID),
@@ -394,6 +426,33 @@ CREATE TABLE iq_content
     INDEX IQ_CONTENT_RECEIVE_DATETIME_CKI (CONTENT_RECEIVE_DATETIME),
     INDEX IQ_CONTENT_AUTHOR_CKI (CONTENT_AUTHOR)
 );
+
+# -----------------------------------------------------------------------
+# iq_search_query
+# -----------------------------------------------------------------------
+drop table if exists iq_search_query;
+
+CREATE TABLE iq_search_query
+(
+		            SEARCH_QUERY_ID BIGINT NOT NULL,
+		            SEARCH_QUERY_CRITERIA VARCHAR (255),
+		            CREATED TIMESTAMP,
+		            CREATED_BY BIGINT,
+		            MODIFIED TIMESTAMP,
+		            MODIFIED_BY BIGINT,
+		            USER_ID BIGINT,
+		            USER_GROUP_ID BIGINT,
+    PRIMARY KEY(SEARCH_QUERY_ID),
+    FOREIGN KEY (USER_ID) REFERENCES iq_user (USER_ID)
+    ,
+    FOREIGN KEY (CREATED_BY) REFERENCES iq_user (USER_ID)
+    ,
+    FOREIGN KEY (MODIFIED_BY) REFERENCES iq_user (USER_ID)
+    ,
+    FOREIGN KEY (USER_GROUP_ID) REFERENCES iq_user_group (USER_GROUP_ID)
+    
+);
+  
   
   
   

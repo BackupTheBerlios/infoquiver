@@ -14,6 +14,11 @@
         <column name="USER_LAST_LOGIN" primaryKey="false" type="BIGINT"/>
         <column name="ADDRESS_ID" primaryKey="false" required="true" type="BIGINT"/>
         <column name="CLIENT_ID" primaryKey="false" required="true" type="INTEGER"/>
+        <column name="CREATED" type="TIMESTAMP"/>            
+        <column name="CREATED_BY" type="BIGINT"/>                   
+        <foreign-key foreignTable="iq_user">
+            <reference local="CREATED_BY" foreign="USER_ID" />
+        </foreign-key>                        
         <foreign-key foreignTable="iq_client">
             <reference local="CLIENT_ID" foreign="CLIENT_ID" />
         </foreign-key>
@@ -43,9 +48,14 @@
         <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>
         <column name="CLIENT_NAME" primaryKey="false" type="VARCHAR" size="32"/>
         <column name="ADDRESS_ID" primaryKey="false" required="true" type="BIGINT"/>
+        <column name="CREATED" type="TIMESTAMP"/>            
+        <column name="CREATED_BY" type="BIGINT"/>                   
         <foreign-key foreignTable="iq_address">
             <reference local="ADDRESS_ID" foreign="ADDRESS_ID" />
         </foreign-key>
+        <foreign-key foreignTable="iq_user">
+            <reference local="CREATED_BY" foreign="USER_ID" />
+        </foreign-key>                                
     </table>
     <table name="iq_client_content_source_lnk" javaName="ClientContentSourceLnk" idMethod="none">        
         <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>
@@ -80,9 +90,14 @@
         <column name="USER_GROUP_NAME" primaryKey="false" type="VARCHAR" size="32"/>
         <column name="USER_GROUP_DESC" primaryKey="false" type="VARCHAR" size="255"/>
         <column name="CLIENT_ID" primaryKey="false" required="true" type="INTEGER"/>
+        <column name="CREATED" type="TIMESTAMP"/>            
+        <column name="CREATED_BY" type="BIGINT"/>                   
         <foreign-key foreignTable="iq_client">
             <reference local="CLIENT_ID" foreign="CLIENT_ID" />
         </foreign-key>
+        <foreign-key foreignTable="iq_user">
+            <reference local="CREATED_BY" foreign="USER_ID" />
+        </foreign-key>                                
     </table>
     <table name="iq_user_group_lnk" javaName="UserGroupLnk">
         <column name="USER_GROUP_ID" primaryKey="true" required="true" type="BIGINT"/>
@@ -154,11 +169,23 @@
     <table name="iq_client_permission_lnk" javaName="ClientPermissionLnk" idMethod="none">
         <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>
         <column name="PERMISSION_ID" primaryKey="true" required="true" type="INTEGER"/>
+        <foreign-key foreignTable="iq_client">
+            <reference local="CLIENT_ID" foreign="CLIENT_ID" />
+        </foreign-key>        
+        <foreign-key foreignTable="iq_permission">
+            <reference local="PERMISSION_ID" foreign="PERMISSION_ID" />
+        </foreign-key>                
     </table>
     <table name="iq_user_group_permission_lnk" javaName="UserGroupPermissionLnk" idMethod="none">
         <column name="USER_GROUP_ID" primaryKey="true" required="true" type="BIGINT"/>
         <column name="PERMISSION_ID" primaryKey="true" required="true" type="INTEGER"/>
         <column name="IS_NEGATION" type="BOOLEANINT"/>
+        <foreign-key foreignTable="iq_user_group">
+            <reference local="USER_GROUP_ID" foreign="USER_GROUP_ID" />
+        </foreign-key>                
+        <foreign-key foreignTable="iq_permission">
+            <reference local="PERMISSION_ID" foreign="PERMISSION_ID" />
+        </foreign-key>                        
         <unique name="IQ_USERGROUPPERMLNK_PKI">
             <unique-column name="USER_GROUP_ID"/>
             <unique-column name="PERMISSION_ID"/>
@@ -172,6 +199,12 @@
     <table name="iq_content_source_type_transport_lnk" javaName="ContentSourceTypeTransportLnk" idMethod="none">
         <column name="CONTENT_SOURCE_TYPE_ID" primaryKey="true" required="true" type="INTEGER"/>   
         <column name="TRANSPORT_ID" primaryKey="true" required="true" type="INTEGER"/>     
+        <foreign-key foreignTable="iq_content_source_type">
+            <reference local="CONTENT_SOURCE_TYPE_ID" foreign="CONTENT_SOURCE_TYPE_ID" />
+        </foreign-key>                        
+        <foreign-key foreignTable="iq_transport">
+            <reference local="TRANSPORT_ID" foreign="TRANSPORT_ID" />
+        </foreign-key>                        
         <unique name="IQ_CONTENTSRCTYPE_TRANSPORT_LNK_PKI">
             <unique-column name="CONTENT_SOURCE_TYPE_ID"/>
             <unique-column name="TRANSPORT_ID"/>
@@ -196,6 +229,10 @@
         <column name="CONTENT_SOURCE_DESC" type="VARCHAR" size="255"/>
         <column name="CONTENT_SOURCE_UPDATE_TIMESPAN" type="BIGINT" description="timespan between updates of this content source contents" default="1800000"/>
         <column name="IS_AUTHENTIFICATION_REQUIRED" type="BOOLEANINT"/>
+        <column name="CREATED" type="TIMESTAMP"/>            
+        <column name="CREATED_BY" type="BIGINT"/>           
+        <column name="MODIFIED" type="TIMESTAMP"/>
+        <column name="MODIFIED_BY" type="BIGINT"/>           
         <foreign-key foreignTable="iq_content_source_type">
             <reference local="CONTENT_SOURCE_TYPE_ID" foreign="CONTENT_SOURCE_TYPE_ID" />
         </foreign-key>
@@ -207,7 +244,13 @@
         </foreign-key>                   
         <foreign-key foreignTable="iq_publisher">
             <reference local="PUBLISHER_ID" foreign="PUBLISHER_ID" />
-        </foreign-key>        
+        </foreign-key>
+        <foreign-key foreignTable="iq_user">
+            <reference local="CREATED_BY" foreign="USER_ID" />
+        </foreign-key>                
+        <foreign-key foreignTable="iq_user">
+            <reference local="MODIFIED_BY" foreign="USER_ID" />
+        </foreign-key>                        
         <index name="IQ_CONTENTSOURCE_TYPE_FKI">
             <index-column name="CONTENT_SOURCE_TYPE_ID"/>
         </index>        
@@ -247,7 +290,7 @@
             <reference local="CONTENT_PARSER_ID" foreign="CONTENT_PARSER_ID" />
         </foreign-key>                
     </table>
-    <table name="iq_content" javaName="Content">
+    <table name="iq_content" javaName="Content" heavyIndexing="true">
         <column name="CONTENT_ID" primaryKey="true" required="true" type="BIGINT"/>
         <column name="CONTENT_PARENT_ID" type="BIGINT"/>
         <column name="CONTENT_TYPE_ID" required="true" type="INTEGER"/>
@@ -290,6 +333,29 @@
             <index-column name="CONTENT_AUTHOR"/>
         </index>                                                     
     </table>
+    <table name="iq_search_query" javaName="SearchQuery" heavyIndexing="true">
+        <column name="SEARCH_QUERY_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <column name="SEARCH_QUERY_CRITERIA" type="VARCHAR" size="255"/>
+        <column name="CREATED" type="TIMESTAMP"/>            
+        <column name="CREATED_BY" type="BIGINT"/>           
+        <column name="MODIFIED" type="TIMESTAMP"/>
+        <column name="MODIFIED_BY" type="BIGINT"/>           
+        <column name="USER_ID" type="BIGINT"/>        
+        <column name="USER_GROUP_ID" type="BIGINT"/>
+        <foreign-key foreignTable="iq_user">
+            <reference local="USER_ID" foreign="USER_ID" />
+        </foreign-key>                
+        <foreign-key foreignTable="iq_user">
+            <reference local="CREATED_BY" foreign="USER_ID" />
+        </foreign-key>                
+        <foreign-key foreignTable="iq_user">
+            <reference local="MODIFIED_BY" foreign="USER_ID" />                        
+        </foreign-key>                
+        <foreign-key foreignTable="iq_user_group">
+            <reference local="USER_GROUP_ID" foreign="USER_GROUP_ID" />
+        </foreign-key>                        
+    </table>
+    
     <!--
     <table name="iq_lucene_index" javaName="LuceneIndex" idMethod="none">
         <column name="DIRECTORY_NAME" type="VARCHAR" size="100" primaryKey="true" required="true"/>
