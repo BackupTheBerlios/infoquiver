@@ -87,6 +87,11 @@ public abstract class Parser
         return doc;
     }
     
+    public Document parse( Document source) throws ParsingException, IOException
+    {
+        return parse(source.getRawContent());
+    }
+    
     
     /**
      * @return
