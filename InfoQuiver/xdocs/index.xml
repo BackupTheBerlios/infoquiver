@@ -20,18 +20,18 @@
             powerful, <a 
             href="http://www.manskes.de/cms/front_content.php?idart=71&amp;idcat=32&amp;idcatart=&amp;lang=1">cluster 
             aware caching solution.</a> Full-text search is build on top of <a href="http://jakarta.apache.org/lucene/">Jakarta Lucene</a>
-            supplemented with extensions for 
+            supplemented with extensions for:
             <ul>
-                <li>pdf documents (build on top of <a href="http://www.pdfbox.org/">PDFBox</a></li>
+                <li>pdf documents (build on top of <a href="http://www.pdfbox.org/">PDFBox</a>)</li>
                 <li>raw xml documents</li>
-                <li>rss, opml and atom feeds (thanks to <a href="http://informa.sourceforge.net/">Informa</a></li>
-            </ul>.            
+                <li>rss, opml and atom feeds (thanks to <a href="http://informa.sourceforge.net/">Informa</a>)</li>
+            </ul>
         </p>
         <p>As for the moment InfoQuiver is in an early development stage even if some of the core services do already 
            work very well.</p>
         <p><br/></p>
         <p align="center">
-            <a href="http://jakarta.apache.org/turbine/maven/"><img src="images/maven.jpg" border="0" height="35" width="133" alt="Built with Maven"/></a>
+            <a href="http://maven.apache.org/"><img src="images/maven.jpg" border="0" height="35" width="133" alt="Built with Maven"/></a>
             <a href="http://jakarta.apache.org/ant/"><img src="images/ant_logo_small.gif" border="0" hspace="20" alt="Powered by Ant"/></a>
             <a href="http://jakarta.apache.org/lucene/"><img src="images/lucene_green_150.gif" alt="Powered by Lucene"/></a>
             <a href="http://www.mysql.com/"><img src="images/mysql.gif" border="0" alt="Works with MySQL"/></a>                        
