@@ -2,7 +2,10 @@
 package net.sf.iquiver.om;
 
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.torque.TorqueException;
 import org.apache.torque.om.Persistent;
@@ -21,4 +24,66 @@ public  class ContentSource
     extends net.sf.iquiver.om.BaseContentSource
     implements Persistent
 {
+    /**
+     * @return
+     * @throws TorqueException
+     */
+    public List getAuthentificationAttributes() throws TorqueException
+    {
+        Criteria crit = new Criteria();
+        crit.addJoin(ContentSourceTransportConfigPeer.TRANSPORT_ATTRIBUTE_ID, TransportAttributePeer.TRANSPORT_ATTRIBUTE_ID);
+        crit.add(TransportAttributePeer.IS_PART_OF_AUTHENTIFICATION, true);
+        
+        return getContentSourceTransportConfigs(crit);
+    }
+    
+    /**
+     * @return
+     * @throws TorqueException
+     */
+    public List getNonAuthentificationAttributes() throws TorqueException
+    {
+        Criteria crit = new Criteria();
+        crit.addJoin(ContentSourceTransportConfigPeer.TRANSPORT_ATTRIBUTE_ID, TransportAttributePeer.TRANSPORT_ATTRIBUTE_ID);
+        crit.add(TransportAttributePeer.IS_PART_OF_AUTHENTIFICATION, false);
+        
+        return getContentSourceTransportConfigs(crit);        
+    }
+    
+    /**
+     * @return
+     * @throws TorqueException
+     */
+    public Map getAuthentificationAttributesAsMap() throws TorqueException
+    {
+        Map results = new HashMap();
+        List auth_attributes = getAuthentificationAttributes();
+        
+        for(Iterator it = auth_attributes.iterator(); it.hasNext();)
+        {
+            ContentSourceTransportConfig config = (ContentSourceTransportConfig)it.next();
+            results.put(new Integer(config.getTransportAttributeId()), config.getTransportAttributeValue());
+        }
+        
+        return results;
+    }
+
+    /**
+     * @return
+     * @throws TorqueException
+     */
+    public Map getNonAuthentificationAttributesAsMap() throws TorqueException
+    {
+        Map results = new HashMap();
+        List auth_attributes = getNonAuthentificationAttributes();
+        
+        for(Iterator it = auth_attributes.iterator(); it.hasNext();)
+        {
+            ContentSourceTransportConfig config = (ContentSourceTransportConfig)it.next();
+            results.put(new Integer(config.getTransportAttributeId()), config.getTransportAttributeValue());
+        }
+        
+        return results;
+    }
+    
 }
