@@ -21,7 +21,7 @@
       </subsection>
       <subsection name="How can i avoid OutOfMemoryExceptions?">
         <p>
-            Edit InfoQuivers start script (InfoQuiver.bat|InfoQuiver.sh) and incease the value for
+            Edit InfoQuivers start script (InfoQuiver.bat|InfoQuiver.sh) and increase the value for
             the max. used memory:
             <p>
                 <code>java -mx256m -cp %CC_CLASSPATH% net.sf.iquiver.DefaultIQuiverStarter</code>
