@@ -4,6 +4,7 @@
  */
 package net.sf.iquiver.service.impl;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +21,7 @@ import net.sf.iquiver.om.ContentSourcePeer;
 import net.sf.iquiver.om.Transport;
 import net.sf.iquiver.parser.Parser;
 import net.sf.iquiver.parser.impl.ParserFactory;
+import net.sf.iquiver.search.DocumentIndexer;
 import net.sf.iquiver.service.BaseService;
 import net.sf.iquiver.transport.Fetcher;
 import net.sf.iquiver.transport.TransportConfigurationException;
@@ -200,6 +202,9 @@ public class ContentFetchService extends BaseService
     }
 
     /**
+     * Fetches and parses content from a content source
+     * Also adds the fetched content to the search index
+     * 
      * @author netseeker aka Michael Manske
      */
     private class ContentFetchThread extends TimerTask
@@ -263,6 +268,17 @@ public class ContentFetchService extends BaseService
                     {
                         logger.error( "Error while saving retrieved content!", e );
                     }
+                }
+                
+                // Add the documents to the search index
+                DocumentIndexer indexer = new DocumentIndexer("");
+                try
+                {
+                    indexer.indexDocuments( documents );
+                }
+                catch ( IOException e )
+                {
+                    logger.error("Indexing fetched contents failed! IOException while accessing the search index.", e);
                 }
 
                 isRunning = false;

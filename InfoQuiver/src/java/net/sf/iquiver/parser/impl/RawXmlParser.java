@@ -22,4 +22,13 @@ public class RawXmlParser extends Parser
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.parser.Parser#getStripped(byte[])
+     */
+    public String getStripped( byte[] rawContent ) throws ParsingException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

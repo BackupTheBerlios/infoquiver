@@ -247,6 +247,7 @@
         <column name="CONTENT_ID" primaryKey="true" required="true" type="BIGINT"/>
         <column name="CONTENT_TYPE_ID" required="true" type="INTEGER"/>
         <column name="CONTENT_SOURCE_ID" required="true" type="BIGINT"/>
+        <column name="CONTENT_UID" type="VARCHAR" size="64"/>
         <column name="CONTENT_RECEIVE_DATETIME" type="TIMESTAMP"/>        
         <column name="CONTENT_LOCALE" type="VARCHAR" size="5"/>
         <column name="CONTENT_DATE_OF_CREATION" type="TIMESTAMP"/>        

@@ -104,4 +104,5 @@ public abstract class Parser
     }
        
     public abstract Document parse ( byte[] rawContent ) throws ParsingException;
+    public abstract String getStripped ( byte[] rawContent ) throws ParsingException;
  }

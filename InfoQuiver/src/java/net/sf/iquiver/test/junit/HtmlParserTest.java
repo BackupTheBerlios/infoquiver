@@ -23,7 +23,7 @@ public class HtmlParserTest extends BaseIQuiverTestCase
         
         try
         {
-            Content content = ContentPeer.retrieveByPK(101);
+            Content content = ContentPeer.retrieveByPK(1000);
             Document doc = parser.parse( content );
             System.out.println(doc.getRawContent());
         }

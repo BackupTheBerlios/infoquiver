@@ -5,6 +5,7 @@
 package net.sf.iquiver.metaformat;
 
 import java.net.URL;
+import java.rmi.server.UID;
 import java.util.Date;
 import java.util.Locale;
 
@@ -19,10 +20,12 @@ public abstract class AbstractDocument implements Document
     private Date dateOfCreation;
     private Date dateOfLastModification;
     private String shortDescription;
+    private String keywords;
     private URL infoURL;
     private Locale locale;
     private String encoding;
     private String contentTypeStr;
+    private String _uid;
 
     /*
      * (non-Javadoc)
@@ -204,7 +207,9 @@ public abstract class AbstractDocument implements Document
         this.encoding = encoding;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#getContentTypeStr()
      */
     public String getContentTypeStr()
@@ -212,12 +217,55 @@ public abstract class AbstractDocument implements Document
         return this.contentTypeStr;
     }
 
-    /* (non-Javadoc)
+    /**
+     * @return Returns the keywords.
+     */
+    public String getKeywords()
+    {
+        return this.keywords;
+    }
+
+    /**
+     * @param keywords The keywords to set.
+     */
+    public void setKeywords( String keywords )
+    {
+        this.keywords = keywords;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#setContentTypeStr(java.lang.String)
      */
     public void setContentTypeStr( String contentTypeStr )
     {
         this.contentTypeStr = contentTypeStr;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.sf.iquiver.metaformat.Document#getUID()
+     */
+    public String getUID()
+    {
+        if(this._uid == null)
+        {
+            this._uid = new UID().toString();
+        }
+        
+        return _uid;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.sf.iquiver.metaformat.Document#setUID(long)
+     */
+    public void setUID( String id )
+    {
+        this._uid = id;
     }
 
     protected void clearDocumentMembers()
@@ -231,7 +279,8 @@ public abstract class AbstractDocument implements Document
         infoURL = null;
         locale = Locale.getDefault();
         encoding = null;
-        contentTypeStr = null;        
+        contentTypeStr = null;
+        _uid = null;
     }
 
     /*

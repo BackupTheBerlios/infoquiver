@@ -1,8 +1,5 @@
 package net.sf.iquiver.om;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,6 +10,8 @@ import java.util.Locale;
 import net.sf.iquiver.metaformat.Document;
 import net.sf.iquiver.parser.UnsupportedContentTypeException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.torque.TorqueException;
 import org.apache.torque.om.Persistent;
 import org.apache.torque.util.Criteria;
@@ -30,7 +29,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
     /**
      * Commons Logger for this class
      */
-    private static final Log logger = LogFactory.getLog(Content.class);
+    private static final Log logger = LogFactory.getLog( Content.class );
 
     /**
      * Creates a new instance of Content
@@ -48,6 +47,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
      */
     public Content(Document doc) throws UnsupportedEncodingException, UnsupportedContentTypeException
     {
+        this.setUID( doc.getUID() );
         this.setName( doc.getName() );
         this.setAuthor( doc.getAuthor() );
         this.setTitle( doc.getTitle() );
@@ -58,6 +58,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
         this.setLocale( doc.getLocale() );
         this.setRawContent( doc.getRawContent() );
         this.setContentTypeStr( doc.getContentTypeStr() );
+        this.setKeywords( doc.getKeywords() );
     }
 
     /*
@@ -267,6 +268,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
      */
     public void clear()
     {
+        this.setContentUid( null );
         this.setContentAuthor( null );
         this.setContentContent( null );
         this.setContentDateOfCreation( null );
@@ -276,6 +278,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
         this.setContentName( null );
         this.setContentShortDescription( null );
         this.setContentTitle( null );
+        this.setContentKeywords( null );
     }
 
     /*
@@ -294,12 +297,12 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
      * @see net.sf.iquiver.metaformat.Document#getContentTypeStr()
      */
     public String getContentTypeStr()
-    {        
+    {
         String cTypeStr = null;
         try
         {
             ContentType type = this.getContentType();
-            if(type != null)
+            if (type != null)
             {
                 cTypeStr = type.getContentTypeName();
             }
@@ -307,7 +310,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
         catch ( TorqueException e )
         {
         }
-        
+
         return cTypeStr;
     }
 
@@ -319,38 +322,76 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
     public void setContentTypeStr( String contentTypeStr ) throws UnsupportedContentTypeException
     {
         Criteria crit = new Criteria();
-        crit.addSelectColumn(ContentTypePeer.CONTENT_TYPE_ID);
-        crit.add(ContentTypePeer.CONTENT_TYPE_NAME, contentTypeStr);
+        crit.addSelectColumn( ContentTypePeer.CONTENT_TYPE_ID );
+        crit.add( ContentTypePeer.CONTENT_TYPE_NAME, contentTypeStr );
         crit.setDistinct();
-        
+
         try
         {
             List ids = ContentTypePeer.doSelectVillageRecords( crit );
-            if(ids != null && !ids.isEmpty())
+            if (ids != null && !ids.isEmpty())
             {
-                Record record = (Record)ids.get(0);
-                this.setContentTypeId( record.getValue(1).asInt());
+                Record record = (Record) ids.get( 0 );
+                this.setContentTypeId( record.getValue( 1 ).asInt() );
             }
             else
             {
-                throw new UnsupportedContentTypeException("Content type " + contentTypeStr + " is not supported!");
+                throw new UnsupportedContentTypeException( "Content type " + contentTypeStr + " is not supported!" );
             }
         }
         catch ( TorqueException e )
         {
-            logger.error("Error while fetching content types from database!", e);
+            logger.error( "Error while fetching content types from database!", e );
         }
         catch ( DataSetException e )
         {
-            logger.error("Uknown error occured while setting content type id!", e);
+            logger.error( "Uknown error occured while setting content type id!", e );
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#setRawContent(byte[])
      */
     public void setRawContent( byte[] content ) throws UnsupportedEncodingException
     {
-        this.setContentContent( new String( content ) );               
+        this.setContentContent( new String( content ) );
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.sf.iquiver.metaformat.Document#getKeywords()
+     */
+    public String getKeywords()
+    {
+        return this.getContentKeywords();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.sf.iquiver.metaformat.Document#setKeywords(java.lang.String)
+     */
+    public void setKeywords( String keywords )
+    {
+        this.setContentKeywords( keywords );
+    }
+        
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#getUID()
+     */
+    public String getUID()
+    {
+        return this.getContentUid();
+    }    
+    
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#setUID(java.lang.String)
+     */
+    public void setUID( String uid )
+    {
+        this.setContentUid( uid );
     }
 }

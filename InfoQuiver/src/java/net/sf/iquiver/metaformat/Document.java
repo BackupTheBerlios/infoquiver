@@ -35,6 +35,8 @@ public interface Document extends Serializable
     public void setDateOfLastModification(Date date);
     public String getShortDescription();
     public void setShortDescription(String desc);
+    public String getKeywords();
+    public void setKeywords(String desc);    
     public URL getInfoURL();
     public void setInfoURL(URL url);
     public Locale getLocale();
@@ -43,6 +45,8 @@ public interface Document extends Serializable
     public void setRawContent( byte[] content ) throws UnsupportedEncodingException;
     public String getContentTypeStr();
     public void setContentTypeStr( String contentTypeStr ) throws UnsupportedContentTypeException;
+    public String getUID();
+    public void setUID( String uid );
     public void clear();
     
 }

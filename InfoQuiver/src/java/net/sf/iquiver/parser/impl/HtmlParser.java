@@ -22,51 +22,67 @@ import org.apache.commons.logging.LogFactory;
  */
 public class HtmlParser extends Parser
 {
-    private static final Log logger = LogFactory.getLog(HtmlParser.class);
+    private static final Log logger = LogFactory.getLog( HtmlParser.class );
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.parser.Parser#parse(java.io.InputStream)
      */
     public Document parse( byte[] rawContent ) throws ParsingException
     {
-        org.apache.lucene.demo.html.HTMLParser parser = new org.apache.lucene.demo.html.HTMLParser( new ByteArrayInputStream( rawContent ));
+        org.apache.lucene.demo.html.HTMLParser parser = new org.apache.lucene.demo.html.HTMLParser(
+                new ByteArrayInputStream( rawContent ) );
         Document doc = null;
         try
         {
-            doc = MetaFormatFactory.createDocumentForContentType( MetaFormatFactory.CT_TEXT_HTML ) ;
+            doc = MetaFormatFactory.createDocumentForContentType( MetaFormatFactory.CT_TEXT_HTML );
             doc.setRawContent( rawContent );
         }
         catch ( Exception e )
         {
             logger.error( e );
-            throw new ParsingException( e.getMessage(), -1);            
+            throw new ParsingException( e.getMessage(), -1 );
         }
-                                
+
         try
         {
             doc.setTitle( parser.getTitle() );
-            doc.setShortDescription( parser.getSummary() );
+            doc.setName( parser.getTitle() );
+            //doc.setShortDescription( parser.getSummary() );
             Properties metas = parser.getMetaTags();
-            doc.setAuthor( metas.getProperty("author"));
-            String date = metas.getProperty("date");
-            if( date != null)
+            doc.setAuthor( metas.getProperty( "author" ) );
+            String date = metas.getProperty( "date" );
+            if (date != null)
             {
                 try
                 {
-                    doc.setDateOfLastModification(DateParser.parseDate( date ));
+                    doc.setDateOfLastModification( DateParser.parseDate( date ) );
                 }
-                catch( DateParseException e )
+                catch ( DateParseException e )
                 {
-                    logger.warn("Unable to parse creation date: " + date, e);
+                    logger.warn( "Unable to parse creation date: " + date, e );
                 }
-            }
+            }            
+            doc.setShortDescription( metas.getProperty( "description" ) );
+            doc.setKeywords( metas.getProperty( "keywords" ) );
+
         }
         catch ( Exception e )
         {
-            logger.error(e);
+            logger.error( e );
             throw new ParsingException( e.getMessage(), -1 );
         }
-        
+
         return doc;
+    }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.parser.Parser#getStripped(byte[])
+     */
+    public String getStripped( byte[] rawContent ) throws ParsingException
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

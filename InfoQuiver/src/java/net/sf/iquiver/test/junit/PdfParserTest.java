@@ -23,15 +23,14 @@ public class PdfParserTest extends BaseIQuiverTestCase
         
         try
         {
-            Content content = ContentPeer.retrieveByPK(102);
+            Content content = ContentPeer.retrieveByPK(1001);
             Document doc = parser.parse( content );
             System.out.println(doc.getRawContent());
         }
         catch ( Exception e )
         {
             e.printStackTrace();
-        }
-        
+        }        
     }
 
 }
