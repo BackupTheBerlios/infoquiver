@@ -7,16 +7,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.torque.TorqueException;
-import org.apache.torque.util.Criteria;
-
 import net.sf.iquiver.om.Content;
 import net.sf.iquiver.om.ContentParser;
 import net.sf.iquiver.om.ContentParserPeer;
 import net.sf.iquiver.om.ContentType;
 import net.sf.iquiver.om.ContentTypePeer;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.torque.TorqueException;
+import org.apache.torque.util.Criteria;
 
 /**
  * Factory for creating Parser instances. This implementation does cache all

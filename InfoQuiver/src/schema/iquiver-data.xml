@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE dataset SYSTEM "file://iquiver-data.dtd">
+<dataset name="all">
+    <User UserId="0" UserPassword="root" UserLogin="root" UserFirstName="IQuivers" UserLastName="Root" AddressId="0" ClientId="0"/>
+    <User UserId="1" UserPassword="test" UserLogin="test" UserFirstName="IQuivers" UserLastName="Testuser" AddressId="1" ClientId="1"/>
+    <Client ClientId="0" ClientName="ROOT" AddressId="0"/>
+    <Client ClientId="1" ClientName="TEST" AddressId="1"/>
+    <Address AddressId="0" AddressName="DUMMY ADDRESS FOR ROOT" AddressStreet="None" AddressZip="00000" AddressEmail="netseeker@manskes.de"/>
+    <Address AddressId="1" AddressName="TEST" AddressStreet="Demo Square" AddressZip="00001" AddressPhone="+(49)711 123456" AddressEmail="netseeker@manskes.de" AddressNumber="41" AddressCountry="DE"/>
+    <UserGroup UserGroupId="0" UserGroupName="ROOT" UserGroupDesc="ROOT" ClientId="0"/>
+    <UserGroup UserGroupId="1" UserGroupName="TEST" UserGroupDesc="TEST" ClientId="1"/>
+    <UserGroupLnk UserGroupId="0" UserId="0"/>
+    <UserGroupLnk UserGroupId="1" UserId="1"/>
+    <UserGroupClientLnk ClientId="0" UserGroupId="0"/>
+    <UserGroupClientLnk ClientId="1" UserGroupId="1"/>
+    <Permission PermissionId="0" PermissionName=""/>
+    <ContentParser ContentParserId="0" ContentParserImplementation="net.sf.iquiver.parser.impl.TextParser" ContentParserName="Text Parser"/>
+    <ContentParser ContentParserId="1" ContentParserImplementation="net.sf.iquiver.parser.impl.HtmlParser" ContentParserName="HTML Parser"/>
+    <ContentType ContentTypeId="0" ContentTypeName="text/plain" ContentTypeDesc="Plain Text" ContentParserId="0"/>
+    <ContentType ContentTypeId="1" ContentTypeName="text/html" ContentTypeDesc="HTML" ContentParserId="1"/>
+</dataset>

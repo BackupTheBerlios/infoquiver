@@ -4,7 +4,6 @@
  */
 package net.sf.iquiver.transport;
 
-import java.util.Locale;
 
 /**
  * @author netseeker aka Michael Manske

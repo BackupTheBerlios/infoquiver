@@ -116,26 +116,14 @@
 	
 <!-- ================================================================================================= -->
 	<target name="datadump_export" description="Creates a complete xml data dump of your database">
-		<ant antfile="build-torque.xml" target="datadtd" inheritAll="false">
-			<property name="outputDirectory" value="src/data"/>
-		</ant>		
-		<ant antfile="build-torque.xml" target="datadump" inheritAll="false">
-			<property name="outputDirectory" value="src/data"/>
-		</ant>				
+		<ant antfile="build-torque.xml" target="datadtd" inheritAll="false"/>
+		<ant antfile="build-torque.xml" target="datadump" inheritAll="false"/>
 	</target>	
 
 
 <!-- ================================================================================================= -->
 	<target name="datadump_import" description="Creates a complete xml data dump of your database">
-		<ant antfile="build-torque.xml" target="datasql" inheritAll="false">
-			<property name="dataXmlFile" value="src/data/${torque.project}-data.xml"/>
-			<property name="outputDirectory" value="src/data"/>
-		</ant>		
-		<ant antfile="build-torque.xml" target="datadump" inheritAll="false">
-			<property name="outputDirectory" value="src/data"/>
-		</ant>
-		<ant antfile="build-torque.xml" target="datadump" inheritAll="false">
-			<property name="srcDir" value="src/data"/>
-		</ant>
+		<ant antfile="build-torque.xml" target="datasql" inheritAll="false"/>
+		<ant antfile="build-torque.xml" target="insert-sql" inheritAll="false"/>
 	</target>	
 </project>
