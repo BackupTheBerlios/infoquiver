@@ -29,7 +29,7 @@ public class SessionPoolFactory implements KeyedPoolableObjectFactory
      */
     public Object makeObject( Object key ) throws Exception
     {        
-        return new Session();
+        return new Session((String)key);
     }
 
     /* (non-Javadoc)
