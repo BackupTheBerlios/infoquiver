@@ -28,34 +28,34 @@ import org.apache.torque.TorqueException;
  */
 public class HTTPTransport implements Fetcher
 {
-    public static final String ATTRIBUTE_HTTP_SERVER    = "Server";
-    public static final String ATTRIBUTE_HTTP_PORT      = "Port";
+    public static final String ATTRIBUTE_HTTP_SERVER = "Server";
+    public static final String ATTRIBUTE_HTTP_PORT = "Port";
     public static final String ATTRIBUTE_HTTP_USER_NAME = "Login";
-    public static final String ATTRIBUTE_HTTP_PASSWORD  = "Password";
+    public static final String ATTRIBUTE_HTTP_PASSWORD = "Password";
 
-    private static final Log   logger                   = LogFactory.getLog( HTTPTransport.class);
+    private static final Log logger = LogFactory.getLog( HTTPTransport.class );
 
-    private ContentSource      fetchLocation;
-    private HttpClient         client;
-    private HttpMethod         method;
-    private boolean            useAuthentification      = false;
+    private ContentSource fetchLocation;
+    private HttpClient client;
+    private HttpMethod method;
+    private boolean useAuthentification = false;
 
     /*
      * (non-Javadoc)
      * 
      * @see net.sf.iquiver.transport.Fetcher#setFetchLocation(net.sf.iquiver.om.ContentSource)
      */
-    public void setFetchLocation( ContentSource source ) throws TransportConfigurationException
+    public void setFetchLocation( ContentSource source) throws TransportConfigurationException
     {
         this.fetchLocation = source;
         this.client = new HttpClient();
 
         method = registerConfiguration();
 
-        if ( source.getIsAuthentificationRequired() )
+        if (source.getIsAuthentificationRequired())
         {
             registerAuthentificationConfiguration();
-            method.setDoAuthentication( true);
+            method.setDoAuthentication( true );
         }
     }
 
@@ -71,27 +71,28 @@ public class HTTPTransport implements Fetcher
         try
         {
             // execute the method.
-            client.executeMethod( method);
-            String encoding = ((GetMethod)method).getResponseCharSet();
-            Header header = ((GetMethod)method).getResponseHeader("Content-Type");
+            client.executeMethod( method );
+            String encoding = ((GetMethod) method).getResponseCharSet();
+            Header header = ((GetMethod) method).getResponseHeader( "Content-Type" );
             String contentType = header.getValue();
-            Document doc = MetaFormatFactory.createDocumentForContentType( contentType, method.getResponseBody(), encoding);
-            documents.add(doc);
+            Document doc = MetaFormatFactory.createDocumentForContentType( contentType, method.getResponseBody(),
+                    encoding );
+            documents.add( doc );
         }
-        catch ( UnsupportedEncodingException ue )
+        catch ( UnsupportedEncodingException ue)
         {
-            logger.error("Failed to convert downloaded file content to " + Document.DEFAULT_ENCODING, ue);
+            logger.error( "Failed to convert downloaded file content to " + Document.DEFAULT_ENCODING, ue );
         }
-        catch ( Exception e )
+        catch ( Exception e)
         {
-            logger.error( "Failed to download file.", e);
+            logger.error( "Failed to download file.", e );
         }
         finally
         {
             //always release the connection after we're done
             method.releaseConnection();
         }
-        
+
         return documents;
     }
 
@@ -103,25 +104,24 @@ public class HTTPTransport implements Fetcher
         try
         {
             Map auth_attributes = this.fetchLocation.getAuthentificationAttributesAsNamedMap();
-            String user = (String) auth_attributes.get( ATTRIBUTE_HTTP_USER_NAME);
-            String pwd = (String) auth_attributes.get( ATTRIBUTE_HTTP_PASSWORD);
+            String user = (String) auth_attributes.get( ATTRIBUTE_HTTP_USER_NAME );
+            String pwd = (String) auth_attributes.get( ATTRIBUTE_HTTP_PASSWORD );
 
-            if ( user != null && pwd != null )
+            if (user != null && pwd != null)
             {
-                client.getState( ).setCredentials( null, null, new UsernamePasswordCredentials( user, pwd ) );
+                client.getState().setCredentials( null, null, new UsernamePasswordCredentials( user, pwd ) );
             }
         }
-        catch ( TorqueException e )
+        catch ( TorqueException e)
         {
             String msg = "Could not register authentification attributes.";
-            logger.error( msg, e);
+            logger.error( msg, e );
             throw new TransportConfigurationException( msg, e );
         }
     }
 
     /**
-     * @return @throws
-     *         TransportConfigurationException
+     * @return @throws TransportConfigurationException
      */
     private HttpMethod registerConfiguration() throws TransportConfigurationException
     {
@@ -130,17 +130,17 @@ public class HTTPTransport implements Fetcher
         try
         {
             Map attributes = this.fetchLocation.getNonAuthentificationAttributesAsNamedMap();
-            String host = (String) attributes.get( ATTRIBUTE_HTTP_SERVER);
+            String host = (String) attributes.get( ATTRIBUTE_HTTP_SERVER );
 
-            if ( host != null )
+            if (host != null)
             {
                 method = new GetMethod( host );
             }
         }
-        catch ( TorqueException e )
+        catch ( TorqueException e)
         {
             String msg = "Could not register transport attributes.";
-            logger.error( msg, e);
+            logger.error( msg, e );
             throw new TransportConfigurationException( msg, e );
         }
 
