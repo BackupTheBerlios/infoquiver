@@ -51,6 +51,8 @@ public interface Document extends Serializable
     public boolean hasChildren();
     public List getChildren();
     public void addChild( Document doc );
+    public String getFileName();
+    public void setFileName( String fileName );
     public void clear();
     
 }

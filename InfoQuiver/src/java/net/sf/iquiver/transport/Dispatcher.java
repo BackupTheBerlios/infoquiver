@@ -30,12 +30,12 @@ public interface Dispatcher
      * @param docs List of net.sf.metaformat.Document objects
      * @return Array with transfered bytes per document
      */
-    public long[] dispatch(List docs);
+    public long[] dispatch(List docs) throws TransportException;
     
     /**
      * Dispatches a single Document to the previously supplied dispatch location
      * @param doc
      * @return count of tranfered bytes
      */
-    public long dispatch(Document doc); 
+    public long dispatch(Document doc) throws TransportException; 
 }

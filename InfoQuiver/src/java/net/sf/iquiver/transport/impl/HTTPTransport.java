@@ -112,7 +112,7 @@ public class HTTPTransport implements Fetcher
 
             Document doc = MetaFormatFactory.createDocumentForContentType( contentType, _method.getResponseBody(),
                     encoding );
-
+                       
             if (created != null)
             {
                 try

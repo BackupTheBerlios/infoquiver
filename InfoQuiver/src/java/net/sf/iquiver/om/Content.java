@@ -64,6 +64,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
         this.setRawContent( doc.getRawContent() );
         this.setContentTypeStr( doc.getContentTypeStr() );
         this.setKeywords( doc.getKeywords() );
+        this.setFileName( doc.getFileName() );
         if( doc.hasChildren() )
         {
             for( Iterator it = doc.getChildren().iterator(); it.hasNext();)
@@ -292,6 +293,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
         this.setContentTitle( null );
         this.setContentKeywords( null );
         this._children = null;
+        this.setFileName( null );
     }
 
     /*
@@ -410,6 +412,22 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
     public void setUID( String uid )
     {
         this.setContentUid( uid );
+    }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#getFileName()
+     */
+    public String getFileName()
+    {
+        return getContentFileName();
+    }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#setFileName(java.lang.String)
+     */
+    public void setFileName( String fileName )
+    {
+        setContentFileName( fileName );
     }
 
     /*

@@ -29,6 +29,7 @@ public abstract class AbstractDocument implements Document
     private String contentTypeStr;
     private String _uid;
     private List _children;
+    private String _fileName;
 
     /*
      * (non-Javadoc)
@@ -271,6 +272,22 @@ public abstract class AbstractDocument implements Document
         this._uid = id;
     }
 
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#getFileName()
+     */
+    public String getFileName()
+    {
+        return this._fileName;
+    }
+    
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#setFileName(java.lang.String)
+     */
+    public void setFileName( String filename )
+    {
+        this._fileName = filename;
+    }
+    
     /* (non-Javadoc)
      * @see net.sf.iquiver.metaformat.Document#addChild(net.sf.iquiver.metaformat.Document)
      */
