@@ -190,6 +190,7 @@
         <column name="CONTENT_SOURCE_ID" primaryKey="true" required="true" type="BIGINT"/>
         <column name="CONTENT_SOURCE_TYPE_ID" required="true" type="INTEGER"/>        
         <column name="TRANSPORT_ID" required="true" type="INTEGER"/>
+        <column name="CONTENT_TYPE_ID" type="INTEGER" description="Can be used to specify the content type, when iquiver seems to get problems with recognizing the correct content type"/>
         <column name="PUBLISHER_ID" type="INTEGER"/>        
         <column name="CONTENT_SOURCE_NAME" type="VARCHAR" size="32"/>
         <column name="CONTENT_SOURCE_DESC" type="VARCHAR" size="255"/>
@@ -201,6 +202,9 @@
         <foreign-key foreignTable="iq_transport">
             <reference local="TRANSPORT_ID" foreign="TRANSPORT_ID" />
         </foreign-key>
+        <foreign-key foreignTable="iq_content_type">
+            <reference local="CONTENT_TYPE_ID" foreign="CONTENT_TYPE_ID" />
+        </foreign-key>                   
         <foreign-key foreignTable="iq_publisher">
             <reference local="PUBLISHER_ID" foreign="PUBLISHER_ID" />
         </foreign-key>        

@@ -51,12 +51,12 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
     /**
      * the configurable default logger
      */
-    private static Log logger;
+    private static Log logger = LogFactory.getLog( IQuiver.class );
 
     /**
      * for use when the default logger isn't initialized or not available anymore
      */
-    private static final SimpleLog log = new SimpleLog( "net.sf.iquiver" );
+    private static final SimpleLog log = new SimpleLog( IQuiver.class.getName() );
 
     /**
      * indicates if we are ready for configure()
@@ -192,9 +192,8 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
 
             //store the current configuration, some services may need to read additional properties
             _configuration = conf;
-            
+           
             configureLogger( conf );
-
             //LogFactory should be configured now, so instanciate our default logger
             logger = LogFactory.getLog( IQuiver.class );
 

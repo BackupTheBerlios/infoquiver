@@ -463,7 +463,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
         try
         {
             content = new Content( doc );
-            this._children.add( doc );
+            this._children.add( content );
         }
         catch ( Exception e )
         {
@@ -478,16 +478,17 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
      */
     public void save( Connection con ) throws TorqueException
     {
+        super.save( con );
+        
         if (hasChildren())
         {
             for (Iterator it = _children.iterator(); it.hasNext();)
             {
                 Content content = (Content) it.next();
                 content.setContentParentId( this.getContentId() );
+                content.setContentSourceId( this.getContentSourceId() );
                 content.save( con );
             }
         }
-
-        super.save( con );
     }
 }

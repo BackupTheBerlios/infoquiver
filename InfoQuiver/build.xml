@@ -97,7 +97,8 @@
 
 	<!-- ================================================================================================= -->
 	<target name="create_db" description="Creates the database from your schema.xml">
-		<ant antfile="build-torque.xml" target="sql" inheritAll="false" />
+        <delete file="${torque.sql.dir}/${torque.project}-data.sql" failonerror="false"/>
+        <ant antfile="build-torque.xml" target="sql" inheritAll="false" />
 		<ant antfile="build-torque.xml" target="create-db" inheritAll="false" />
         <ant antfile="build-torque.xml" target="id-table-init-sql" inheritAll="false" />        
 		<ant antfile="build-torque.xml" target="insert-sql" inheritAll="false" />

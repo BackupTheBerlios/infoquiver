@@ -52,14 +52,14 @@ public class HTTPTransport implements Fetcher
     {
         this._fetchLocation = source;
         this._client = new HttpClient();
-        
+
         _method = _registerConfiguration();
-        _method.setRequestHeader("User-Agent", IQuiver.NAME + " " + IQuiver.VERSION);
+        _method.setRequestHeader( "User-Agent", IQuiver.NAME + " " + IQuiver.VERSION );
 
         if (source.getIsAuthentificationRequired())
         {
             _registerAuthentificationConfiguration();
-            _method.setDoAuthentication( true );            
+            _method.setDoAuthentication( true );
         }
     }
 
@@ -89,10 +89,25 @@ public class HTTPTransport implements Fetcher
             String encoding = ((GetMethod) _method).getResponseCharSet();
             Header header = ((GetMethod) _method).getResponseHeader( "Content-Type" );
             String contentType = header.getValue();
+
+            //check for non-standard content type strings
+            if (contentType.indexOf( ";" ) != -1)
+            {
+                contentType = contentType.substring( 0, contentType.indexOf( ";" ) );
+            }
+
             header = ((GetMethod) _method).getResponseHeader( "Date" );
             String created = header.getValue();
             header = ((GetMethod) _method).getResponseHeader( "Last-Modified" );
-            String modified = header.getValue();
+            String modified = null;
+            if (header != null)
+            {
+                modified = header.getValue();
+            }
+            else
+            {
+                modified = created;
+            }
 
             Document doc = MetaFormatFactory.createDocumentForContentType( contentType, _method.getResponseBody(),
                     encoding );
@@ -190,7 +205,9 @@ public class HTTPTransport implements Fetcher
         return method;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.transport.Fetcher#isParsingRequired()
      */
     public boolean isParsingRequired()

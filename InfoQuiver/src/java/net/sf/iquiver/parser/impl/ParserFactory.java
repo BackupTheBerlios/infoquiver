@@ -3,6 +3,7 @@
  */
 package net.sf.iquiver.parser.impl;
 
+import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.torque.TorqueException;
 import org.apache.torque.util.Criteria;
+
+import de.nava.informa.core.ChannelFormat;
+import de.nava.informa.utils.FormatDetector;
 
 import net.sf.iquiver.om.ContentParser;
 import net.sf.iquiver.om.ContentType;
@@ -122,4 +126,27 @@ public class ParserFactory
     {
         return DEFAULT_PARSER;
     }
+    
+    /**
+     * @param rawContent
+     * @return
+     */
+    public static Parser getParserForKnownXmlDialect( byte[] rawContent )
+    {
+        try
+        {
+            ChannelFormat format = FormatDetector.getFormat( new ByteArrayInputStream( rawContent ) );
+            if( format != null )
+            {
+                return new FeedParser();
+            }
+        }
+        catch( Exception e )
+        {
+            logger.error( e );
+        }
+        
+        return null;
+    }
+ 
 }

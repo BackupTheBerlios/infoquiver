@@ -130,7 +130,10 @@ public class DocumentIndexer
             try
             {
                 Parser parser = ParserFactory.getParserForContentType( doc.getContentTypeStr() );
-                lDoc.add( Field.UnStored( "contents", parser.getStripped( doc.getRawContent() ) ) );
+                if( doc.getRawContent() != null )
+                {
+                    lDoc.add( Field.UnStored( "contents", parser.getStripped( doc.getRawContent() ) ) );    
+                }                
             }
             catch ( UnsupportedContentTypeException e )
             {

@@ -103,10 +103,6 @@ public class ContentFetchService extends BaseService
     {
         List transports = new ArrayList();
         List sources = null;
-        long now = new Date().getTime();
-        boolean isFetchRequired = true;
-        long fetchPeriod = 0;
-        Criteria crit = new Criteria();
 
         try
         {
@@ -121,88 +117,42 @@ public class ContentFetchService extends BaseService
         for (Iterator it = sources.iterator(); it.hasNext();)
         {
             ContentSource source = (ContentSource) it.next();
-            fetchPeriod = now - source.getContentSourceUpdateTimespan();
-            crit.clear();
-            crit.addSelectColumn( ContentPeer.CONTENT_ID );
-            crit.add( ContentPeer.CONTENT_SOURCE_ID, source.getContentSourceId() );
-            crit.add( ContentPeer.CONTENT_TO_DELETE, false );
-
-            if (logger.isDebugEnabled())
-            {
-                logger.debug( crit );
-            }
 
             try
             {
-                //first fetch for this content source?
-                isFetchRequired = ContentPeer.doSelectVillageRecords( crit ).isEmpty();
-                //already fetched this content source in past, check if update is neccessary
-                if (!isFetchRequired)
+                Transport transport = source.getTransport();
+                if (transport != null)
                 {
-                    crit.clear();
-                    crit.addSelectColumn( ContentPeer.CONTENT_ID );
-                    crit.add( ContentPeer.CONTENT_SOURCE_ID, source.getContentSourceId() );
-                    crit.add( ContentPeer.CONTENT_TO_DELETE, false );
-                    crit.add( ContentPeer.CONTENT_RECEIVE_DATETIME, new Date( fetchPeriod ), Criteria.GREATER_THAN );
-                    crit.setDistinct();
+                    String className = transport.getTransportImplementation();
 
-                    isFetchRequired = ContentPeer.doSelectVillageRecords( crit ).isEmpty();
+                    try
+                    {
+                        Fetcher impl = (Fetcher) Class.forName( className ).newInstance();
+                        impl.setFetchLocation( source );
+                        transports.add( impl );
+                    }
+                    catch ( ClassNotFoundException e1 )
+                    {
+                        logger.error( "The implementation class " + className + " could not be found.", e1 );
+                    }
+                    catch ( TransportConfigurationException e )
+                    {
+                        logger.error( "Configuration of transport id=" + transport.getTransportId() + " failed.", e );
+                    }
+                    catch ( Exception e )
+                    {
+                        logger.error( "Unknown error occurred while loading transport implementation for transport id="
+                                + transport.getTransportId(), e );
+                    }
+                }
+                else
+                {
+                    logger.warn( "No transport found for ContentSource id=" + source.getContentSourceId() );
                 }
             }
             catch ( TorqueException e )
             {
-                logger.error( "Error while fetching content sources from database.", e );
-                isFetchRequired = true;
-            }
-
-            if (isFetchRequired)
-            {
-                try
-                {
-                    Transport transport = source.getTransport();
-                    if (transport != null)
-                    {
-                        String className = transport.getTransportImplementation();
-
-                        try
-                        {
-                            Fetcher impl = (Fetcher) Class.forName( className ).newInstance();
-                            impl.setFetchLocation( source );
-                            transports.add( impl );
-                        }
-                        catch ( ClassNotFoundException e1 )
-                        {
-                            logger.error( "The implementation class " + className + " could not be found.", e1 );
-                        }
-                        catch ( TransportConfigurationException e )
-                        {
-                            logger
-                                    .error( "Configuration of transport id=" + transport.getTransportId() + " failed.",
-                                            e );
-                        }
-                        catch ( Exception e )
-                        {
-                            logger.error(
-                                    "Unknown error occurred while loading transport implementation for transport id="
-                                            + transport.getTransportId(), e );
-                        }
-                    }
-                    else
-                    {
-                        logger.warn( "No transport found for ContentSource id=" + source.getContentSourceId() );
-                    }
-                }
-                catch ( TorqueException e )
-                {
-                    logger.error( "Error while fetching transport for ContentSource id=" + source.getContentSourceId() );
-                }
-            }
-            else
-            {
-                if (logger.isDebugEnabled())
-                {
-                    logger.debug( "Found up-to-date data, ignoring content source " + source.getContentSourceId() );
-                }
+                logger.error( "Error while fetching transport for ContentSource id=" + source.getContentSourceId() );
             }
         }
         return transports;
@@ -247,79 +197,176 @@ public class ContentFetchService extends BaseService
             if (!isRunning)
             {
                 isRunning = true;
-                long contentSourceId = fetcher.getFetchLocation().getContentSourceId();
-                List documents = null;
-                try
-                {
-                    documents = fetcher.fetch();
-                    if (failures != 0)
-                    {
-                        failures = 0;
-                    }
-                }
-                catch ( TransportException e )
-                {
-                    logger.error( e );
-                    failures++;
 
-                    // stopping this content fetch thread for the current application session after three sequenced
-                    // failures
-                    if (failures >= 3)
-                    {
-                        String id = fetcher.getFetchLocation().getContentSourceName();
-                        logger
-                                .error( "Content fetching from content source \""
-                                        + id
-                                        + "\" failed for three times. Content fetching for this source will be stopped now for this session." );
-                        Timer timer = (Timer) _timers.get( id );
-                        timer.cancel();
-                        _timers.remove( id );
-                    }
-
-                    isRunning = false;
-                    return;
-                }
-
-                List contentDocs = new ArrayList();
-                
-                for (Iterator it = documents.iterator(); it.hasNext();)
+                //check if content needs update - this is neccessary because of
+                //a) we could be in a cluster enviroment, so another iquiver instance might already
+                //did update this content source and
+                //b) maybe we had a transport failure in past
+                if (checkForUpdate())
                 {
-                    Document doc = (Document) it.next();
+                    ContentSource source = fetcher.getFetchLocation();
+                    String contentType = null;
+                    //does the content source explicit overwrite the content type?
                     try
                     {
-                        Content content = null;
-
-                        if (fetcher.isParsingRequired())
+                        if (source.getContentType() != null)
                         {
-                            Parser parser = ParserFactory.getParserForContentType( doc.getContentTypeStr() );
-                            content = new Content( parser.parse( doc ) );
+                            contentType = source.getContentType().getContentTypeName();
                         }
-                        else
+                    }
+                    catch ( TorqueException e )
+                    {
+                        logger.error( "Check for explicit overwritten content type of content source "
+                                + source.getContentSourceName() + " failed!", e );
+                    }
+
+                    List documents = null;
+                    try
+                    {
+                        documents = fetcher.fetch();
+                        //restet failure count on success
+                        if (failures != 0)
                         {
-                            content = new Content( doc );
+                            failures = 0;
                         }
 
-                        content.setContentReceiveDatetime( new Date() );
-                        content.setContentSourceId( contentSourceId );
-                        content.save();
-                        contentDocs.add( content );
+                        //Parse and convert the document into net.sf.iquiver.om.Content instances and save them into
+                        // the database
+                        List contentDocs = new ArrayList();
+                        for (Iterator it = documents.iterator(); it.hasNext();)
+                        {
+                            Document doc = (Document) it.next();
+
+                            try
+                            {
+                                Content content = null;
+                                //does the content source explicit overwrite the content type?
+                                if (contentType != null)
+                                {
+                                    doc.setContentTypeStr( contentType );
+                                }
+
+                                //transports might be able to set all neccessary document values without a special
+                                // parser
+                                if (fetcher.isParsingRequired())
+                                {
+                                    Parser parser = ParserFactory.getParserForContentType( doc.getContentTypeStr() );
+                                    content = new Content( parser.parse( doc ) );
+                                    //does the content source explicit overwrite the content type?
+                                    if (contentType != null)
+                                    {
+                                        //the used parser might have set another content type
+                                        content.setContentTypeStr( contentType );
+                                    }
+                                }
+                                else
+                                {
+                                    content = new Content( doc );
+                                }
+                                
+                                content.setContentReceiveDatetime( new Date() );
+                                content.setContentSourceId( source.getContentSourceId() );
+                                content.save();
+                                contentDocs.add( content );
+                            }
+                            catch ( UnsupportedEncodingException e )
+                            {
+                                logger.error( "Encoding of retrieved content is not supported!", e );
+                            }
+                            catch ( Exception e )
+                            {
+                                logger.error( "Error while saving retrieved content!", e );
+                            }
+                        }
+                        
+                        if( !contentDocs.isEmpty() )
+                        {
+	                        // Add the documents to the search index
+	                        IndexScheduler scheduler = IndexScheduler.getInstance( indexDir );
+	                        scheduler.scheduleForIndexing( contentDocs );
+                        }
                     }
-                    catch ( UnsupportedEncodingException e )
+                    catch ( TransportException e )
                     {
-                        logger.error( "Encoding of retrieved content is not supported!", e );
-                    }
-                    catch ( Exception e )
-                    {
-                        logger.error( "Error while saving retrieved content!", e );
+                        logger.error( e );
+                        handleFailure();
+                        isRunning = false;
+                        return;
                     }
                 }
-
-                // Add the documents to the search index
-                IndexScheduler scheduler = IndexScheduler.getInstance( indexDir );
-                scheduler.scheduleForIndexing( contentDocs );
+                else
+                {
+                    if (logger.isDebugEnabled())
+                    {
+                        logger.debug( "Found up-to-date data, ignoring content source "
+                                + fetcher.getFetchLocation().getContentSourceName() );
+                    }
+                }
 
                 isRunning = false;
             }
+        }
+
+        /**
+         * 
+         */
+        private void handleFailure()
+        {
+            failures++;
+
+            // stopping this content fetch thread for the current application session after three sequenced
+            // failures
+            if (failures >= 3)
+            {
+                String id = fetcher.getFetchLocation().getContentSourceName();
+                logger
+                        .error( "Content fetching from content source \""
+                                + id
+                                + "\" failed for three times. Content fetching for this source will be stopped now for this session." );
+                Timer timer = (Timer) _timers.get( id );
+                timer.cancel();
+                _timers.remove( id );
+            }
+        }
+
+        /**
+         * @return
+         */
+        private boolean checkForUpdate()
+        {
+            ContentSource source = this.fetcher.getFetchLocation();
+            boolean isFetchRequired = true;
+            long fetchPeriod = new Date().getTime() - source.getContentSourceUpdateTimespan();
+            Criteria crit = new Criteria();
+            crit.addSelectColumn( ContentPeer.CONTENT_ID );
+            crit.add( ContentPeer.CONTENT_SOURCE_ID, source.getContentSourceId() );
+            crit.add( ContentPeer.CONTENT_TO_DELETE, false );
+
+            try
+            {
+                //first fetch for this content source?
+                isFetchRequired = ContentPeer.doSelectVillageRecords( crit ).isEmpty();
+                //already fetched this content source in past, check if update is neccessary
+                if (!isFetchRequired)
+                {
+                    crit.clear();
+                    crit.addSelectColumn( ContentPeer.CONTENT_ID );
+                    crit.add( ContentPeer.CONTENT_SOURCE_ID, source.getContentSourceId() );
+                    crit.add( ContentPeer.CONTENT_TO_DELETE, false );
+                    crit.add( ContentPeer.CONTENT_RECEIVE_DATETIME, new Date( fetchPeriod ), Criteria.GREATER_THAN );
+                    crit.setDistinct();
+
+                    isFetchRequired = ContentPeer.doSelectVillageRecords( crit ).isEmpty();
+                }
+            }
+            catch ( TorqueException e )
+            {
+                logger.error( "Error while fetching contents for content source " + source.getContentSourceName()
+                        + " from database.", e );
+                isFetchRequired = true;
+            }
+
+            return isFetchRequired;
         }
     }
 }
