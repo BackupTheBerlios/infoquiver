@@ -37,7 +37,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
      * temporarily storage for all kinds of application wide variables and
      * objects
      */
-    private DefaultContext context;
+    private static DefaultContext context;
 
     /**
      * holds the currently active configuration
@@ -53,7 +53,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
      * for use when the default logger isn't initialized or not available
      * anymore
      */
-    private static final SimpleLog log = new SimpleLog( "IQuiver" );
+    private static final SimpleLog log = new SimpleLog( "net.sf.iquiver" );
 
     /**
      * indicates if we are ready for configure()
@@ -143,7 +143,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
 
     private void initialize()
     {
-        this.context = new DefaultContext();
+        context = new DefaultContext();
         this.logConfigurator = new LogConfigurator();
         this.persistConfigurator = new PersistenceConfigurator();
         this.configDir = ConfigurationConstants.DEFAULT_CONFIG_DIR;
@@ -162,7 +162,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
         this.logConfigurator = null;
         this.persistConfigurator = null;
         this.configDir = null;
-        this.context = null;
+        context = null;
         this.isConfigured = false;
         this.isInitialized = false;
     }
@@ -192,12 +192,21 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
             configurePersistence( conf);
             configureCache( conf);            
 
+            context.put( "net.sf.iquiver.IQuiver:CONFIGURATION", conf );
             this.isConfigured = true;
         }
         else
         {
             throw new ConfigurationException( "IQuiver must be successfully initialized before invoking configure" );
         }
+    }
+    
+    /**
+     * @return
+     */
+    public static DefaultContext getContext()
+    {
+        return context;
     }
 
     private void configureLogger( Configuration conf ) throws ConfigurationException
@@ -257,7 +266,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
             {
                 cacheConfig = new DefaultProperiesConfiguration( conf
                         .getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_CACHE) );
-                CacheBackedPeer.configure( cacheConfig.getSubset( "cache"));
+                CacheBackedPeer.configure( cacheConfig.getSubset( "cache" ) );
                 configured = true;
             }
             catch ( IOException e )
@@ -280,7 +289,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
             {
                 cacheConfig = new DefaultProperiesConfiguration( this.configDir + "/"
                         + ConfigurationConstants.CONFIG_FILE_CACHE );
-                CacheBackedPeer.configure(cacheConfig.subset("cache"));
+                CacheBackedPeer.configure(cacheConfig.subset("cache") );
             }
             catch ( Exception e )
             {
