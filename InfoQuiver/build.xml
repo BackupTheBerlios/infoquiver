@@ -137,7 +137,13 @@
 
 	<!-- ================================================================================================= -->
 	<target name="generate_soap_skeleton" description="Creates SOAP stubs and skeletons for server and client">
-		<java2wsdl bindingname="IQuiverSoapBinding" classname="net.sf.iquiver.remote.soap.IWebService" location="http://localhost:8080/simpleservice/services/IQuiver" namespace="http://iquiver" output="iquiver.wsdl" porttypename="IQuiver" useinheritedmethods="false"
+		<java2wsdl bindingname="IQuiverSoapBinding" 
+            classname="net.sf.iquiver.remote.soap.IWebService"
+            location="http://localhost:8080/simpleservice/services/IQuiver"
+            namespace="http://iquiver"
+            output="${torque.schema.dir}/iquiver.wsdl"
+            porttypename="IQuiver"
+            useinheritedmethods="false"
             stopclasses="java.*,javax.*,org.apache.torque.*">
 			<!-- <mapping namespace="http://iquiver" package="net.sf.iquiver.remote.soap.impl" /> -->
             <mapping namespace="http://iquiver" package="net.sf.iquiver" />
@@ -151,7 +157,7 @@
         
 		<ant target="awk" inheritAll="false">
 			<property name="awk.scriptfile" value="src/awk/wsdl.awk" />
-			<property name="awk.targetfile" value="iquiver.wsdl" />
+			<property name="awk.targetfile" value="${torque.schema.dir}/iquiver.wsdl" />
 		</ant>
         
 		<!--
@@ -163,7 +169,7 @@
             helperGen="false" 
             noimports="false" 
             output="${java.dir}" 
-            url="iquiver.wsdl" 
+            url="${torque.schema.dir}/iquiver.wsdl" 
             verbose="true">
 	            <mapping namespace="http://iquiver-impl" package="${remote.soap.pkg}.impl"/>
 	            <mapping namespace="http://iquiver-intf" package="${remote.soap.pkg}.impl"/>

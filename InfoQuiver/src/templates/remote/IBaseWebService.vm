@@ -14,8 +14,9 @@
 package net.sf.iquiver.remote.soap;
 
 import java.util.List;
-import java.util.Map;
+import net.sf.iquiver.util.om.SimpleCriteria;
 import org.apache.torque.om.SimpleKey;
+import org.apache.torque.om.ComboKey;
 
 /**
 #if ($addTimeStamp)
@@ -30,12 +31,13 @@ public interface IBaseWebService
 	#foreach ($tbl in $database.Tables)
 	  	#if (!$tbl.isForReferenceOnly())	    
 			#set ( $objname = "${package}.${tbl.JavaName}" )
-			public $objname doSelect${tbl.JavaName}($objname object);
-			public List doSelect${tbl.JavaName}(Map criteria);
-			public $objname retrieve${tbl.JavaName}ByPk(SimpleKey key);
-			public $objname doInsert${tbl.JavaName}($objname object);
-			public void doDelete${tbl.JavaName}($objname object);
-			public void doDelete${tbl.JavaName}(Map criteria);
+			public $objname doSelect${tbl.JavaName}(String sessionId, $objname object);
+			public List doSelect${tbl.JavaName}(String sessionId, SimpleCriteria criteria);
+			public $objname retrieve${tbl.JavaName}ByPk(String sessionId, SimpleKey[] key);
+			public $objname retrieve${tbl.JavaName}ByPk(String sessionId, ComboKey key);			
+			public $objname doInsert${tbl.JavaName}(String sessionId, $objname object);
+			public void doDelete${tbl.JavaName}(String sessionId, $objname object);
+			public void doDelete${tbl.JavaName}(String sessionId, SimpleCriteria criteria);
 		#end  		
 	#end	
 }
