@@ -10,10 +10,10 @@ import net.sf.iquiver.configuration.Configurable;
 import net.sf.iquiver.configuration.Configuration;
 import net.sf.iquiver.configuration.ConfigurationConstants;
 import net.sf.iquiver.configuration.Reconfigurable;
-import net.sf.iquiver.configuration.impl.CacheConfigurator;
 import net.sf.iquiver.configuration.impl.DefaultProperiesConfiguration;
 import net.sf.iquiver.configuration.impl.LogConfigurator;
 import net.sf.iquiver.configuration.impl.PersistenceConfigurator;
+import net.sf.iquiver.util.om.CacheBackedPeer;
 
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Startable;
@@ -76,7 +76,6 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
      * application components and/or services
      */
     private Reconfigurable logConfigurator;
-    private Reconfigurable cacheConfigurator;
     private Reconfigurable persistConfigurator;
 
     /**
@@ -146,7 +145,6 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
     {
         this.context = new DefaultContext();
         this.logConfigurator = new LogConfigurator();
-        this.cacheConfigurator = new CacheConfigurator();
         this.persistConfigurator = new PersistenceConfigurator();
         this.configDir = ConfigurationConstants.DEFAULT_CONFIG_DIR;
         this.isConfigured = false;
@@ -162,7 +160,6 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
     {
         logger.info( "Shutting down...");
         this.logConfigurator = null;
-        this.cacheConfigurator = null;
         this.persistConfigurator = null;
         this.configDir = null;
         this.context = null;
@@ -260,20 +257,20 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
             {
                 cacheConfig = new DefaultProperiesConfiguration( conf
                         .getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_CACHE) );
-                this.cacheConfigurator.configure( cacheConfig.getSubset( "cache"));
+                CacheBackedPeer.configure( cacheConfig.getSubset( "cache"));
                 configured = true;
-            }
-            catch ( ConfigurationException e )
-            {
-                log.error( "Configuration of the caching mechanism with custom configuration file \""
-                        + conf.getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_CACHE)
-                        + "\"failed. Will use default location instead", e);
             }
             catch ( IOException e )
             {
                 log.error( "Custom configuration file \""
                         + conf.getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_CACHE)
                         + "\"does not exist. Will use default location instead", e);
+            }
+            catch ( Exception e )
+            {
+                log.error( "Configuration of the caching mechanism with custom configuration file \""
+                        + conf.getString( ConfigurationConstants.OVERWRITE_KEY_CONFIG_CACHE)
+                        + "\"failed. Will use default location instead", e);
             }
         }
 
@@ -283,9 +280,9 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
             {
                 cacheConfig = new DefaultProperiesConfiguration( this.configDir + "/"
                         + ConfigurationConstants.CONFIG_FILE_CACHE );
-                this.cacheConfigurator.configure( cacheConfig.getSubset( "cache"));
+                CacheBackedPeer.configure(cacheConfig.subset("cache"));
             }
-            catch ( IOException e )
+            catch ( Exception e )
             {
                 logger.error( "Cache Configuration with default configuration file failed!", e);
                 throw new ConfigurationException( e.getMessage() );
