@@ -17,7 +17,7 @@ public interface Dispatcher
     /**
      * @param location
      */
-    public void setDispatchLocation(ContentSource location);
+    public void setDispatchLocation(ContentSource location) throws TransportConfigurationException;
     
     /**
      * Dispatches a list of Documents to the previously supplied dispatch location

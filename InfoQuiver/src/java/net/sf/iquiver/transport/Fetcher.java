@@ -16,7 +16,7 @@ public interface Fetcher
     /**
      * @param source
      */
-    public void setFetchLocation(ContentSource source);
+    public void setFetchLocation(ContentSource source) throws TransportConfigurationException;
     
     /**
      * @return
