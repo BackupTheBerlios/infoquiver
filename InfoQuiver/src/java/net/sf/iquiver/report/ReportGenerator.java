@@ -2,8 +2,8 @@
  * ReportGenerator.java
  * created on 16.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/ReportGenerator.java,v $
- * $Date: 2004/11/24 21:27:35 $
- * $Revision: 1.6 $
+ * $Date: 2004/11/26 22:51:18 $
+ * $Revision: 1.7 $
  *********************************************************************/
 
 package net.sf.iquiver.report;
@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 
 import net.sf.iquiver.IQuiver;
 import net.sf.iquiver.om.Client;
+import net.sf.iquiver.om.User;
 import net.sf.iquiver.om.UserGroup;
 
 import org.apache.commons.logging.Log;
@@ -38,8 +39,8 @@ public abstract class ReportGenerator
     protected static String _targetDir = _reportDir + File.separator + "tmp";
     protected static String _template = IQuiver.getConfiguration().getString( "reports.templates.searchresults" );  
     
-    protected static DateFormat formatter = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
-    protected static DateFormat filename_formatter = new SimpleDateFormat("yyyyMMdd");
+    public static DateFormat DATE_FORMATTER = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+    public static DateFormat FILE_DATE_FORMATTER = new SimpleDateFormat("yyyyMMdd");
     
     /**
      * Returns the path to use when saving a report result for a IReportSource.
@@ -47,7 +48,7 @@ public abstract class ReportGenerator
      * @param searcher
      * @return
      */
-    protected String getReportFilePathForReportSource( IReportSource searcher )
+    public static String getReportFilePathForReportSource( IReportSource searcher )
     {
         StringBuffer path = new StringBuffer( _targetDir );
         path.append( File.separator );
@@ -61,7 +62,18 @@ public abstract class ReportGenerator
             UserGroup group = (UserGroup) searcher;
             path.append( group.getClientId() );
             path.append( File.separator );
+            path.append( "groups" );
+            path.append( File.separator );
             path.append( group.getUserGroupId() );
+        }
+        else
+        {
+            User user = (User) searcher;
+            path.append( user.getClientId() );
+            path.append( File.separator );
+            path.append( "users" );
+            path.append( File.separator );
+            path.append( user.getUserId() );
         }
         
         File file = new File( path.toString() );

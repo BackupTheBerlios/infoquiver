@@ -2,8 +2,8 @@
  * IReportSource.java
  * created on 17.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/IReportSource.java,v $
- * $Date: 2004/10/24 16:27:55 $
- * $Revision: 1.2 $
+ * $Date: 2004/11/26 22:51:18 $
+ * $Revision: 1.3 $
 *********************************************************************/
 
 package net.sf.iquiver.report;
@@ -21,4 +21,5 @@ public interface IReportSource extends Introspectable
 {
     public List getSearchQuerys() throws TorqueException;
     public List getContentSources() throws TorqueException;
+    public int getClientId();
 }
