@@ -126,7 +126,7 @@ public class DocumentIndexer
         }
         if (doc.getFileName() != null)
         {
-            lDoc.add( Field.Keyword( "modified", doc.getFileName() ) );
+            lDoc.add( Field.Keyword( "filename", doc.getFileName() ) );
         }
 
         if (doc.getRawContent() != null)
@@ -213,7 +213,7 @@ public class DocumentIndexer
     {
         org.apache.lucene.document.Document lDoc = convertDocument( doc );
 
-        if (logger.isDebugEnabled())
+        if ( logger.isDebugEnabled() )
         {
             logger.debug( "Indexing document UID="
                     + doc.getUID()
@@ -227,7 +227,7 @@ public class DocumentIndexer
         // we should optimize the index after EACH document
         writer.optimize();
 
-        if (doc.hasChildren())
+        if ( doc.hasChildren() )
         {
             for (Iterator it = doc.getChildren().iterator(); it.hasNext();)
             {
