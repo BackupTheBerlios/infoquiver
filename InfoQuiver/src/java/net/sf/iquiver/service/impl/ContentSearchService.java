@@ -2,8 +2,8 @@
  * ContentSearchService.java
  * created on 15.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/ContentSearchService.java,v $
- * $Date: 2004/07/20 19:46:09 $
- * $Revision: 1.7 $
+ * $Date: 2004/07/21 22:34:10 $
+ * $Revision: 1.8 $
  *********************************************************************/
 
 package net.sf.iquiver.service.impl;
@@ -146,7 +146,6 @@ public class ContentSearchService extends BaseService
             }
         }
         
-        generator = new ReportGenerator( obj, queryResults );
-        generator.start();
+        ReportGenerator.generate( obj, queryResults );
     }
 }

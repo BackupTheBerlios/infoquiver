@@ -2,8 +2,8 @@
  * ReportGenerator.java
  * created on 16.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/Attic/ReportGenerator.java,v $
- * $Date: 2004/07/20 19:46:09 $
- * $Revision: 1.4 $
+ * $Date: 2004/07/21 22:34:10 $
+ * $Revision: 1.5 $
  *********************************************************************/
 
 package net.sf.iquiver.service.impl;
@@ -30,7 +30,7 @@ import dori.jasper.engine.JasperPrint;
 /**
  * @author netseeker aka Michael Manske
  */
-public class ReportGenerator extends Thread
+public class ReportGenerator
 {
     /**
      * Commons Logger for this class
@@ -42,26 +42,18 @@ public class ReportGenerator extends Thread
      */
     private static String _targetDir = IQuiver.getConfiguration().getString( "reports.directory", "reports" ) + File.separator + "tmp";
     private static String _template = IQuiver.getConfiguration().getString( "reports.templates.searchresults" ) + ".jasper";
-    private IReportSource _searcher;
-    private ListMap _queryresults;
 
-    public ReportGenerator(IReportSource searcher, ListMap queryresults)
-    {
-        this._searcher = searcher;
-        this._queryresults = queryresults;
-    }
-
-    public void run()
+    public static void generate(IReportSource searcher, ListMap queryresults)
     {
         String path = _targetDir + File.separator;
 
-        if (_searcher instanceof Client)
+        if (searcher instanceof Client)
         {
-            path += String.valueOf( ((Client) _searcher).getClientId() );
+            path += String.valueOf( ((Client) searcher).getClientId() );
         }
-        else if (_searcher instanceof UserGroup)
+        else if (searcher instanceof UserGroup)
         {
-            UserGroup group = (UserGroup) _searcher;
+            UserGroup group = (UserGroup) searcher;
             path += String.valueOf( group.getClientId() );
             path += File.separator;
             path += String.valueOf( group.getUserGroupId() );
@@ -76,7 +68,7 @@ public class ReportGenerator extends Thread
         path += File.separator;
         path += String.valueOf( System.currentTimeMillis() );
 
-        QueryResultMapDataSource dataSource = new QueryResultMapDataSource( _searcher, _queryresults );
+        QueryResultMapDataSource dataSource = new QueryResultMapDataSource( searcher, queryresults );
         Map parameters = new HashMap();
         parameters.put( "ReportTitle", "InfoQuiver - Search Results" );
         try
