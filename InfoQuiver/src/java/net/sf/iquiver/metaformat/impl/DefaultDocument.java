@@ -1,6 +1,5 @@
 /*
  * Created on 10.03.2004
- *
  */
 package net.sf.iquiver.metaformat.impl;
 
@@ -16,35 +15,45 @@ import org.apache.commons.logging.LogFactory;
  * @author netseeker aka Michael Manske
  */
 public class DefaultDocument extends AbstractDocument
-{    
-    private static final Log logger = LogFactory.getLog(DefaultDocument.class);
+{
+    private static final Log logger = LogFactory.getLog( DefaultDocument.class);
     private byte[] rawContent;
-    
+
+    /**
+     * 
+     */
     public DefaultDocument()
-    {        
-    }
-    
-    public DefaultDocument(byte[] rawContent, String encoding) throws UnsupportedEncodingException
     {
-        this(new String(rawContent, encoding), encoding);
     }
-    
-    public DefaultDocument(String rawContent, String encoding)
-    {        
-        try
-        {
-            this.rawContent = rawContent.getBytes(Document.DEFAULT_ENCODING);
-            setEncoding(Document.DEFAULT_ENCODING);
-        }
-        catch ( UnsupportedEncodingException e )
-        {
-            logger.error("Unable to convert string to UTF8", e);
-            this.rawContent = rawContent.getBytes();
-            setEncoding(encoding);
-        }
+
+    /**
+     * Constructs a new DefaultDocument and sets it's Content by calling
+     * DefaultDocument( String rawContent ) with rawContent transformed into
+     * a String with the supplied encoding.
+     * @param rawContent
+     * @param encoding
+     * @throws UnsupportedEncodingException
+     */
+    public DefaultDocument( byte[] rawContent, String encoding ) throws UnsupportedEncodingException
+    {
+        this( new String( rawContent, encoding ) );
     }
-    
-    /* (non-Javadoc)
+
+    /**
+     * Constructs a new DefaultDocument and sets it's content. The content will
+     * be converted to UTF8, if this fails an UnsupportedEncodingException will be thrown.
+     * @param rawContent
+     * @throws UnsupportedEncodingException
+     */
+    public DefaultDocument( String rawContent ) throws UnsupportedEncodingException
+    {
+        this.rawContent = rawContent.getBytes( Document.DEFAULT_ENCODING);
+        setEncoding( Document.DEFAULT_ENCODING);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#getRawContent()
      */
     public byte[] getRawContent()
@@ -52,7 +61,9 @@ public class DefaultDocument extends AbstractDocument
         return this.rawContent;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#clear()
      */
     public void clear()
