@@ -30,6 +30,8 @@ public class ContentTypeFactory
     public static final String CT_APPLICATION_RTF = "application/rtf";
     public static final String CT_APPLICATION_PS = "application/postscript";
     public static final String CT_APPLICATION_PDF = "application/pdf";
+    public static final String CT_APPLICATION_MSWORD = "application/msword";
+    public static final String CT_APPLICATION_MSEXCEL = "application/vnd.msexcel";    
     public static final String CT_APPLICATION_XSHAR = "application/x-shar";
     public static final String CT_APPLICATION_XTROFF = "application/x-troff";
     public static final String CT_APPLICATION_XTROFF_MS = "application/x-troff-ms";
@@ -37,12 +39,12 @@ public class ContentTypeFactory
     public static final String CT_APPLICATION_XLATEX = "application/x-latex";
     public static final String CT_MULTIPART_MIXED = "multipart/mixed";
     public static final String CT_APPLICATION_OCTET_STREAM = "application/octet-stream";
-    public static final String CT_APPLICATION_ZIP = "application/zip";
+    public static final String CT_APPLICATION_ZIP = "application/zip";    
 
     private static String[] TEXT_CTS = new String[] { CT_TEXT_PLAIN, CT_TEXT_HTML, CT_TEXT_XML,
             CT_APPLICATION_XML, CT_APPLICATION_ATOM_XML, CT_APPLICATION_RSS_XML, CT_APPLICATION_OPML_XML,
             CT_TEXT_TAB_SEPARATED, CT_APPLICATION_RTF, CT_APPLICATION_PS, CT_APPLICATION_XSHAR, CT_APPLICATION_XTROFF,
-            CT_APPLICATION_XTROFF_MS, CT_APPLICATION_XTEX, CT_APPLICATION_XLATEX };
+            CT_APPLICATION_XTROFF_MS, CT_APPLICATION_XTEX, CT_APPLICATION_XLATEX, CT_APPLICATION_MSWORD, CT_APPLICATION_MSEXCEL };
 
     private static final String[] NOT_SUPPORTET_CTS = new String[]{};
     
