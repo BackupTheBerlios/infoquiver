@@ -15,6 +15,7 @@ package net.sf.iquiver.remote.soap;
 
 import java.util.List;
 import java.util.Map;
+import org.apache.torque.om.SimpleKey;
 
 /**
 #if ($addTimeStamp)
@@ -31,7 +32,7 @@ public interface IBaseWebService
 			#set ( $objname = "${package}.${tbl.JavaName}" )
 			public $objname doSelect${tbl.JavaName}($objname object);
 			public List doSelect${tbl.JavaName}(Map criteria);
-			public $objname retrieve${tbl.JavaName}ByPk();
+			public $objname retrieve${tbl.JavaName}ByPk(SimpleKey key);
 			public $objname doInsert${tbl.JavaName}($objname object);
 			public void doDelete${tbl.JavaName}($objname object);
 			public void doDelete${tbl.JavaName}(Map criteria);
