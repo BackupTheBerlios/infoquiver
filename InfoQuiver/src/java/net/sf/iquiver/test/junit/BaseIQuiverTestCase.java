@@ -85,7 +85,7 @@ public class BaseIQuiverTestCase extends TestCase
     public URLConnection openConnection( URL url ) throws IOException
     {
         URLConnection connection = url.openConnection();
-        connection.setRequestProperty( "User-Agent", IQuiver.NAME + " " + IQuiver.VERSION );
+        connection.setRequestProperty( "User-Agent", IQuiver.NAME + " " + IQuiver.VERSION + " (http://developer.berlios.de/projects/infoquiver/)" );
         return connection;
     }
 

@@ -54,7 +54,8 @@ public class HTTPTransport implements Fetcher
         this._client = new HttpClient();
 
         _method = _registerConfiguration();
-        _method.setRequestHeader( "User-Agent", IQuiver.NAME + " " + IQuiver.VERSION );
+        _method.setRequestHeader( "User-Agent", IQuiver.NAME + " " + IQuiver.VERSION
+                + " (http://developer.berlios.de/projects/infoquiver/)" );
 
         if (source.getIsAuthentificationRequired())
         {
