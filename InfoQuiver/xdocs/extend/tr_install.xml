@@ -7,8 +7,22 @@
   <body>
     <section name="Installing Custom Tranports">
         <p>
-            To be done.
+            The InfoQuiver distribution contains a little commandline tool called &quot;TransportInstaller&quot;.
+            It makes the installation of new transports as simple as it's possible in InfoQuivers current
+            development stage.                    
         </p>
+        <subsection name="Usage">
+            Before using the TransportInstaller ensure that both - your transport class and the transport xml descriptor -
+            are located in the same directory.            
+            <code>java net.sf.iquiver.tools.TransportInstaller -fTorque ... transport</code>
+            <ul>
+                <li>fTorque: specifies the path to the configuration file with settings for the persistence layer<br/>
+                    As long as you are not a InfoQuiver developer this setting should be
+                    <code>PathToInfoQuiverInstallDir/conf/torque.properties</code></li>
+                <li>transport: specifies the class containing your transport implementation, eg.
+                    <code>net.sf.iquiver.samples.transport.SimpleFetchTransport</code></li>
+            </ul>
+        </subsection>
     </section>
   </body>
 </document>    

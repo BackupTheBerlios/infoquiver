@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <document>
   <properties>
-    <title>Extending InfoQuiver</title>
+    <title>Installing Custom Parsers</title>
     <author email="netseeker@manskes.de">Michael Manske</author>
   </properties>
   <body>
-    <section name="Extending InfoQuiver">
+    <section name="Installing Custom Parsers">
         <p>
-            To be done.
+            The InfoQuiver distribution contains a little commandline tool called &quot;ParserInstaller&quot;.
+            It makes the installation of new parsers as simple as it's possible in InfoQuivers current
+            development stage.                    
         </p>
+        <subsection name="Usage">
+            <code>java net.sf.iquiver.tools.ParserInstaller -fTorque ... -class ... name</code>
+            <ul>
+                <li>fTorque: specifies the path to the configuration file with settings for the persistence layer<br/>
+                    As long as you are not a InfoQuiver developer this setting should be
+                    <code>PathToInfoQuiverInstallDir/conf/torque.properties</code></li>
+                <li>class: specifies the class containing your transport implementation, eg.
+                    <code>net.sf.iquiver.samples.parser.SimpleParsert</code></li>
+                <li>name: specifies a name for your parser, eg. &quot;SimpleParser&quot;</li>    
+            </ul>
+        </subsection>
     </section>
   </body>
 </document>    

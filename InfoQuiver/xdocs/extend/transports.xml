@@ -5,6 +5,21 @@
     <author email="netseeker@manskes.de">Michael Manske</author>
   </properties>
   <body>
+    <section name="What are Transports?">
+        <p>
+            In InfoQuiver transports are modules which deal with:
+            <ul>
+                <li>connections to an information data source</li>
+                <li>retrieving data from an information data source</li>
+                <li>connection to an target for report dispatching</li>
+                <li>dispatching reports to an target</li>
+            </ul>
+        </p>
+        <p>
+        Information data sources and dispatch targets can be http hosts, filesystem locations, email accounts or whatever you are
+        able to provide a transport for.
+        </p>
+    </section>
     <section name="Creating Custom Transports">
         <p>
             Creating custom transports is usually a simple task. InfoQuiver knows
