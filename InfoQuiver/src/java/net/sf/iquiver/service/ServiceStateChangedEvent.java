@@ -15,14 +15,14 @@ public class ServiceStateChangedEvent extends EventObject
     private int newState;
     private long time;
     
-    public ServiceStateChangedEvent( Object obj, int oldState, int newState)
+    public ServiceStateChangedEvent( Service service, int oldState, int newState)
     {
-        this( obj, oldState, newState, System.currentTimeMillis() );
+        this( service, oldState, newState, System.currentTimeMillis() );
     }
     
-    public ServiceStateChangedEvent( Object obj, int oldState, int newState, long time )
+    public ServiceStateChangedEvent( Service service, int oldState, int newState, long time )
     {
-        super( obj );
+        super( service );
         this.oldState = oldState;
         this.newState = newState;
         this.time = time;
