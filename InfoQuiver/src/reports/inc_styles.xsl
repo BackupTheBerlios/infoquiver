@@ -1,168 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">    
+<xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:template name="styles">
-        <style type="text/css">
-        <![CDATA[
-            BODY
-            {
-                BORDER-LEFT: 5px;
-                BORDER-RIGHT: 5px;
-                BORDER-TOP: 5px;
-                FONT-SIZE: 11px;
-                MARGIN: 0px;
-                COLOR: #000000;
-                BORDER-BOTTOM: 0px;
-                FONT-FAMILY: Verdana, Arial, Geneva, Helvetica, sans-serif;
-                BACKGROUND-COLOR: #ffffff
-            }
-            TD
-            {
-                FONT-SIZE: 11px;
-                COLOR: #000000;
-                FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
-            }
-            H1
-            {
-                FONT-SIZE: 11px;
-                COLOR: #000000;
-                FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
-            }
-            H2
-            {
-                FONT-SIZE: 11px;
-                COLOR: #000000;
-                FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
-            }
-            H3
-            {
-                FONT-SIZE: 11px;
-                COLOR: #000000;
-                FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
-            }
-            H4
-            {
-                FONT-SIZE: 11px;
-                COLOR: #000000;
-                FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
-            }
-            UL
-            {
-                FONT-SIZE: 11px;
-                COLOR: #000000;
-                FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
-            }
-            OL
-            {
-                FONT-SIZE: 11px;
-                COLOR: #000000;
-                FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
-            }
-            LI
-            {
-                FONT-SIZE: 11px;
-                COLOR: #000000;
-                FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
-            }
-            BLOCKQUOTE
-            {
-                FONT-SIZE: 11px;
-                COLOR: #000000;
-                FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
-            }
-            .txtTitle
-            {
-                FONT-WEIGHT: bold;
-                FONT-SIZE: 18px;
-                COLOR: #255aa6;
-                FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
-            }
-            .txtSubTitle
-            {
-                FONT-WEIGHT: bold;
-                FONT-SIZE: 14px;
-                COLOR: #255aa6;
-                FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
-            }
-            .copyright
-            {
-                FONT-WEIGHT: normal;
-                FONT-SIZE: 11px;
-                COLOR: #999999;
-                FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
-            }
-            A
-            {
-                COLOR: #000000;
-                FONT-FAMILY: Verdana, Arial, Geneva, Helvetica, sans-serif;
-                TEXT-DECORATION: underline
-            }
-            A
-            {
-                COLOR: #000000;
-                FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif;
-                TEXT-DECORATION: underline
-            }
-            A:active
-            {
-                COLOR: #255aa6
-            }
-            A:visited
-            {
-                COLOR: #000000
-            }
-            A:hover
-            {
-                COLOR: #255aa6
-            }
-            TABLE.blue
-            {
-                BACKGROUND-COLOR: #336699
-            }
-            TR.blue
-            {
-                BACKGROUND-COLOR: #336699
-            }
-            TD.blue
-            {
-                BACKGROUND-COLOR: #336699
-            }
-            TABLE.background
-            {
-                BACKGROUND-COLOR: #efefef
-            }
-            TR.background
-            {
-                BACKGROUND-COLOR: #efefef
-            }
-            TD.background
-            {
-                BACKGROUND-COLOR: #efefef
-            }
-            TABLE.bright
-            {
-                BACKGROUND-COLOR: #efefef
-            }
-            TR.bright
-            {
-                BACKGROUND-COLOR: #efefef
-            }
-            TD.bright
-            {
-                BACKGROUND-COLOR: #efefef
-            }
-            TABLE.dark
-            {
-                BACKGROUND-COLOR: #d5dbe3
-            }
-            TR.dark
-            {
-                BACKGROUND-COLOR: #d5dbe3
-            }
-            TD.dark
-            {
-                BACKGROUND-COLOR: #d5dbe3
-            }
-        ]]>
-        </style>
-    </xsl:template>    
+        <style type="text/css"> <![CDATA[
+            body            { background-color               : #E7E7E7;
+                              color                          : #000000;
+                              padding-top                    : 20px;
+                              padding-bottom                 : 20px;                  
+                            }
+            
+            td, p, li     { font-size              : 11px;
+                            font-family            : Verdana,Arial;
+                            color                  : #000000; } 
+            .headline   	 {font-family: Verdana, Arial, sans-serif; font-size:11; color:#000000; font-weight: bold}
+            .tableheader    { font-size: 11px; font-family: Verdana,Arial; color: #FFFFFF; font-weight: bold}
+            .footer         { font-size: 11px; font-family: Verdana,Arial; color: #FFFFFF;}
+            .maintable           { margin:             0px;
+                                   padding:            0px; }                                   
+            .headerbox           { font-family:        Verdana,Arial;
+                                   font-size:          11px;
+                                   border-left:        1px solid #333333;
+                                   border-right:       1px solid #333333;
+                                   border-top:         1px solid #333333;
+                                   border-bottom:      1px solid #333333;
+                                   background-color:   #3394c7;
+                                   color:              #FFFFFF;
+                                   height:             16px; }
+            .contentbox            {font-family:        Verdana,Arial;
+                                   font-size:          11px;
+                                   border-left:        1px solid #333333;
+                                   border-right:       1px solid #333333;                                   
+                                   background-color:   #DAE7F3;
+                                   padding:            8px;
+                                   color:              #000000;}
+            .content            {font-family:        Verdana,Arial;
+                                   font-size:          11px;
+                                   background-color:   #DAE7F3;
+                                   padding:            8px;
+                                   color:              #000000;}                                   
+            A:link           {font-family: Verdana, Arial, sans-serif; font-size:11; text-decoration: none; color: #225B79}
+            A:visited        {font-family: Verdana, Arial, sans-serif; font-size:11; text-decoration: none; color: #225B79}
+            A:hover          {font-family: Verdana, Arial, sans-serif; font-size:11; text-decoration: none; color: #AE6B00}
+            A:active         {font-family: Verdana, Arial, sans-serif; font-size:11; text-decoration: none; color: #AE6B00}            
+        ]]> </style>
+    </xsl:template>
 </xsl:stylesheet>

@@ -2,8 +2,8 @@
  * DefaultReportGenerator.java
  * created on 24.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/impl/DefaultReportGenerator.java,v $
- * $Date: 2004/11/24 19:05:01 $
- * $Revision: 1.4 $
+ * $Date: 2004/11/24 21:21:19 $
+ * $Revision: 1.5 $
  *********************************************************************/
 
 package net.sf.iquiver.report.impl;
@@ -75,6 +75,9 @@ public class DefaultReportGenerator extends ReportGenerator
             sb.append( "<path>" );
             sb.append( _reportDir );
             sb.append( "</path>\n" );
+            sb.append( "<created>");
+            sb.append( formatter.format( new Date() ));
+            sb.append( "</created>");            
             sb.append( ObjectSerializer.objectToXmlString( searcher ) );
 
             for (int i = 0; i < queryresults.size(); i++)
@@ -123,7 +126,12 @@ public class DefaultReportGenerator extends ReportGenerator
                 logger.error( "!!!PDF Report generation failed!!!", te );
             }
             
-            FileUtil.fastFileCopy( "images/iquiver.gif", path + "iquiver.gif" );
+            File dir = new File("images");
+            File[] images = dir.listFiles();
+            for( int i = 0; i < images.length; i++)
+            {
+                FileUtil.fastFileCopy( images[i].getAbsolutePath(), path + images[i].getName() );
+            }
 /*
             //create xml report            
             try
