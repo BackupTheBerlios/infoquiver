@@ -2,8 +2,8 @@
  * ReportGeneratorTest.java
  * created on 19.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/test/junit/ReportGeneratorTest.java,v $
- * $Date: 2004/11/26 22:51:29 $
- * $Revision: 1.2 $
+ * $Date: 2004/11/26 23:42:41 $
+ * $Revision: 1.3 $
  *********************************************************************/
 
 package net.sf.iquiver.test.junit;
@@ -94,7 +94,7 @@ public class ReportGeneratorTest extends BaseIQuiverTestCase
         {
             ContentSource source = (ContentSource) contentSources.get( i );
             String index = IQuiver.getConfiguration().getString( "lucene.index.path" ) + File.separator
-                    + String.valueOf( obj.getClientId() );
+                    + source.getContentSourceId();
             File testFile = new File( index );
             if (testFile.exists())
             {
