@@ -209,8 +209,15 @@
         <column name="CONTENT_ID" primaryKey="true" required="true" type="BIGINT"/>
         <column name="CONTENT_TYPE_ID" required="true" type="INTEGER"/>
         <column name="CONTENT_SOURCE_ID" required="true" type="BIGINT"/>
-        <column name="RECEIVE_DATETIME" type="TIMESTAMP"/>        
+        <column name="CONTENT_RECEIVE_DATETIME" type="TIMESTAMP"/>        
         <column name="CONTENT_LOCALE" type="VARCHAR" size="5"/>
+        <column name="CONTENT_DATE_OF_CREATION" type="TIMESTAMP"/>        
+        <column name="CONTENT_DATE_OF_LAST_MODIFICATION" type="TIMESTAMP"/>                
+        <column name="CONTENT_NAME" type="VARCHAR" size="32"/>
+        <column name="CONTENT_TITLE" type="VARCHAR" size="32"/>
+        <column name="CONTENT_SHORT_DESCRIPTION" type="VARCHAR" size="128"/>
+        <column name="CONTENT_INFO_URL" type="VARCHAR" size="32"/>
+        <column name="CONTENT_AUTHOR" type="VARCHAR" size="32"/>
         <column name="CONTENT_CONTENT" type="LONGVARCHAR" size="16184"/>
         <foreign-key foreignTable="iq_content_source">
             <reference local="CONTENT_SOURCE_ID" foreign="CONTENT_SOURCE_ID" />
@@ -225,8 +232,11 @@
             <index-column name="CONTENT_LOCALE"/>
         </index>                                     
         <index name="IQ_CONTENT_RECEIVE_DATETIME_CKI">
-            <index-column name="RECEIVE_DATETIME"/>
-        </index>                                             
+            <index-column name="CONTENT_RECEIVE_DATETIME"/>
+        </index>
+        <index name="IQ_CONTENT_AUTHOR_CKI">
+            <index-column name="CONTENT_AUTHOR"/>
+        </index>                                                     
     </table>
     <table name="iq_client_content_lnk" javaName="ClientContentLnk" idMethod="none">
         <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>        
