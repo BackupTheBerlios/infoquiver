@@ -64,6 +64,11 @@ public abstract class BaseService implements Service
         serviceExecutionListeners.remove(listener);
     }
     
+    /**
+     * The recommended method for all inherited classes to notify ServiceStateListeners
+     * of a ServiceStateChangedEvent.
+     * @param evt
+     */
     protected final void notifyServiceStateListeners(final ServiceStateChangedEvent evt)
     {
         new Thread() {
@@ -77,6 +82,11 @@ public abstract class BaseService implements Service
         }.start();        
     }
 
+    /**
+     * The recommended method for all inherited classes to notify ServiceExecutionListeners
+     * of a ServiceExecutionEvent.
+     * @param evt
+     */
     protected final void notifyServiceExecutionListeners(final ServiceExecutionEvent evt)
     {
         new Thread() {
