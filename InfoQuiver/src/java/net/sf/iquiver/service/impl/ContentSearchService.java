@@ -1,9 +1,9 @@
 /*********************************************************************
  * ContentSearchService.java
  * created on 15.07.2004 by netseeker
- * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/ContentSearchService.java,v $\
- * $Date: 2004/07/15 17:01:51 $\
- * $Revision: 1.3 $\
+ * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/ContentSearchService.java,v $
+ * $Date: 2004/07/16 08:08:57 $
+ * $Revision: 1.4 $
 *********************************************************************/
 package net.sf.iquiver.service.impl;
 
@@ -12,12 +12,14 @@ import java.util.List;
 
 import net.sf.iquiver.om.Client;
 import net.sf.iquiver.om.ClientPeer;
+import net.sf.iquiver.om.User;
 import net.sf.iquiver.om.UserGroup;
 import net.sf.iquiver.om.UserGroupLnkPeer;
 import net.sf.iquiver.om.UserPeer;
 import net.sf.iquiver.service.BaseService;
 
 import org.apache.torque.TorqueException;
+import org.apache.torque.om.BaseObject;
 import org.apache.torque.util.Criteria;
 
 /**
@@ -77,4 +79,28 @@ public class ContentSearchService extends BaseService
         // TODO Auto-generated method stub
 
     }    
+    
+    /**
+     * @param obj
+     * @throws TorqueException
+     */
+    private void executeSearchQueries( BaseObject obj ) throws TorqueException
+    {
+        List queries = null;
+        
+        if( obj instanceof Client )
+        {
+            queries = ((Client)obj).getSearchQuerys();
+        }
+        else if ( obj instanceof UserGroup )
+        {
+            queries = ((UserGroup)obj).getSearchQuerys();
+        }
+        else
+        {
+            queries = ((User)obj).getSearchQuerysRelatedByUserId();
+        }
+        
+        
+    }
 }
