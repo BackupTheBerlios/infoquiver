@@ -10,15 +10,15 @@
             In this guide you will learn how to create your own custom fetcher transport. The ready to use
             sample class used in this guide comes with the default InfoQuiver distribution.
             <ul>
-                <li><a href="../apidocs/net/sf/iquiver/samples/SimpleFetchTransport.html">javadoc of the used example class</a></li>
-                <li><a href="../xref/net/sf/iquiver/samples/SimpleFetchTransport.html">xref of the used example class</a></li>
+                <li><a href="../apidocs/net/sf/iquiver/samples/transport/SimpleFetchTransport.html">javadoc of the used example class</a></li>
+                <li><a href="../xref/net/sf/iquiver/samples/transport/SimpleFetchTransport.html">xref of the used example class</a></li>
             </ul>
             <img src="../images/sampe_fetcher.png" alt="class diagram" border="0"/>
         </p>
     <subsection name="net.sf.iquiver.transport.Fetcher">
         <p>
             As shown in the class diagram above a fetcher must implement <a href="../apidocs/net/sf/iquiver/transport/Fetcher.html">net.sf.iquiver.transport.Fetcher</a>.
-            <source>public class <a href="../apidocs/net/sf/iquiver/samples/SimpleFetchTransport.html">SimpleFetchTransport</a> implements Fetcher</source>
+            <source>public class <a href="../apidocs/net/sf/iquiver/samples/transport/SimpleFetchTransport.html">SimpleFetchTransport</a> implements Fetcher</source>
             The interface Fetcher declares four methods:
             </p>
 <source>

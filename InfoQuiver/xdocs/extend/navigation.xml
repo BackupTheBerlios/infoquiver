@@ -12,10 +12,13 @@
         <item name="Install" href="/install.html"/>
         <item name="Getting Started" href="/getstarted/getstarted.html"/>
         <item name="Extending InfoQuiver" href="/extend/index.html">
-            <item name="1. Custom Transports" href="/extend/transports.html"/>
-            <item name="1.1 Fetcher transports" href="/extend/fetcher.html"/>
-            <item name="1.2 Dispatcher transports" href="/extend/dispatcher.html"/>
-            <item name="2. Custom Parsers" href="/extend/parsers.html"/>
+            <item name="1. Custom Services" href="/extend/services.html"/>
+            <item name="2. Custom Transports" href="/extend/transports.html"/>
+            <item name="2.1 Fetcher transports" href="/extend/fetcher.html"/>
+            <item name="2.2 Dispatcher transports" href="/extend/dispatcher.html"/>
+            <item name="2.3 Installing transports" href="/extend/tr_install.html"/>
+            <item name="3. Custom Parsers" href="/extend/parsers.html"/>
+            <item name="3.1 Installing Parsers" href="/extend/pa_install.html"/>            
         </item>
         <item name="FAQ" href="/faq.html"/>
     </menu>

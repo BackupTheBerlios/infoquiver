@@ -188,17 +188,12 @@
                 </includes>
             </resource>
         </resources>
-        <!--
-        <unitTestSourceDirectory>src/java</unitTestSourceDirectory>
+        <unitTestSourceDirectory>src/java/net/sf/iquiver/test/junit</unitTestSourceDirectory>
         <unitTest>
-            <includes>
-                <include>**/*Test.java</include>
-            </includes>
             <excludes>
                 <exclude>**/BaseIQuiverTestCase.java</exclude>
             </excludes>
         </unitTest>
-        -->
     </build>
     <reports>
         <report>maven-changes-plugin</report>

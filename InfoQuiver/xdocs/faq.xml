@@ -40,7 +40,7 @@
         <p>
             In such a case there are two options:
             <ol>
-                <li>Write your own parser, see <a href="extend/extend.html">the extension guide</a></li>
+                <li>Write your own parser, see <a href="extend/index.html">the extension guide</a></li>
                 <li>If there exists an application which is able to parse format xyz and output the result 
                     to your systems standard output, you can use InfoQuivers DelegateParser to invoke that application,
                     all you need to do is to add an content type for your information source, set up DelegateParser as parser
@@ -53,7 +53,7 @@
       <subsection name="I would like to use protocoll xyz to fetch a content source, but InfoQuiver doesn't provide a adequate transport. What can i do?">
         <p>
             <ol>
-                <li>You could write your own transport, see <a href="extend/extend.html">the extension guide</a></li>
+                <li>You could write your own transport, see <a href="extend/index.html">the extension guide</a></li>
                 <li>If there exists an application which is able to fetch information via protocol xyz and output the result 
                     to your systems standard output, you can use InfoQuivers DelegateTransport to invoke that application.<br/>
                     If the application can output the content only to the filesystem you could schedule the application outside of
