@@ -8,8 +8,6 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Locale;
 
-import net.sf.iquiver.util.CompatibleDate;
-
 /**
  * @author netseeker aka Michael Manske
  */
@@ -159,7 +157,7 @@ public abstract class AbstractDocument implements Document
         name = null;
         author = null;
         title = null;
-        dateOfCreation = new CompatibleDate(System.currentTimeMillis()).getDate();
+        dateOfCreation = new Date();
         dateOfLastModification = dateOfCreation;
         shortDescription = null;
         infoURL = null;
