@@ -190,8 +190,8 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
             //LogFactory should be configured now, so instanciate our default logger
             logger = LogFactory.getLog( IQuiver.class);
 
-            configureCache( conf);
             configurePersistence( conf);
+            configureCache( conf);            
 
             this.isConfigured = true;
         }

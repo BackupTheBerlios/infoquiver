@@ -16,6 +16,8 @@ import net.sf.iquiver.om.Content;
  */
 public interface Document
 {
+    public static final String DEFAULT_ENCODING = "UTF8";
+    
     public String getName();
     public void setName(String name);
     public String getEncoding();

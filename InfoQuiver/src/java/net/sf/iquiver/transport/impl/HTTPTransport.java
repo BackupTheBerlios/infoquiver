@@ -4,6 +4,7 @@
 package net.sf.iquiver.transport.impl;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -73,15 +74,13 @@ public class HTTPTransport implements Fetcher
         {
             // execute the method.
             client.executeMethod( method);
-            DefaultDocument doc = new DefaultDocument(method.getResponseBody());
-            doc.setEncoding(((GetMethod)method).getResponseCharSet());
+            String encoding = ((GetMethod)method).getResponseCharSet(); 
+            DefaultDocument doc = new DefaultDocument(method.getResponseBodyAsString(), encoding);           
             documents.add(doc);
-            Header[] headers = method.getResponseHeaders();
-            for(int i = 0; i < headers.length; i++)
-            {
-                Header header = headers[i];
-                logger.debug(header.toExternalForm());
-            }
+        }
+        catch ( UnsupportedEncodingException ue )
+        {
+            logger.error("Failed to convert downloaded file content to " + Document.DEFAULT_ENCODING, ue);
         }
         catch ( Exception e )
         {
