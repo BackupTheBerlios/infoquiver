@@ -4,6 +4,8 @@
  */
 package net.sf.iquiver.metaformat;
 
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Date;
 import java.util.Locale;
@@ -13,7 +15,7 @@ import net.sf.iquiver.parser.UnsupportedContentTypeException;
 /**
  * @author netseeker aka Michael Manske
  */
-public interface Document
+public interface Document extends Serializable
 {
     /**
      * Default encoding used when creating text based document from byte arrays
@@ -38,6 +40,7 @@ public interface Document
     public Locale getLocale();
     public void setLocale(Locale locale);
     public byte[] getRawContent();
+    public void setRawContent( byte[] content ) throws UnsupportedEncodingException;
     public String getContentTypeStr();
     public void setContentTypeStr( String contentTypeStr ) throws UnsupportedContentTypeException;
     public void clear();

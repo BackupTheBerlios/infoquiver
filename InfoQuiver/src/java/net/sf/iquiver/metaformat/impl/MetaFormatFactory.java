@@ -14,23 +14,24 @@ import de.netseeker.util.ArrayUtil;
  */
 public class MetaFormatFactory
 {
-    public static final String    CT_TEXT_PLAIN            = "text/plain";
-    public static final String    CT_TEXT_HTML             = "text/html";
-    public static final String    CT_TEXT_TAB_SEPARATED    = "text/tab-separated-values";
-    public static final String    CT_APPLICATION_RTF       = "application/rtf";
-    public static final String    CT_APPLICATION_PS        = "application/postscript";
-    public static final String    CT_APPLICATION_PDF       = "application/pdf";
-    public static final String    CT_APPLICATION_XSHAR     = "application/x-shar";
-    public static final String    CT_APPLICATION_XTROFF    = "application/x-troff";
-    public static final String    CT_APPLICATION_XTROFF_MS = "application/x-troff-ms";
-    public static final String    CT_APPLICATION_XTEX      = "application/x-tex";
-    public static final String    CT_APPLICATION_XLATEX    = "application/x-latex";
+    public static final String    CT_TEXT_PLAIN            	= "text/plain";
+    public static final String    CT_TEXT_HTML             	= "text/html";
+    public static final String    CT_TEXT_XML				= "text/xml";    
+    public static final String    CT_TEXT_TAB_SEPARATED    	= "text/tab-separated-values";
+    public static final String    CT_APPLICATION_RTF       	= "application/rtf";
+    public static final String    CT_APPLICATION_PS        	= "application/postscript";
+    public static final String    CT_APPLICATION_PDF       	= "application/pdf";
+    public static final String    CT_APPLICATION_XSHAR     	= "application/x-shar";
+    public static final String    CT_APPLICATION_XTROFF    	= "application/x-troff";
+    public static final String    CT_APPLICATION_XTROFF_MS 	= "application/x-troff-ms";
+    public static final String    CT_APPLICATION_XTEX      	= "application/x-tex";
+    public static final String    CT_APPLICATION_XLATEX    	= "application/x-latex";
 
-    private static final String[] TEXT_CTS                 = new String[]{CT_TEXT_PLAIN, CT_TEXT_HTML,
-            CT_TEXT_TAB_SEPARATED, CT_APPLICATION_RTF, CT_APPLICATION_PS, CT_APPLICATION_XSHAR, CT_APPLICATION_XTROFF,
+    private static final String[] TEXT_CTS = new String[]{CT_TEXT_PLAIN, CT_TEXT_HTML, CT_TEXT_XML, CT_TEXT_TAB_SEPARATED,
+            CT_APPLICATION_RTF, CT_APPLICATION_PS, CT_APPLICATION_XSHAR, CT_APPLICATION_XTROFF,
             CT_APPLICATION_XTROFF_MS, CT_APPLICATION_XTEX, CT_APPLICATION_XLATEX};
     
-    private static final String[] BINARY_CTS               = new String[] {CT_APPLICATION_PDF};
+    private static final String[] BINARY_CTS = new String[] {CT_APPLICATION_PDF};
 
     
     /**

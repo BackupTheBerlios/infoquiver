@@ -22,8 +22,9 @@ public class DefaultDocument extends AbstractDocument
     /**
      * 
      */
-    public DefaultDocument()
+    public DefaultDocument( String contentType )
     {
+        setContentTypeStr( contentType );
     }
     
     /**
@@ -34,9 +35,9 @@ public class DefaultDocument extends AbstractDocument
      * @param encoding
      * @throws UnsupportedEncodingException
      */
-    public DefaultDocument( byte[] rawContent, String encoding ) throws UnsupportedEncodingException
+    public DefaultDocument( String contentType, byte[] rawContent, String encoding ) throws UnsupportedEncodingException
     {
-        //this( new String( rawContent, encoding ) );
+        this( contentType );
         this.rawContent = rawContent;
         setEncoding( encoding );
     }
@@ -47,8 +48,9 @@ public class DefaultDocument extends AbstractDocument
      * @param rawContent
      * @throws UnsupportedEncodingException
      */
-    public DefaultDocument( String rawContent ) throws UnsupportedEncodingException
+    public DefaultDocument( String contentType, String rawContent ) throws UnsupportedEncodingException
     {
+        this( contentType );
         this.rawContent = rawContent.getBytes( Document.DEFAULT_ENCODING);
         setEncoding( Document.DEFAULT_ENCODING);
     }
@@ -63,6 +65,14 @@ public class DefaultDocument extends AbstractDocument
         return this.rawContent;
     }
 
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#setRawContent(byte[])
+     */
+    public void setRawContent( byte[] content )
+    {
+        this.rawContent = content;        
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -73,4 +83,5 @@ public class DefaultDocument extends AbstractDocument
         super.clearDocumentMembers();
         this.rawContent = null;
     }
+
 }

@@ -56,7 +56,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
         this.setShortDescription( doc.getShortDescription() );
         this.setInfoURL( doc.getInfoURL() );
         this.setLocale( doc.getLocale() );
-        this.setContentContent( new String( doc.getRawContent(), doc.getEncoding() ) );
+        this.setRawContent( doc.getRawContent() );
         this.setContentTypeStr( doc.getContentTypeStr() );
     }
 
@@ -285,7 +285,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
      */
     public String getEncoding()
     {
-        return "UTF-8";
+        return DEFAULT_ENCODING;
     }
 
     /*
@@ -344,5 +344,13 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
         {
             logger.error("Uknown error occured while setting content type id!", e);
         }
+    }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#setRawContent(byte[])
+     */
+    public void setRawContent( byte[] content ) throws UnsupportedEncodingException
+    {
+        this.setContentContent( new String( content ) );               
     }
 }

@@ -4,12 +4,13 @@
  */
 package net.sf.iquiver.metaformat;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author netseeker aka Michael Manske
  */
-public interface Branch
+public interface Branch extends Serializable
 {
     public List getElements();
     public void setElements(List elements);

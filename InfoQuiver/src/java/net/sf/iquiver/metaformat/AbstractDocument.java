@@ -13,7 +13,7 @@ import java.util.Locale;
  */
 public abstract class AbstractDocument implements Document
 {
-    private String name;
+    private String _name;
     private String author;
     private String title;
     private Date dateOfCreation;
@@ -31,7 +31,7 @@ public abstract class AbstractDocument implements Document
      */
     public String getName()
     {
-        return this.name;
+        return this._name;
     }
 
     /*
@@ -41,7 +41,7 @@ public abstract class AbstractDocument implements Document
      */
     public void setName( String name )
     {
-        this.name = name;
+        this._name = name;
     }
 
     /*
@@ -196,6 +196,9 @@ public abstract class AbstractDocument implements Document
         return this.encoding;
     }
 
+    /**
+     * @param encoding
+     */
     public void setEncoding( String encoding )
     {
         this.encoding = encoding;
@@ -219,7 +222,7 @@ public abstract class AbstractDocument implements Document
 
     protected void clearDocumentMembers()
     {
-        name = null;
+        _name = null;
         author = null;
         title = null;
         dateOfCreation = new Date();
@@ -228,14 +231,8 @@ public abstract class AbstractDocument implements Document
         infoURL = null;
         locale = Locale.getDefault();
         encoding = null;
+        contentTypeStr = null;        
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.sf.iquiver.metaformat.Document#getRawContent()
-     */
-    public abstract byte[] getRawContent();
 
     /*
      * (non-Javadoc)

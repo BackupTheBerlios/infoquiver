@@ -18,13 +18,14 @@ public class BinaryDocument extends AbstractDocument
     private byte[] rawContent;
     
     
-    public BinaryDocument()
+    public BinaryDocument(String contentType)
     {
-        
+        setContentTypeStr( contentType );
     }
     
-    public BinaryDocument(byte[] content)
+    public BinaryDocument(String contentType, byte[] content)
     {
+        setContentTypeStr( contentType );
         this.rawContent = content;
     }
     
