@@ -19,6 +19,11 @@ public class ObjectSerializer
      */
     public static String objectToXml( Object object )
     {
+        if(object instanceof XmlSerializable)
+        {
+            return ((XmlSerializable)object).toXml();
+        }
+        
         return xstream.toXML( object );
     }
 
@@ -26,8 +31,15 @@ public class ObjectSerializer
      * @param xml
      * @return
      */
-    public static Object xmlToObject( String xml )
+    public static void xmlToObject(Object object, String xml )
     {
-        return xstream.fromXML( xml );
+        if(object instanceof XmlSerializable)
+        {
+            ((XmlSerializable)object).fromXml( xml );
+        }
+        else
+        {
+            object = xstream.fromXML( xml );
+        }
     }
 }
