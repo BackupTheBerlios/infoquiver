@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author netseeker aka Michael Manske
  */
-public interface Element extends Document
+public interface Element extends Branch
 {
     public String[] getAttributeNames();
     public Map getAttributes();
