@@ -2,8 +2,8 @@
  * SmtpTransport.java
  * created on 15.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/transport/impl/SmtpTransport.java,v $
- * $Date: 2004/11/26 19:27:22 $
- * $Revision: 1.2 $
+ * $Date: 2004/11/26 22:50:17 $
+ * $Revision: 1.3 $
  *********************************************************************/
 
 package net.sf.iquiver.transport.impl;
@@ -94,30 +94,31 @@ public class SmtpTransport implements Dispatcher
         EMail mail = new EMail( from, to, subject );
         long[] size = new long[docs.size()];
 
-        for (int i = 0; i < docs.size(); i++)
-        {
-            Document doc = (Document) docs.get( i );
-            String fileName = doc.getFileName();
-            if (fileName == null)
-            {
-                fileName = doc.getUID();
-                if (doc.getContentTypeStr() != null)
-                {
-                    String ext = ContentTypeFileTypeMap.getInstance().getFirstFileType( doc.getContentTypeStr() );
-                    if (ext != null)
-                    {
-                        fileName += "." + ext;
-                    }
-                }
-
-            }
-
-            size[i] = doc.getRawContent().length;
-            mail.addAttachment( new ByteArrayInputStream( doc.getRawContent() ), fileName );
-        }
-
         try
         {
+
+            for (int i = 0; i < docs.size(); i++)
+            {
+                Document doc = (Document) docs.get( i );
+                String fileName = doc.getFileName();
+                if (fileName == null)
+                {
+                    fileName = doc.getUID();
+                    if (doc.getContentTypeStr() != null)
+                    {
+                        String ext = ContentTypeFileTypeMap.getInstance().getFirstFileType( doc.getContentTypeStr() );
+                        if (ext != null)
+                        {
+                            fileName += "." + ext;
+                        }
+                    }
+
+                }
+
+                size[i] = doc.getRawContent().length;
+                mail.addAttachment( new ByteArrayInputStream( doc.getRawContent() ), fileName );
+            }
+
             client.send( mail );
         }
         catch ( MessagingException e )
@@ -135,7 +136,7 @@ public class SmtpTransport implements Dispatcher
     {
         SmtpClient client = null;
         long sent = -1;
-        
+
         if (!_dispatchAttributes.containsKey( ATTRIBUTE_SMTP_PORT ))
         {
             client = new SmtpClient( (String) _dispatchAttributes.get( ATTRIBUTE_SMTP_SERVER ),
@@ -169,18 +170,16 @@ public class SmtpTransport implements Dispatcher
             }
         }
 
-        mail.addAttachment( new BufferedInputStream( new ByteArrayInputStream( doc.getRawContent() ) ), fileName );
-
         try
         {
+            mail.addAttachment( new BufferedInputStream( new ByteArrayInputStream( doc.getRawContent() ) ), fileName );
             sent = client.send( mail );
         }
         catch ( MessagingException e )
         {
             throw new TransportException( e );
         }
-        
-        
+
         return sent;
     }
 }
