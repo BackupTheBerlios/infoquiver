@@ -30,6 +30,7 @@ public abstract class AbstractDocument implements Document
     private String _uid;
     private List _children;
     private String _fileName;
+    private float _score;
 
     /*
      * (non-Javadoc)
@@ -316,6 +317,22 @@ public abstract class AbstractDocument implements Document
     {
         return (this._children != null && !this._children.isEmpty());
     }
+    
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#getScore()
+     */
+    public float getScore()
+    {
+        return this._score;
+    }
+    
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#setScore(float)
+     */
+    public void setScore( float score )
+    {
+        this._score = score;
+    }
 
     /**
      * 
@@ -334,6 +351,7 @@ public abstract class AbstractDocument implements Document
         contentTypeStr = null;
         _uid = null;
         _children = null;
+        _score = 0;
     }
 
     /*

@@ -2,8 +2,8 @@
  * QueryResultMapDataSource.java
  * created on 17.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/QueryResultMapDataSource.java,v $
- * $Date: 2004/07/17 18:02:19 $
- * $Revision: 1.2 $
+ * $Date: 2004/07/20 19:45:30 $
+ * $Revision: 1.3 $
  *********************************************************************/
 
 package net.sf.iquiver.report;
@@ -12,7 +12,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
+import net.sf.iquiver.metaformat.Document;
 import net.sf.iquiver.om.SearchQuery;
 import de.netseeker.util.ListMap;
 import dori.jasper.engine.JRDataSource;
@@ -33,8 +35,8 @@ public class QueryResultMapDataSource implements JRDataSource
 
     private IReportSource _source;
     private ListMap _queryResults;
-    private int index = -1;
-
+    private int _index = -1;
+    
     /**
      * @param source
      * @param queryResults
@@ -50,8 +52,24 @@ public class QueryResultMapDataSource implements JRDataSource
      */
     public boolean next() throws JRException
     {
-        index++;
-        return (index < _queryResults.size());
+        if( _queryResults.size() > 0 )
+        {
+	        List docs = (List)_queryResults.getValueAt( 0 );
+	        _index++;
+	        if( _index > 0 )
+	        {            
+	            docs.remove( 0 );
+	            
+	            if( docs.isEmpty() )
+	            {
+	                _queryResults.removeAt( 0 );
+	            }
+	        }
+	        
+	        return _queryResults.size() > 0 && docs.size() > 1;
+        }
+        
+        return false;
     }
 
     /* (non-Javadoc)
@@ -62,22 +80,43 @@ public class QueryResultMapDataSource implements JRDataSource
         Object value = null;
         String fieldName = field.getName();
 
-        if (fieldName.equals( "SearchCriteria" ))
+        if (fieldName.equals( "Criteria" ))
         {
-            SearchQuery query = (SearchQuery) _queryResults.getKeyAt( index );
+            SearchQuery query = (SearchQuery) _queryResults.getKeyAt( 0 );
             value = query.getSearchQueryCriteria();
         }
         else
         {
-            Object doc = _queryResults.getValueAt( index );
+            if (logger.isDebugEnabled())
+            {
+                logger.debug( "Requested field is: " + fieldName );
+            }
+            
+            List docs = (List)_queryResults.getValueAt( 0 );
+            Object doc = docs.get( 0 );
+            
             try
             {
-                Method method = doc.getClass().getMethod( field.getName(), null );
+                StringBuffer sb = new StringBuffer( fieldName );
+                char upperChar = Character.toUpperCase( fieldName.charAt( 0 ) );
+                sb.delete( 0, 1 );
+                sb.insert( 0, upperChar );
+                fieldName = "get" + sb.toString();
+                if (logger.isDebugEnabled())
+                {
+                    logger.debug( "Will invoke method: " + fieldName );
+                }
+                Method method = doc.getClass().getMethod( fieldName, null );
                 value = method.invoke( doc, null );
+                
+                if( fieldName.equals("getName") && ( value == null || value.toString().length() == 0))
+                {
+                    value = ((Document)doc).getTitle();
+                }
             }
             catch ( Exception e )
             {
-                logger.error( "Error while calling method for fieldname " + field.getName(), e );
+                logger.error( "Error while calling method for fieldname " + fieldName, e );
             }
         }
 

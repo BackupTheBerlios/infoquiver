@@ -35,6 +35,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
     private static final Log logger = LogFactory.getLog( Content.class );
 
     private List _children;
+    private float _score;
 
     /**
      * Creates a new instance of Content
@@ -65,6 +66,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
         this.setContentTypeStr( doc.getContentTypeStr() );
         this.setKeywords( doc.getKeywords() );
         this.setFileName( doc.getFileName() );
+        this.setScore( doc.getScore() );
         if( doc.hasChildren() )
         {
             for( Iterator it = doc.getChildren().iterator(); it.hasNext();)
@@ -294,6 +296,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
         this.setContentKeywords( null );
         this._children = null;
         this.setFileName( null );
+        this.setScore( 0 );
     }
 
     /*
@@ -430,6 +433,22 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
         setContentFileName( fileName );
     }
 
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#getScore()
+     */
+    public float getScore()
+    {
+        return this._score;
+    }
+    
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#setScore(float)
+     */
+    public void setScore( float score )
+    {
+        this._score = score;
+    }    
+    
     /*
      * (non-Javadoc)
      * 

@@ -53,6 +53,8 @@ public interface Document extends Serializable
     public void addChild( Document doc );
     public String getFileName();
     public void setFileName( String fileName );
+    public float getScore();
+    public void setScore( float score );
     public void clear();
     
 }

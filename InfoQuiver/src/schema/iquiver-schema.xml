@@ -10,7 +10,7 @@
         <column name="USER_LAST_NAME" primaryKey="false" type="VARCHAR" size="32"/>
         <column name="USER_GENDER" type="VARCHAR" size="1"/>
         <column name="USER_DATE_OF_BIRTH" type="TIMESTAMP"/>        
-        <column name="USER_PICTURE" type="LONGVARBINARY" size="4096"/>
+        <column name="USER_PICTURE" type="BLOB" size="4096"/>
         <column name="USER_LAST_LOGIN" primaryKey="false" type="BIGINT"/>
         <column name="USER_LOCALE" primaryKey="false" type="VARCHAR" size="5"/>
         <column name="USER_PREFERED_REPORT_FORMAT" primaryKey="false" type="VARCHAR" size="3"/>

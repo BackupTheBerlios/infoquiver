@@ -134,11 +134,12 @@ public class QueryTask
         
         for (int i = 0; i < hits.length(); i++)
         {
-            Document doc = hits.doc( i );
+            Document doc = hits.doc( i );            
             String uid = doc.get( "uid" );
             try
             {
                 Content content = ContentPeer.retrieveByUID( uid );
+                content.setScore( hits.score( i ));
                 if( content != null )
                 {
                     contents.add( content );
