@@ -1,6 +1,8 @@
 <!ELEMENT dataset (
     User|
+    UserContentSourceLnk|
     Client|
+    ClientContentSourceLnk|
     Address|
     UserGroup|
     UserGroupLnk|
@@ -12,6 +14,7 @@
     ClientPermissionLnk|
     UserGroupPermissionLnk|
     ContentSourceType|
+    ContentSourceTypeTransportLnk|
     Publisher|
     ContentSource|
     ContentSourceTransportConfig|
@@ -34,8 +37,15 @@
     UserGender CDATA #IMPLIED
     UserDateOfBirth CDATA #IMPLIED
     UserPicture CDATA #IMPLIED
+    UserLastLogin CDATA #IMPLIED
     AddressId CDATA #REQUIRED
     ClientId CDATA #REQUIRED
+>
+
+<!ELEMENT UserContentSourceLnk EMPTY>
+<!ATTLIST UserContentSourceLnk
+    UserId CDATA #REQUIRED
+    ContentSourceId CDATA #REQUIRED
 >
 
 <!ELEMENT Client EMPTY>
@@ -43,6 +53,12 @@
     ClientId CDATA #REQUIRED
     ClientName CDATA #IMPLIED
     AddressId CDATA #REQUIRED
+>
+
+<!ELEMENT ClientContentSourceLnk EMPTY>
+<!ATTLIST ClientContentSourceLnk
+    ClientId CDATA #REQUIRED
+    ContentSourceId CDATA #REQUIRED
 >
 
 <!ELEMENT Address EMPTY>
@@ -133,6 +149,12 @@
     ContentSourceTypeId CDATA #REQUIRED
     ContentSourceTypeName CDATA #IMPLIED
     ContentSourceTypeDesc CDATA #IMPLIED
+>
+
+<!ELEMENT ContentSourceTypeTransportLnk EMPTY>
+<!ATTLIST ContentSourceTypeTransportLnk
+    ContentSourceTypeId CDATA #REQUIRED
+    TransportId CDATA #REQUIRED
 >
 
 <!ELEMENT Publisher EMPTY>

@@ -26,14 +26,18 @@
         </index>
     </table>
     <table name="iq_user_content_source_lnk" javaName="UserContentSourceLnk" idMethod="none">        
-        <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>
         <column name="USER_ID" primaryKey="true" required="true" type="BIGINT"/>
-        <foreign-key foreignTable="iq_client">
-            <reference local="CLIENT_ID" foreign="CLIENT_ID" />
-        </foreign-key>
+        <column name="CONTENT_SOURCE_ID" primaryKey="true" required="true" type="BIGINT"/>        
+        <foreign-key foreignTable="iq_content_source">
+            <reference local="CONTENT_SOURCE_ID" foreign="CONTENT_SOURCE_ID" />
+        </foreign-key>                
         <foreign-key foreignTable="iq_user">
             <reference local="USER_ID" foreign="USER_ID" />
         </foreign-key>                
+        <unique name="IQ_USRCONTENTSRCLNK_PKI">
+            <unique-column name="USER_ID"/>
+            <unique-column name="CONTENT_SOURCE_ID"/>
+        </unique>        
     </table>    
     <table name="iq_client" javaName="Client" idMethod="none">
         <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>
@@ -52,6 +56,10 @@
         <foreign-key foreignTable="iq_content_source">
             <reference local="CONTENT_SOURCE_ID" foreign="CONTENT_SOURCE_ID" />
         </foreign-key>                
+        <unique name="IQ_CLIENTCONTENTSRCLNK_PKI">
+            <unique-column name="CLIENT_ID"/>
+            <unique-column name="CONTENT_SOURCE_ID"/>
+        </unique>                
     </table>
     <table name="iq_address" javaName="Address">
         <column name="ADDRESS_ID" primaryKey="true" required="true" type="BIGINT"/>
@@ -156,10 +164,18 @@
             <unique-column name="PERMISSION_ID"/>
         </unique>                        
     </table>
-    <table name="iq_content_source_type" javaName="ContentSourceType" idMethod="none">
+    <table name="iq_content_source_type" javaName="ContentSourceType">
         <column name="CONTENT_SOURCE_TYPE_ID" primaryKey="true" required="true" type="INTEGER"/>
         <column name="CONTENT_SOURCE_TYPE_NAME" type="VARCHAR" size="32"/>
         <column name="CONTENT_SOURCE_TYPE_DESC" type="VARCHAR" size="255"/>
+    </table>
+    <table name="iq_content_source_type_transport_lnk" javaName="ContentSourceTypeTransportLnk" idMethod="none">
+        <column name="CONTENT_SOURCE_TYPE_ID" primaryKey="true" required="true" type="INTEGER"/>   
+        <column name="TRANSPORT_ID" primaryKey="true" required="true" type="INTEGER"/>     
+        <unique name="IQ_CONTENTSRCTYPE_TRANSPORT_LNK_PKI">
+            <unique-column name="CONTENT_SOURCE_TYPE_ID"/>
+            <unique-column name="TRANSPORT_ID"/>
+        </unique>                                
     </table>
     <table name="iq_publisher" javaName="Publisher">
         <column name="PUBLISHER_ID" primaryKey="true" required="true" type="INTEGER"/>

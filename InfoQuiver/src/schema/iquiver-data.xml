@@ -4,8 +4,12 @@
 
     <User UserId="0" UserPassword="root" UserLogin="root" UserFirstName="IQuivers" UserLastName="Root" UserDateOfBirth="2004-03-11 21:50:31.0" AddressId="0" ClientId="0"/>
     <User UserId="1" UserPassword="test" UserLogin="test" UserFirstName="IQuivers" UserLastName="Testuser" UserDateOfBirth="2004-03-11 21:50:31.0" AddressId="1" ClientId="1"/>
+    <UserContentSourceLnk UserId="0" ContentSourceId="0"/>
+    <UserContentSourceLnk UserId="1" ContentSourceId="0"/>
     <Client ClientId="0" ClientName="ROOT" AddressId="0"/>
     <Client ClientId="1" ClientName="TEST" AddressId="1"/>
+    <ClientContentSourceLnk ClientId="0" ContentSourceId="0"/>
+    <ClientContentSourceLnk ClientId="1" ContentSourceId="0"/>
     <Address AddressId="0" AddressName="DUMMY ADDRESS FOR ROOT" AddressStreet="None" AddressZip="00000" AddressEmail="netseeker@manskes.de"/>
     <Address AddressId="1" AddressName="TEST" AddressStreet="Demo Square" AddressZip="00001" AddressPhone="+(49)711 123456" AddressEmail="netseeker@manskes.de" AddressNumber="41" AddressCountry="DE"/>
     <UserGroup UserGroupId="0" UserGroupName="ROOT" UserGroupDesc="ROOT" ClientId="0"/>
