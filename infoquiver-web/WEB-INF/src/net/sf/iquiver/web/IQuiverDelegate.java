@@ -2,8 +2,8 @@
  * IQuiverDelegate.java
  * created on 28.11.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/infoquiver-web/WEB-INF/src/net/sf/iquiver/web/IQuiverDelegate.java,v $
- * $Date: 2004/12/02 22:35:05 $
- * $Revision: 1.6 $
+ * $Date: 2004/12/11 23:50:08 $
+ * $Revision: 1.7 $
 *********************************************************************/
 
 package net.sf.iquiver.web;
@@ -166,4 +166,17 @@ public class IQuiverDelegate implements ViewTool
         params.add( IQuiverUtil.objectToXml( keys ) );
         return IQuiverUtil.execute(rpcClient, "retrieveByPks", params );        
     }      
+    
+    /**
+     * @return
+     * @throws XmlRpcException
+     * @throws IOException
+     * @throws DocumentException
+     */
+    public Document getServerStatistics() throws XmlRpcException, IOException, DocumentException
+    {
+        Vector params = new Vector(1);
+        params.add( rpcSessionId );
+        return IQuiverUtil.execute(rpcClient, "getServerStatistics", params );
+    }
 }

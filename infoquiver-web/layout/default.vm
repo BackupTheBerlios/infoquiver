@@ -2,7 +2,6 @@
 <head>
   <title>$!page_title</title>
   <link rel="stylesheet" type="text/css" href="$link.setRelative("main.css")" />
-  <script language="javascript" src="$link.setRelative("main.js")"></script>
   <meta name="author" content="netseeker aka Michael Manske">
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
