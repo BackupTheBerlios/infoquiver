@@ -1,8 +1,11 @@
-<table>
-	<tr>
-		<td>
-			hallo
-		</td>
-	</tr>
-</table>
-				
+#if ( $iquiver.isLoggedIn( $request ) )
+    <table>
+    	<tr>
+    		<td>
+    			hallo
+    		</td>
+    	</tr>
+    </table>
+#else
+	#parse("login.vm")
+#end
