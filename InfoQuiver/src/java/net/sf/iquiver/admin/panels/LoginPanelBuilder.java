@@ -16,11 +16,12 @@ import javax.swing.event.DocumentListener;
 
 import net.sf.iquiver.om.User;
 import net.sf.iquiver.om.UserPeer;
-import net.sf.iquiver.util.StringUtil;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import de.netseeker.util.StringUtil;
 
 /**
  * @author netseeker aka Michael Manske

@@ -7,7 +7,7 @@ import java.io.UnsupportedEncodingException;
 
 import net.sf.iquiver.metaformat.Document;
 import net.sf.iquiver.parser.UnsupportedContentTypeException;
-import net.sf.iquiver.util.ArrayUtil;
+import de.netseeker.util.ArrayUtil;
 
 /**
  * @author netseeker aka Michael Manske

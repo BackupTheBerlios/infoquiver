@@ -3,8 +3,6 @@
  */
 package net.sf.iquiver.remote.soap;
 
-
-
 /**
  * @author netseeker aka Michael Manske
  */
