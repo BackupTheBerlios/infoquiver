@@ -143,8 +143,8 @@
             namespace="http://iquiver"
             output="${torque.schema.dir}/iquiver.wsdl"
             porttypename="IQuiver"
-            useinheritedmethods="false"
-            stopclasses="java.*,javax.*,org.apache.torque.*">
+            useinheritedmethods="true"
+            stopclasses="java.*,javax.*,org.apache.torque.om.*,org.apache.torque.util.*">
 			<!-- <mapping namespace="http://iquiver" package="net.sf.iquiver.remote.soap.impl" /> -->
             <mapping namespace="http://iquiver" package="net.sf.iquiver" />
             <mapping namespace="http://iquiver.om" package="net.sf.iquiver.om" />
