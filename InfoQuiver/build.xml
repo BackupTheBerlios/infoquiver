@@ -1,0 +1,141 @@
+<!-- ================================================================
+    IQuiver Buildfile
+
+	You should not have to edit this file!
+	Edit build.properties instead.
+================================================================= -->
+
+<project name="iquiver" default="compile" basedir=".">
+
+  <property name="build.properties" value="build.properties"/>
+  <property file="build.properties"/>
+  <property name="build.properties" value="build.properties"/>
+  
+  <path id="compile.classpath">
+
+    <pathelement location="${compile.dir}"/>
+
+    <fileset dir="${lib.dir}">
+      <include name="**/*.jar"/>
+      <include name="**/*.zip"/>
+    </fileset>
+
+  </path>
+
+<!-- ================================================================================================= -->
+  <target name="prepare">
+    <tstamp/>
+    <mkdir  dir="${compile.dir}"/>
+  </target>
+
+<!-- ================================================================================================= -->
+  <target name="clean" description="Delete old build directories">
+    <delete dir="${compile.dir}" failonerror="false"/>
+  </target>
+
+
+<!-- ================================================================================================= -->
+  <target name="compile" depends="prepare" description="Compile Java sources">
+	
+	<mkdir  dir="${compile.dir}" />
+
+    <javac srcdir="${java.dir}"
+        destdir="${compile.dir}"
+        debug="${compile.debug}"
+        verbose="off"
+      	deprecation="${compile.deprecation}"
+        optimize="${compile.optimize}">
+        <classpath refid="compile.classpath"/>
+    </javac>
+
+    <copy todir="${compile.dir}" overwrite="true">
+      <fileset dir="${java.dir}" includes="**/*.xml,**/*.dtd, **/*.xsd"/>
+    </copy>
+
+  </target>
+
+
+<!-- ================================================================================================= -->
+  <target name="dist" depends="compile" description="Create binary distribution">
+
+   	<mkdir  dir="${dist.dir}"/>
+   	
+    <delete file="${dist.dir}/iquiver.jar" failonerror="false"/>
+    <jar jarfile="${dist.dir}/iquiver.jar"
+     	 basedir="${compile.dir}"
+    >
+	 <manifest>
+      <attribute name="Purpose" value="${project.name}"/>
+      <attribute name="Version" value="0.1.1"/>
+     </manifest>
+    </jar>
+  
+  </target>
+
+
+<!-- ================================================================================================= -->
+    <target name="javadoc">
+        <javadoc destdir="${javadoc.dir}" access="public" use="true"
+            notree="false" nonavbar="false" noindex="false"
+            splitindex="true" author="true" version="true"
+            nodeprecatedlist="false" nodeprecated="false"
+            packagenames="net.sf.iquiver.*"
+            sourcepath="${java.dir}"
+            classpath="${build.dir}"
+            doctitle="${project.name}">            
+            <classpath refid="compile.classpath"/>        
+        </javadoc>
+    </target>
+
+
+<!-- ================================================================================================= -->
+	<target name="generate_om" description="Creates the torque object model">
+		<!-- Run the task 'om' of build-torque.xml with the appropriate settings -->
+	   	<ant antfile="build-torque.xml" target="om" inheritAll="false"/>	
+	   <!-- Delete the report file -->
+	   <delete file="${java.dir}/report.${torque.project}.om.generation" />			   
+	</target>
+	
+
+<!-- ================================================================================================= -->
+	<target name="id_table_init" description="Initializes the id-table for the torque id generator">
+		<delete dir="src/sql" failonerror="false"/>
+	   	<ant antfile="build-torque.xml" target="id-table-init-sql" inheritAll="false"/>
+	   	<ant antfile="build-torque.xml" target="insert-sql" inheritAll="false"/>	   
+	</target>
+	
+	
+<!-- ================================================================================================= -->
+	<target name="create_db" description="Creates the database from your schema.xml">	
+		<delete dir="src/sql" failonerror="false"/>
+		<ant antfile="build-torque.xml" target="sql" inheritAll="false"/>		
+		<ant antfile="build-torque.xml" target="create-db" inheritAll="false"/>
+		<ant antfile="build-torque.xml" target="insert-sql" inheritAll="false"/>
+		<antcall target="id_table_init"/>
+	</target>
+	
+<!-- ================================================================================================= -->
+	<target name="datadump_export" description="Creates a complete xml data dump of your database">
+		<ant antfile="build-torque.xml" target="datadtd" inheritAll="false">
+			<property name="outputDirectory" value="src/data"/>
+		</ant>		
+		<ant antfile="build-torque.xml" target="datadump" inheritAll="false">
+			<property name="outputDirectory" value="src/data"/>
+		</ant>				
+	</target>	
+
+
+<!-- ================================================================================================= -->
+	<target name="datadump_import" description="Creates a complete xml data dump of your database">
+		<ant antfile="build-torque.xml" target="datasql" inheritAll="false">
+			<property name="dataXmlFile" value="src/data/${torque.project}-data.xml"/>
+			<property name="outputDirectory" value="src/data"/>
+		</ant>		
+		<ant antfile="build-torque.xml" target="datadump" inheritAll="false">
+			<property name="outputDirectory" value="src/data"/>
+		</ant>
+		<ant antfile="build-torque.xml" target="datadump" inheritAll="false">
+			<property name="srcDir" value="src/data"/>
+		</ant>
+	</target>	
+</project>

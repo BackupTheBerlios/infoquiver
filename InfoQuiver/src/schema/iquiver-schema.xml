@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE database SYSTEM "http://db.apache.org/torque/dtd/database_3_1.dtd">
+<database name="iquiver" package="net.sf.iquiver.om" defaultIdMethod="idbroker" basePeer="net.sf.iquiver.util.om.CacheBackedPeer">
+    <table name="iq_user" javaName="User">
+        <column name="USER_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <column name="USER_PASSWORD" primaryKey="false" type="VARCHAR" size="32"/>
+        <column name="USER_LOGIN" primaryKey="false" required="true" type="VARCHAR" size="32"/>
+        <column name="USER_FIRST_NAME" primaryKey="false" type="VARCHAR" size="32"/>
+        <column name="USER_MID_NAME" primaryKey="false" type="VARCHAR" size="32"/>
+        <column name="USER_LAST_NAME" primaryKey="false" type="VARCHAR" size="32"/>
+        <column name="ADDRESS_ID" primaryKey="false" required="true" type="BIGINT"/>
+        <column name="CLIENT_ID" primaryKey="false" required="true" type="INTEGER"/>
+        <foreign-key foreignTable="iq_client">
+            <reference local="CLIENT_ID" foreign="CLIENT_ID" />
+        </foreign-key>
+        <foreign-key foreignTable="iq_address">
+            <reference local="ADDRESS_ID" foreign="ADDRESS_ID" />
+        </foreign-key>
+        <index name="IQ_USER_CKI">
+            <index-column name="USER_LOGIN"/>
+            <index-column name="USER_PASSWORD"/>
+        </index>
+    </table>
+    <table name="iq_client" javaName="Client" idMethod="none">
+        <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>
+        <column name="CLIENT_NAME" primaryKey="false" type="VARCHAR" size="32"/>
+        <column name="ADDRESS_ID" primaryKey="false" required="true" type="BIGINT"/>
+        <foreign-key foreignTable="iq_address">
+            <reference local="ADDRESS_ID" foreign="ADDRESS_ID" />
+        </foreign-key>
+    </table>
+    <table name="iq_address" javaName="Address">
+        <column name="ADDRESS_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <column name="ADDRESS_NAME" primaryKey="false" type="VARCHAR" size="64"/>
+        <column name="ADDRESS_STREET" primaryKey="false" type="VARCHAR" size="32"/>
+        <column name="ADDRESS_ZIP" primaryKey="false" type="VARCHAR" size="10"/>
+        <column name="ADDRESS_PO_BOX" primaryKey="false" type="VARCHAR" size="32"/>
+        <column name="ADDRESS_PO_BOX_ZIP" primaryKey="false" type="VARCHAR" size="10"/>
+        <column name="ADDRESS_PHONE" primaryKey="false" type="VARCHAR" size="16"/>
+        <column name="ADDRESS_MOBILE" primaryKey="false" type="VARCHAR" size="16"/>
+        <column name="ADDRESS_EMAIL" primaryKey="false" type="VARCHAR" size="32"/>
+        <column name="ADDRESS_NUMBER" primaryKey="false" type="VARCHAR" size="10"/>
+        <column name="ADDRESS_COUNTRY" primaryKey="false" type="VARCHAR" size="255"/>
+    </table>
+    <table name="iq_user_group" javaName="UserGroup">
+        <column name="USER_GROUP_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <column name="USER_GROUP_NAME" primaryKey="false" type="VARCHAR" size="32"/>
+        <column name="USER_GROUP_DESC" primaryKey="false" type="VARCHAR" size="255"/>
+        <column name="CLIENT_ID" primaryKey="false" required="true" type="INTEGER"/>
+        <foreign-key foreignTable="iq_client">
+            <reference local="CLIENT_ID" foreign="CLIENT_ID" />
+        </foreign-key>
+    </table>
+    <table name="iq_user_group_lnk" javaName="UserGroupLnk">
+        <column name="USER_GROUP_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <column name="USER_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <foreign-key foreignTable="iq_user_group">
+            <reference local="USER_GROUP_ID" foreign="USER_GROUP_ID" />
+        </foreign-key>
+        <foreign-key foreignTable="iq_user">
+            <reference local="USER_ID" foreign="USER_ID" />
+        </foreign-key>
+        <unique name="IQ_USRGRPLNK_PKI">
+            <unique-column name="USER_GROUP_ID"/>
+            <unique-column name="USER_ID"/>
+        </unique>
+    </table>
+    <table name="iq_user_group_client_lnk" javaName="UserGroupClientLnk" idMethod="none">
+        <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>    
+        <column name="USER_GROUP_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <foreign-key foreignTable="iq_client">
+            <reference local="CLIENT_ID" foreign="CLIENT_ID" />
+        </foreign-key>
+        <foreign-key foreignTable="iq_user_group">
+            <reference local="USER_GROUP_ID" foreign="USER_GROUP_ID" />
+        </foreign-key>
+        <unique name="IQ_USRGRPCLIENTLNK_PKI">
+            <unique-column name="CLIENT_ID"/>
+            <unique-column name="USER_GROUP_ID"/>
+        </unique>        
+    </table>
+    <table name="iq_transport" javaName="Transport">
+        <column name="TRANSPORT_ID" primaryKey="true" required="true" type="INTEGER"/>
+        <column name="TRANSPORT_NAME" required="true" type="VARCHAR" size="32"/>
+        <column name="TRANSPORT_TYPE" required="true" type="TINYINT" description="RECEIVER=0|SENDER=1|BOTH=2"/>
+        <column name="TRANSPORT_DESC" type="VARCHAR" size="255"/>
+        <column name="TRANSPORT_START_TIMEOUT" type="TIMESTAMP"/>        
+        <column name="TRANSPORT_IMPLEMENTATION" required="true" type="VARCHAR" size="255" description="complete name of corresponding java class"/>
+        <column name="IS_AUTHENTIFICATION_REQUIRED" type="BOOLEANCHAR" description="does the transport require authentification?"/>
+    </table>
+    <table name="iq_transport_attribute" javaName="TransportAttribute">
+        <column name="TRANSPORT_ATTRIBUTE_ID" primaryKey="true" required="true" type="INTEGER"/>
+        <column name="TRANSPORT_ID" required="true" type="INTEGER"/>
+        <column name="TRANSPORT_ATTRIBUTE_NAME" required="true" type="VARCHAR" size="16"/>
+        <column name="TRANSPORT_ATTRIBUTE_TYPE" required="true" type="VARCHAR" size="32" description="complete name of corresponding java type"/>
+        <column name="IS_PART_OF_AUTHENTIFICATION" type="BOOLEANCHAR" description="is the attribute needed by the transport authentification mechanism?"/>
+        <column name="IS_MANDATORY" type="BOOLEANCHAR"/>
+        <foreign-key foreignTable="iq_transport">
+            <reference local="TRANSPORT_ID" foreign="TRANSPORT_ID" />
+        </foreign-key>        
+        <unique name="IQ_CLIENTTRANSPORTLNK_CKI">
+            <unique-column name="TRANSPORT_ID"/>
+            <unique-column name="TRANSPORT_ATTRIBUTE_NAME"/>
+        </unique>
+    </table>
+    <table name="iq_client_transport_lnk" javaName="ClientTransportLnk">
+        <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>
+        <column name="TRANSPORT_ID" primaryKey="true" required="true" type="INTEGER"/>
+        <foreign-key foreignTable="iq_client">
+            <reference local="CLIENT_ID" foreign="CLIENT_ID" />
+        </foreign-key>
+        <foreign-key foreignTable="iq_transport">
+            <reference local="TRANSPORT_ID" foreign="TRANSPORT_ID" />
+        </foreign-key>
+        <unique name="IQ_CLIENTTRANSPORTLNK_PKI">
+            <unique-column name="CLIENT_ID"/>
+            <unique-column name="TRANSPORT_ID"/>
+        </unique>                
+    </table>
+    <table name="iq_permission" javaName="Permission" idMethod="none">        
+        <column name="PERMISSION_ID" primaryKey="true" required="true" type="INTEGER"/>
+        <column name="PERMISSION_NAME" type="VARCHAR" size="32"/>
+        <column name="PERMISSION_DESC" type="VARCHAR" size="255"/>        
+        <unique name="IQ_PERMISSION_PKI">
+            <unique-column name="PERMISSION_ID"/>
+        </unique>                        
+    </table>
+    <table name="iq_client_permission_lnk" javaName="ClientPermissionLnk" idMethod="none">
+        <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>
+        <column name="PERMISSION_ID" primaryKey="true" required="true" type="INTEGER"/>
+    </table>
+    <table name="iq_user_group_permission_lnk" javaName="UserGroupPermissionLnk" idMethod="none">
+        <column name="USER_GROUP_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <column name="PERMISSION_ID" primaryKey="true" required="true" type="INTEGER"/>
+        <column name="IS_NEGATION" type="BOOLEANCHAR"/>
+        <unique name="IQ_USERGROUPPERMLNK_PKI">
+            <unique-column name="USER_GROUP_ID"/>
+            <unique-column name="PERMISSION_ID"/>
+        </unique>                        
+    </table>
+    <table name="iq_content_source_type" javaName="ContentSourceType" idMethod="none">
+        <column name="CONTENT_SOURCE_TYPE_ID" primaryKey="true" required="true" type="INTEGER"/>
+        <column name="CONTENT_SOURCE_TYPE_NAME" type="VARCHAR" size="32"/>
+        <column name="CONTENT_SOURCE_TYPE_DESC" type="VARCHAR" size="255"/>
+    </table>
+    <table name="iq_content_source" javaName="ContentSource">
+        <column name="CONTENT_SOURCE_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <column name="CONTENT_SOURCE_TYPE_ID" required="true" type="INTEGER"/>
+        <column name="TRANSPORT_ID" required="true" type="INTEGER"/>
+        <column name="CONTENT_SOURCE_NAME" type="VARCHAR" size="32"/>
+        <column name="CONTENT_SOURCE_DESC" type="VARCHAR" size="255"/>
+        <column name="IS_AUTHENTIFICATION_REQUIRED" type="BOOLEANCHAR"/>
+        <foreign-key foreignTable="iq_content_source_type">
+            <reference local="CONTENT_SOURCE_TYPE_ID" foreign="CONTENT_SOURCE_TYPE_ID" />
+        </foreign-key>
+        <foreign-key foreignTable="iq_transport">
+            <reference local="TRANSPORT_ID" foreign="TRANSPORT_ID" />
+        </foreign-key>
+        <index name="IQ_CONTENTSOURCE_TYPE_FKI">
+            <index-column name="CONTENT_SOURCE_TYPE_ID"/>
+        </index>        
+        <index name="IQ_CONTENTSOURCE_TRANSPORT_FKI">
+            <index-column name="TRANSPORT_ID"/>
+        </index>                
+    </table>
+    <table name="iq_content_source_transport_config" javaName="ContentSourceTransportConfig" idMethod="none">
+        <column name="CONTENT_SOURCE_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <column name="TRANSPORT_ATTRIBUTE_ID" primaryKey="true" required="true" type="INTEGER"/>
+        <column name="TRANSPORT_ATTRIBUTE_VALUE" type="VARCHAR" size="255"/>
+        <foreign-key foreignTable="iq_content_source">
+            <reference local="CONTENT_SOURCE_ID" foreign="CONTENT_SOURCE_ID" />
+        </foreign-key>        
+        <foreign-key foreignTable="iq_transport_attribute">
+            <reference local="TRANSPORT_ATTRIBUTE_ID" foreign="TRANSPORT_ATTRIBUTE_ID" />            
+        </foreign-key>                
+        <unique name="IQ_CONTENTSOURCECONFIG_PKI">
+            <unique-column name="CONTENT_SOURCE_ID"/>
+            <unique-column name="TRANSPORT_ATTRIBUTE_ID"/>
+        </unique>
+    </table>    
+    <table name="iq_content_parser" javaName="ContentParser">
+        <column name="CONTENT_PARSER_ID" primaryKey="true" required="true" type="INTEGER"/>
+        <column name="CONTENT_PARSER_IMPLEMENTATION" required="true" type="VARCHAR" size="255"/>
+        <column name="CONTENT_PARSER_NAME" type="VARCHAR" size="32"/>
+    </table>
+    <table name="iq_content_type" javaName="ContentType">
+        <column name="CONTENT_TYPE_ID" primaryKey="true" required="true" type="INTEGER"/>
+        <column name="CONTENT_TYPE_NAME" required="true" type="VARCHAR" size="32"/>
+        <column name="CONTENT_TYPE_DESC" type="VARCHAR" size="255"/>
+        <column name="CONTENT_PARSER_ID" type="INTEGER" required="true"/>
+        <foreign-key foreignTable="iq_content_parser">
+            <reference local="CONTENT_PARSER_ID" foreign="CONTENT_PARSER_ID" />
+        </foreign-key>                
+    </table>
+    <table name="iq_content" javaName="Content">
+        <column name="CONTENT_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <column name="CONTENT_TYPE_ID" required="true" type="INTEGER"/>
+        <column name="CONTENT_SOURCE_ID" required="true" type="BIGINT"/>
+        <column name="LOCALE" type="VARCHAR" size="5"/>
+        <column name="RECEIVE_DATETIME" type="TIMESTAMP"/>
+        <column name="CONTENT_CONTENT" type="LONGVARCHAR" size="16184"/>
+        <foreign-key foreignTable="iq_content_source">
+            <reference local="CONTENT_SOURCE_ID" foreign="CONTENT_SOURCE_ID" />
+        </foreign-key>                
+    </table>
+    <table name="iq_client_content_lnk" javaName="ClientContentLnk" idMethod="none">
+        <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>        
+        <column name="CONTENT_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <column name="REQUEST_DATETIME" type="TIMESTAMP"/> 
+        <foreign-key foreignTable="iq_client">
+            <reference local="CLIENT_ID" foreign="CLIENT_ID" />
+        </foreign-key>
+        <foreign-key foreignTable="iq_content">
+            <reference local="CONTENT_ID" foreign="CONTENT_ID" />
+        </foreign-key>        
+    </table>
+</database>

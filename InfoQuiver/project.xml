@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <extend />
+    <pomVersion>3</pomVersion>
+    <id>MODEL_2</id>
+    <name>Model 2</name>
+    <groupId>org.devaki</groupId>
+    <currentVersion>0.1</currentVersion>
+    <organization>
+        <name />
+        <url />
+        <logo />
+    </organization>
+    <inceptionYear />
+    <package>org.devaki.nomodels.om</package>
+    <logo />
+    <gumpRepositoryId />
+    <description />
+    <shortDescription />
+    <url />
+    <issueTrackingUrl />
+    <siteAddress />
+    <siteDirectory />
+    <distributionDirectory />
+    <repository>
+        <connection>scm:cvs:&lt;provider-parameters&gt;</connection>
+        <url>scm:cvs:&lt;provider-parameters&gt;</url>
+    </repository>
+    <mailingLists />
+    <developers />
+    <contributors />
+    <licenses />
+    <dependencies />
+    <build>
+        <nagEmailAddress />
+        <unitTestSourceDirectory />
+        <integrationUnitTestSourceDirectory />
+        <sourceDirectory />
+        <aspectSourceDirectory />
+        <unitTest>
+            <directory />
+            <targetPath />
+            <includes />
+            <excludes />
+        </unitTest>
+        <resources />
+    </build>
+</project>
+
