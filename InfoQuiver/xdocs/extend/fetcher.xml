@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Creating Custom Tranports :: Fetcher</title>
+    <author email="netseeker@manskes.de">Michael Manske</author>
+  </properties>
+  <body>
+    <section name="Fetcher">
+        <p>
+            In this guide you will learn how to create your own custom fetcher transport. The ready to use
+            sample class used in this guide comes with the default InfoQuiver distribution.
+            <ul>
+                <li><a href="../apidocs/net/sf/iquiver/samples/SimpleFetchTransport.html">javadoc of the used example class</a></li>
+                <li><a href="../xref/net/sf/iquiver/samples/SimpleFetchTransport.html">xref of the used example class</a></li>
+            </ul>
+            <img src="../images/sampe_fetcher.png" alt="class diagram" border="0"/>
+        </p>
+    <subsection name="net.sf.iquiver.transport.Fetcher">
+        <p>
+            As shown in the class diagram above a fetcher must implement <a href="../apidocs/net/sf/iquiver/transport/Fetcher.html">net.sf.iquiver.transport.Fetcher</a>.
+            <source>public class <a href="../apidocs/net/sf/iquiver/samples/SimpleFetchTransport.html">SimpleFetchTransport</a> implements Fetcher</source>
+            The interface Fetcher declares four methods:
+            </p>
+<source>
+public void setFetchLocation(<a href="../apidocs/net/sf/iquiver/om/ContentSource.html">ContentSource</a> source) throws <a href="../apidocs/net/sf/iquiver/transport/TransportConfigurationException.html">TransportConfigurationException</a>;
+public <a href="apidocs/net/sf/iquiver/om/ContentSource.html">ContentSource</a> getFetchLocation();
+public List fetch() throws <a href="apidocs/net/sf/iquiver/transport/TransportException.html">TransportException</a>;
+public boolean isParsingRequired();
+</source>
+    </subsection>
+        <subsection name="setFetchLocation()">
+            <p>
+                The ContentFetchService, which is responsible for invoking fetcher transports, will first call setFetchLocation() then
+                fetch(). So in setFetchLocation() you should ensure that the given ContentSource is a valid content source for your
+                transport and does contain a valid set of <a href="../apidocs/net/sf/iquiver/om/TransportAttribute.html">TransportAttribute</a>.
+            </p>
+<source>
+public static final String ATTRIBUTE_SERVER = &quot;Server&quot;;
+public static final String ATTRIBUTE_PORT = &quot;Port&quot;;
+public static final String ATTRIBUTE_USER_NAME = &quot;Login&quot;;
+public static final String ATTRIBUTE_PASSWORD = &quot;Password&quot;;
+
+private ContentSource _fetchLocation;
+private Map _attributes;
+private Map _authentAttributes;
+...
+
+public void setFetchLocation( ContentSource source ) throws TransportConfigurationException
+{
+    try
+    {
+        this._fetchLocation = source;
+        this._attributes = this._fetchLocation.getNonAuthentificationAttributesAsNamedMap();
+        this._authentAttributes = this._fetchLocation.getAuthentificationAttributesAsNamedMap();
+        if( !this._attributes.containsKey( ATTRIBUTE_SERVER ) )
+        {
+            throw new TransportConfigurationException( &quot;The mandatory attribute \&quot;Server\&quot; is missing!&quot; );
+        }
+    }
+    catch ( TorqueException e )
+    {
+        throw new TransportConfigurationException( &quot;Could not register transport attributes.&quot;, e );
+    }
+}
+</source>
+        </subsection>                        
+        <subsection name="fetch()">
+            <p>
+            The fetch() method must return a java.util.List of <a href="../apidocs/net/sf/iquiver/metaformat/Document.html">net.sf.iquiver.metaformat.Document</a> objects.
+            So your transport is responsible for converting fetched contents into documents. The easiest way to do this is:
+            <ol>
+                <li>use <a href="../apidocs/net/sf/iquiver/metaformat/impl/MetaformatFactory.html">net.sf.iquiver.metaformat.impl.MetaformatFactory</a> to create a new document for the expected content type (MIME type)</li>
+                <li>use <a href="../apidocs/net/sf/iquiver/metaformat/Document.html#setRawContent(byte[])">net.sf.iquiver.metaformat.Document.setRawConent( byte[] )</a> to fill the document with your content data</li>
+                <li>assumed your transport is able to provide the neccessary values you might optionally fill other members in the document objects</li>
+            </ol>
+            </p>
+<source>
+public List fetch() throws TransportException
+{
+    List documents = new ArrayList();
+    DataInputStream input = null;
+    URLConnection connection = null;
+
+    try
+    {
+        URL url = new URL( (String)this._attributes.get( ATTRIBUTE_SERVER ) );
+        connection = url.openConnection();
+        connection.setRequestProperty( &amp;quot;User-Agent&amp;quot;,
+            IQuiver.NAME + &amp;quot; &amp;quot; + IQuiver.VERSION
+            + &amp;quot; (http://developer.berlios.de/projects/infoquiver/)&amp;quot; );
+        input = new DataInputStream( connection.getInputStream() );
+        //create a new Document for the current contentType and encoding
+        Document doc = MetaFormatFactory.createDocumentForContentType( connection.getContentType() );
+        doc.setRawContent( IOUtils.toByteArray( input ) );
+        documents.add( doc );
+    }
+    catch ( UnsupportedContentTypeException ue )
+    {
+        throw new TransportException( "Content type " + connection.getContentType() + " is not supported", ue );
+    }
+    catch( IOException e )
+    {
+        throw new TransportException(&amp;quot;IOException occured while fetching content from &amp;quot;
+                + (String)this._attributes.get( ATTRIBUTE_SERVER ), e );
+    }
+    finally
+    {
+        if( input != null )
+        {
+            try
+            {
+                input.close();
+            }
+            catch( IOException e )
+            {
+            }
+        }
+    }
+
+    return documents;
+}
+</source>
+        </subsection>
+        <subsection name="isParsingRequired()">            
+        <p>
+            Now you have to decide whether the documents returned by your transport require
+            further parsing or not:
+        </p>
+            <table>
+                <tr><th>behavior</th><th>implementation</th></tr>
+                <tr><td>your tranport is able to set allmost all fields in the created document objects,
+                    especially name, title, date of creation, date of last modification and short description of the content</td>
+                    <td>
+<source>
+public boolean isParsingRequired()
+{
+    return false;
+}
+</source>
+                </td></tr>
+            <tr><td>your tranport is NOT able to set allmost all fields in the created document objects</td>
+                <td>
+<source>
+public boolean isParsingRequired()
+{
+    return true;
+}
+</source>
+                </td></tr>
+        </table>
+        </subsection>        
+    </section>
+</body>
+</document>

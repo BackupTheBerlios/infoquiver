@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <document>
   <properties>
-    <title>Extending InfoQuiver</title>
+    <title>Creating Custom Tranports</title>
     <author email="netseeker@manskes.de">Michael Manske</author>
   </properties>
   <body>
@@ -10,31 +10,35 @@
             Creating custom transports is usually a simple task. InfoQuiver knows
             three kinds of transports:
             <ol>
-                <li>Transports implementing <a href="apidocs/net/sf/iquiver/transport/Fetcher.html">net.sf.iquiver.transport.Fetcher</a><br/> 
-                    These transport classes are used for fetching/querying content sources only. You can't use a transport class 
+                <li>Transports implementing <a href="../apidocs/net/sf/iquiver/transport/Fetcher.html">net.sf.iquiver.transport.Fetcher</a><br/>
+                    These transport classes are used for fetching/querying content sources only. You can't use a transport class
                     implementing only net.sf.iquiver.transport.Fetcher for dispatching.</li>
-                <li>Transports implementing <a href="apidocs/net/sf/iquiver/transport/Dispatcher.html">net.sf.iquiver.transport.Dispatcher</a><br/>
-                    These transport classes are used for dispatching search results in form of reports to users. You can't use a transport class 
+                <li>Transports implementing <a href="../apidocs/net/sf/iquiver/transport/Dispatcher.html">net.sf.iquiver.transport.Dispatcher</a><br/>
+                    These transport classes are used for dispatching search results in form of reports to users. You can't use a transport class
                     implementing only net.sf.iquiver.transport.Dispatcher for querying content sources.</li>
                 <li>Transports implementing both Fetcher and Dispatcher<br/>
-                    Well, i guess the behavior of these transport classes need no further description.</li>                                
+                    Well, i guess the behavior of these transport classes doesn't need further description.</li>
             </ol>
-        </p>        
+            Here is InfoQuivers transport class diagram as the time of this writing:
+        <img src="../images/net_sf_iquiver_transport_impl.png" alt="class diagram" border="0"/>
+        </p>         
     </section>
     <section name="Transport Configurations">
+        <p>
         In most cases transports require some parameters to be able to connect to a ContentSource or DispatchTarget.
         Such parameters contain usually server/hostnames, login, password or port settings.
         You must declare the required parameters in an xml file, the transport descriptor. This file will be used
         when registering your transport in InfoQuiver (we will capture the install procedure later in this guide).
-        <source>
-            &lt;transport&gt;
-                &lt;name&gt;simple transport&lt;/name&gt;
-                &lt;type&gt;0&lt;/type&gt;
-                &lt;attribute name=&quot;Server&quot; mandatory=&quot;true&quot; type=&quot;java.lang.String&quot;/&gt;
-                &lt;attribute name=&quot;Login&quot; partOfAuthentification=&quot;yes&quot; type=&quot;java.lang.String&quot;/&gt;
-                &lt;attribute name=&quot;Password&quot; partOfAuthentification=&quot;yes&quot; type=&quot;java.lang.String&quot;/&gt;
-            &lt;/transport&gt;            
-        </source>
+        </p>
+<source>
+&lt;transport&gt;
+    &lt;name&gt;simple transport&lt;/name&gt;
+    &lt;type&gt;0&lt;/type&gt;
+    &lt;attribute name=&quot;Server&quot; mandatory=&quot;true&quot; type=&quot;java.lang.String&quot;/&gt;
+    &lt;attribute name=&quot;Login&quot; partOfAuthentification=&quot;yes&quot; type=&quot;java.lang.String&quot;/&gt;
+    &lt;attribute name=&quot;Password&quot; partOfAuthentification=&quot;yes&quot; type=&quot;java.lang.String&quot;/&gt;
+&lt;/transport&gt;
+</source>
         <table>
             <tr><th>element</th><th>meaning</th></tr>
             <tr><td>name</td><td>a name for your transport, it should state clearly what your transport does</td></tr>
@@ -44,60 +48,13 @@
                     <ul>
                         <li>name: identifier of the attribute</li>
                         <li>mandatory: boolean, is the attribute a mandatory one</li>
-                        <li>partOfAuthentification: boolean, is the attribute required for authentification with the content source/dispatch location</li>                        
+                        <li>partOfAuthentification: boolean, is the attribute required for authentification with the content source/dispatch location</li>
                         <li>type: java type used for basic validating the attribute value</li>
                     </ul>
                 </td>
             </tr>
         </table>
-        The transport descriptor file must be located in the same directory/package as the transport itself.
-    </section>
-    <section name="Fetcher">
-        <p>
-            A fetcher must implement <a href="apidocs/net/sf/iquiver/transport/Fetcher.html">net.sf.iquiver.transport.Fetcher</a>.            
-            <source>public class SimpleFetchTransport implements Fetcher</source>
-            The interface Fetcher defines four methods:
-            <source>
-                public void setFetchLocation(<a href="apidocs/net/sf/iquiver/om/ContentSource.html">ContentSource</a> source) throws <a href="apidocs/net/sf/iquiver/transport/TransportConfigurationException.html">TransportConfigurationException</a>;
-                public <a href="apidocs/net/sf/iquiver/om/ContentSource.html">ContentSource</a> getFetchLocation();                
-                public List fetch() throws <a href="apidocs/net/sf/iquiver/transport/TransportException.html">TransportException</a>;
-                public boolean isParsingRequired();                                
-            </source>
-            <p>
-            The ContentFetchService, which is responsible for invoking fetcher transports, will first call setFetchLocation() then
-            fetch(). So in setFetchLocation() you should ensure that the given ContentSource is a valid content source for your
-            transport and does contain a valid set of <a href="apidocs/net/sf/iquiver/om/TransportAttribute.html">TransportAttribute</a>.
-            <source>
-                public static final String ATTRIBUTE_SERVER = "Server";
-                public static final String ATTRIBUTE_PORT = "Port";
-                public static final String ATTRIBUTE_USER_NAME = "Login";
-                public static final String ATTRIBUTE_PASSWORD = "Password";
-
-                private ContentSource _fetchLocation;
-                private Map _attributes;
-                private Map _authentAttributes;
-                ...
-                                
-                public void setFetchLocation( ContentSource source ) throws TransportConfigurationException
-                {
-                    try
-                    {
-                        this._fetchLocation = source;
-                        this._attributes = this._fetchLocation.getNonAuthentificationAttributesAsNamedMap();
-                        this._authentAttributes = this._fetchLocation.getAuthentificationAttributesAsNamedMap();
-                        if( !this._attributes.contains( ATTRIBUTE_SERVER ) )
-                        {
-                            throw new TransportConfigurationException( "The mandatory attribute \"Server\" is missing!" );
-                        }
-                    }
-                    catch ( TorqueException e )
-                    {
-                        throw new TransportConfigurationException( "Could not register transport attributes.", e );
-                    }
-                }                
-            </source>
-            </p>
-        </p>
+        <subsection name="The transport descriptor file must be located in the same directory/package as the transport itself!"/>
     </section>
   </body>
-</document>    
+</document>
