@@ -3,6 +3,10 @@
  */
 package net.sf.iquiver.util.om;
 
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+
 import org.apache.torque.util.Criteria;
 
 /**
@@ -19,6 +23,51 @@ public class SimpleCriteria extends Criteria
     public SimpleCriteria()
     {
         super( DEFAULT_CAPACITY );
+    }
+    
+    /**
+     * Copy constructor
+     * @param crit
+     * FIXME: can't handle Criteria.aliases, Criteria.selectModifiers and Criteria.useTransaction
+     */
+    public SimpleCriteria(Criteria crit)
+    {
+        this.putAll(crit);        
+        this.setIgnoreCase(crit.isIgnoreCase());
+        this.setSingleRecord(crit.isSingleRecord());
+        this.setCascade(crit.isCascade());
+        this.setDbName(crit.getDbName());
+        this.setLimit(crit.getLimit());
+        this.setOffset(crit.getOffset());        
+       
+        //select columns
+        for(Iterator it = crit.getSelectColumns().iterator(); it.hasNext();)
+        {
+            this.addSelectColumn((String)it.next());
+        }
+        
+        //order by columns
+        for(Iterator it = crit.getOrderByColumns().iterator(); it.hasNext();)
+        {
+            String column = (String)it.next();            
+            
+            if(column.endsWith("ASC"))
+            {
+                this.addAscendingOrderByColumn(column.substring(0, column.indexOf(" ")));
+            }
+            else
+            {
+                this.addDescendingOrderByColumn(column.substring(0, column.indexOf(" ")));
+            }
+        }
+        
+        //as columns
+        Hashtable asColumns = crit.getAsColumns();
+        for(Enumeration enum = asColumns.keys(); enum.hasMoreElements(); )
+        {
+            String key = (String)enum.nextElement();
+            this.addAsColumn(key, (String)asColumns.get(key));
+        }
     }
 
     /*
@@ -90,6 +139,14 @@ public class SimpleCriteria extends Criteria
         criterion.and( super.getNewCriterion( criterion.getTable(), criterion.getColumn(), new Long( max ),
                 Criteria.LESS_EQUAL));
         return this;
+    }
+    
+    /* (non-Javadoc)
+     * @see java.lang.Object#clone()
+     */
+    public Object clone()
+    {
+        return new SimpleCriteria(this);
     }
     
 }
