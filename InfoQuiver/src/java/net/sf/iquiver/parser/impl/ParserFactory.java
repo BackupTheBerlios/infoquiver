@@ -38,7 +38,7 @@ public class ParserFactory
     /**
      * The default parser used in InfoQuiver
      */
-    private static final Parser DEFAULT_PARSER = new HtmlParser();
+    private static final Parser DEFAULT_PARSER = new RawParser();
 
     /**
      * used for caching already instanciated parsers
@@ -64,7 +64,12 @@ public class ParserFactory
                 if( types != null && !types.isEmpty() )
                 {
                     parser = getParserForContentType( (ContentType)types.get(0) );
-                }                
+                }
+                else
+                {
+                    logger.warn("No parser found for content type " + contentType + ". Will use default parser...");
+                    parser = DEFAULT_PARSER;
+                }
             }
             catch ( TorqueException e )
             {

@@ -2,8 +2,8 @@
  * ContentFetchService.java
  * created on 20.03.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/ContentFetchService.java,v $
- * $Date: 2004/07/17 18:02:15 $
- * $Revision: 1.24 $
+ * $Date: 2004/07/18 17:27:08 $
+ * $Revision: 1.25 $
  *********************************************************************/
 
 package net.sf.iquiver.service.impl;
@@ -268,7 +268,7 @@ public class ContentFetchService extends BaseService
                                 {
                                     content = new Content( doc );
                                 }
-                                
+
                                 content.setContentReceiveDatetime( new Date() );
                                 content.setContentSourceId( source.getContentSourceId() );
                                 content.save();
@@ -283,12 +283,13 @@ public class ContentFetchService extends BaseService
                                 logger.error( "Error while saving retrieved content!", e );
                             }
                         }
-                        
-                        if( !contentDocs.isEmpty() )
+
+                        if (!contentDocs.isEmpty())
                         {
-	                        // Add the documents to the search index - we use one index per content source
-	                        IndexScheduler scheduler = IndexScheduler.getInstance( indexDir + File.separator + String.valueOf( source.getContentSourceId() ));
-	                        scheduler.scheduleForIndexing( contentDocs );
+                            // Add the documents to the search index - we use one index per content source
+                            IndexScheduler scheduler = IndexScheduler.getInstance( indexDir + File.separator
+                                    + String.valueOf( source.getContentSourceId() ) );
+                            scheduler.scheduleForIndexing( contentDocs );
                         }
                     }
                     catch ( TransportException e )
