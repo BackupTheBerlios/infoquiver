@@ -122,13 +122,17 @@
 
 	<!-- ================================================================================================= -->
 	<target name="datadump_import" description="Creates a complete xml data dump of your database">
-		<ant antfile="build-torque.xml" target="datasql" inheritAll="false">
-			<property name="outputDirectory" value="${torque.sql.dir}" />
-		</ant>
-		<ant antfile="build-torque.xml" target="insert-sql" inheritAll="false" />
+        <antcall target="xmldump2sql" />
+        <ant antfile="build-torque.xml" target="insert-sql" inheritAll="false" />
 	</target>
 
-
+    <!-- ================================================================================================= -->
+    <target name="xmldump2sql" description="Creates a complete xml data dump of your database">
+	    <ant antfile="build-torque.xml" target="datasql" inheritAll="false">
+	        <property name="outputDirectory" value="${torque.sql.dir}" />
+	    </ant>
+    </target>
+    
 	<!-- ================================================================================================= -->
 	<target name="awk-direct" description="exec awk with direct script command">
 		<!-- this target uses the following properties:
