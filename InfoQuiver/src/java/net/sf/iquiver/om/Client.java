@@ -2,8 +2,8 @@
  * Client.java
  * created on 12.06.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/om/Client.java,v $
- * $Date: 2004/07/17 17:14:42 $
- * $Revision: 1.5 $
+ * $Date: 2004/10/24 16:28:16 $
+ * $Revision: 1.6 $
  *********************************************************************/
 
 package net.sf.iquiver.om;
@@ -29,5 +29,21 @@ public class Client extends net.sf.iquiver.om.BaseClient implements Persistent, 
         crit.add( ClientContentSourceLnkPeer.CLIENT_ID, this.getClientId() );
 
         return ContentSourcePeer.doSelect( crit );
+    }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.util.Introspectable#getMemberNames()
+     */
+    public List getMemberNames()
+    {
+        return getFieldNames();
+    }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.util.Introspectable#getMemberValueByName(java.lang.String)
+     */
+    public Object getMemberValueByName( String name )
+    {
+        return getByName( name );
     }
 }

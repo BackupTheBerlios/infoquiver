@@ -34,6 +34,7 @@ public abstract class AbstractDocument implements Document
     private String _fileName;
     private float _score;
     private boolean _isRemoved;
+    private List fieldNames;
 
     /*
      * (non-Javadoc)
@@ -439,8 +440,8 @@ public abstract class AbstractDocument implements Document
         {
             toFill.setTitle( toRead.getTitle() );
         }
-    }
-
+    }    
+    
     /*
      * (non-Javadoc)
      * 

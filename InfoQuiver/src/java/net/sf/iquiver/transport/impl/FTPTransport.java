@@ -2,8 +2,8 @@
  * FTPTransport.java
  * created on 23.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/transport/impl/FTPTransport.java,v $
- * $Date: 2004/10/23 22:49:11 $
- * $Revision: 1.1 $
+ * $Date: 2004/10/24 16:28:38 $
+ * $Revision: 1.2 $
  *********************************************************************/
 
 package net.sf.iquiver.transport.impl;
@@ -54,7 +54,6 @@ public class FTPTransport implements Fetcher, Dispatcher
     public static final String ATTRIBUTE_FTP_PASSWORD = "Password";
     public static final String ATTRIBUTE_FTP_REMOTE_FILEPATH = "FetchRemoteFilePath";
     public static final String ATTRIBUTE_FTP_REMOTE_DIRECTORY = "RemoteDirectory";
-    public static final String ATTRIBUTE_FTP_MODE = "Mode";
 
     private ContentSource _fetchLocation;
     private ContentSource _dispatchLocation;

@@ -2,6 +2,10 @@
 package net.sf.iquiver.om;
 
 
+import java.util.List;
+
+import net.sf.iquiver.util.Introspectable;
+
 import org.apache.torque.om.Persistent;
 
 /**
@@ -15,6 +19,22 @@ import org.apache.torque.om.Persistent;
  */
 public  class SearchQuery
     extends net.sf.iquiver.om.BaseSearchQuery
-    implements Persistent
+    implements Persistent, Introspectable
 {
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.util.Introspectable#getMemberNames()
+     */
+    public List getMemberNames()
+    {
+        return getFieldNames();
+    }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.util.Introspectable#getMemberValueByName(java.lang.String)
+     */
+    public Object getMemberValueByName( String name )
+    {
+        return getByName( name );
+    }
 }

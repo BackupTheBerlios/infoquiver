@@ -2,15 +2,13 @@
  * ReportGenerator.java
  * created on 16.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/ReportGenerator.java,v $
- * $Date: 2004/07/22 20:44:12 $
- * $Revision: 1.1 $
+ * $Date: 2004/10/24 16:27:55 $
+ * $Revision: 1.2 $
  *********************************************************************/
 
 package net.sf.iquiver.report;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 import net.sf.iquiver.IQuiver;
 import net.sf.iquiver.om.Client;
@@ -20,15 +18,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.netseeker.util.ListMap;
-import dori.jasper.engine.JRException;
-import dori.jasper.engine.JasperExportManager;
-import dori.jasper.engine.JasperFillManager;
-import dori.jasper.engine.JasperPrint;
 
 /**
  * @author netseeker aka Michael Manske
  */
-public class ReportGenerator
+public abstract class ReportGenerator
 {
     /**
      * Commons Logger for this class
@@ -38,48 +32,44 @@ public class ReportGenerator
     /**
      * directory where the generated report will be saved, default: reports/tmp
      */
-    private static String _targetDir = IQuiver.getConfiguration().getString( "reports.directory", "reports" ) + File.separator + "tmp";
-    private static String _template = IQuiver.getConfiguration().getString( "reports.templates.searchresults" ) + ".jasper";
-
-    public static void generate(IReportSource searcher, ListMap queryresults)
+    protected static String _targetDir = IQuiver.getConfiguration().getString( "reports.directory", "reports" ) + File.separator + "tmp";
+    protected static String _template = IQuiver.getConfiguration().getString( "reports.templates.searchresults" );   
+    
+    /**
+     * Returns the path to use when saving a report result for a IReportSource.
+     * If the directory structure doesn't already exist it will be created.
+     * @param searcher
+     * @return
+     */
+    protected String getReportFilePathForReportSource( IReportSource searcher )
     {
-        String path = _targetDir + File.separator;
+        StringBuffer path = new StringBuffer( _targetDir );
+        path.append( File.separator );
 
         if (searcher instanceof Client)
         {
-            path += String.valueOf( ((Client) searcher).getClientId() );
+            path.append( ((Client) searcher).getClientId() );
         }
         else if (searcher instanceof UserGroup)
         {
             UserGroup group = (UserGroup) searcher;
-            path += String.valueOf( group.getClientId() );
-            path += File.separator;
-            path += String.valueOf( group.getUserGroupId() );
+            path.append( group.getClientId() );
+            path.append( File.separator );
+            path.append( group.getUserGroupId() );
         }
         
-        File file = new File( path );
+        File file = new File( path.toString() );
         if( !file.exists() )
         {
             file.mkdirs();
         }
         
-        path += File.separator;
-        path += String.valueOf( System.currentTimeMillis() );
-
-        QueryResultMapDataSource dataSource = new QueryResultMapDataSource( searcher, queryresults );
-        Map parameters = new HashMap();
-        parameters.put( "ReportTitle", "InfoQuiver - Search Results" );
-        try
-        {
-            JasperPrint data = JasperFillManager.fillReport( _template, parameters, dataSource );
-            JasperExportManager.exportReportToPdfFile( data, path + ".pdf" );
-            JasperExportManager.exportReportToHtmlFile( data, path + ".html" );
-            JasperExportManager.exportReportToXmlFile( data, path + ".xml", true );
-        }
-        catch ( JRException e )
-        {
-            logger.error( e );
-        }
+        path.append( File.separator );
+        path.append( System.currentTimeMillis() );      
+        
+        return path.toString();
     }
+    
+    public abstract void generate(IReportSource searcher, ListMap queryresults);
 }
 
