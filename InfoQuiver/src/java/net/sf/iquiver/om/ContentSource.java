@@ -88,4 +88,25 @@ public  class ContentSource
         return results;
     }
     
+    /**
+     * @return
+     * @throws TorqueException
+     */
+    public Map getAttributesAsNamedMap() throws TorqueException
+    {
+        Map results = new HashMap();
+        Criteria crit = new Criteria();
+        crit.addJoin(ContentSourceTransportConfigPeer.TRANSPORT_ATTRIBUTE_ID, TransportAttributePeer.TRANSPORT_ATTRIBUTE_ID);
+        List attributes = getContentSourceTransportConfigs(crit);
+        
+        for(Iterator it = attributes.iterator(); it.hasNext();)
+        {
+            ContentSourceTransportConfig config = (ContentSourceTransportConfig)it.next();
+            TransportAttribute attr = TransportAttributePeer.retrieveByPK(config.getTransportAttributeId());            
+            results.put(attr.getTransportAttributeName(), config.getTransportAttributeValue());            
+            results.put(attr.getTransportAttributeName(), config.getTransportAttributeValue());
+        }
+        
+        return results;
+    }        
 }
