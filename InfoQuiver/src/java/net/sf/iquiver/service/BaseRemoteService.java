@@ -12,6 +12,7 @@ import net.sf.iquiver.remote.RemoteException;
 import net.sf.iquiver.util.ObjectSerializer;
 import net.sf.iquiver.util.om.SimpleCriteria;
 
+import org.apache.torque.om.BaseObject;
 import org.apache.torque.om.ComboKey;
 import org.apache.torque.util.Criteria;
 
@@ -150,5 +151,32 @@ public abstract class BaseRemoteService extends BaseService
         {
             throw new RemoteException( e );
         }        
+    }
+    
+    /**
+     * @param sessionId
+     * @param objectType
+     * @param object
+     * @return
+     */
+    public String doSave( String sessionId, String objectType, String object )
+    {
+        Object obj = ObjectSerializer.xmlToObject( object );
+        
+        if( !( obj instanceof BaseObject) )
+        {
+            throw new RemoteException( "Given object does not subclass " + BaseObject.class.getName() );
+        }
+        
+        try
+        {
+            ((BaseObject)obj).save();
+        }
+        catch (Exception e )
+        {
+            throw new RemoteException( e );
+        }   
+        
+        return ObjectSerializer.objectToXml( obj ); 
     }
 }
