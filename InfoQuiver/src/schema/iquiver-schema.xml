@@ -23,7 +23,7 @@
         <column name="CREATED_BY" type="BIGINT"/>                   
         <foreign-key foreignTable="iq_user">
             <reference local="CREATED_BY" foreign="USER_ID" />
-        </foreign-key>                        
+        </foreign-key>                                
         <foreign-key foreignTable="iq_client">
             <reference local="CLIENT_ID" foreign="CLIENT_ID" />
         </foreign-key>
