@@ -28,8 +28,8 @@ public class ObjectSerializer
     }
 
     /**
+     * @param object
      * @param xml
-     * @return
      */
     public static void xmlToObject(Object object, String xml )
     {
@@ -42,4 +42,15 @@ public class ObjectSerializer
             object = xstream.fromXML( xml );
         }
     }
+    
+    /**
+     * Method to convert an xml string into an object
+     * @param xml xml string, MUST be created via XStream
+     * @return
+     */
+    public static Object xmlToObject( String xml )
+    {
+        return xstream.fromXML( xml );
+    }
+    
 }
