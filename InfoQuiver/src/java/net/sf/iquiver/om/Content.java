@@ -16,7 +16,15 @@ import org.apache.torque.om.Persistent;
  */
 public class Content extends net.sf.iquiver.om.BaseContent implements Persistent, Document
 {
-
+    /**
+     * Creates a new instance of Content
+     */
+    public Content()
+    {
+        super();
+    }
+    
+    
     /**
      * Creates a new instance of Content out of an already existent instance of Document
      * @param doc the source document
