@@ -28,7 +28,7 @@ public class CacheBackedPeer extends BasePeer implements Configurable
      * 
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.DefaultProperiesConfiguration)
      */
-    public void configure( Configuration configuration ) throws ConfigurationException
+    public final void configure( Configuration configuration ) throws ConfigurationException
     {
         CacheConfiguration cacheConfiguration = new CacheConfiguration();
         String cacheType = (String) ObjectUtils.defaultIfNull( configuration.getString( "type"),
