@@ -31,14 +31,14 @@ public class MetaFormatFactory
     public static final String    CT_APPLICATION_XTEX      	= "application/x-tex";
     public static final String    CT_APPLICATION_XLATEX    	= "application/x-latex";
     public static final String    CT_MULTIPART_MIXED    	= "multipart/mixed";        
-
+    public static final String    CT_APPLICATION_OCTET_STREAM 	= "application/octet-stream";
+    
     private static final String[] TEXT_CTS = new String[]{CT_TEXT_PLAIN, CT_TEXT_HTML, CT_TEXT_XML, CT_APPLICATION_XML,
             CT_APPLICATION_ATOM_XML, CT_APPLICATION_RSS_XML, CT_APPLICATION_OPML_XML, CT_TEXT_TAB_SEPARATED, CT_APPLICATION_RTF,
             CT_APPLICATION_PS, CT_APPLICATION_XSHAR, CT_APPLICATION_XTROFF, CT_APPLICATION_XTROFF_MS, CT_APPLICATION_XTEX,
             CT_APPLICATION_XLATEX};
     
-    private static final String[] BINARY_CTS = new String[] {CT_APPLICATION_PDF, CT_MULTIPART_MIXED};
-
+    private static final String[] BINARY_CTS = new String[] {CT_APPLICATION_PDF, CT_MULTIPART_MIXED, CT_APPLICATION_OCTET_STREAM};
     
     /**
      * @param contentType
