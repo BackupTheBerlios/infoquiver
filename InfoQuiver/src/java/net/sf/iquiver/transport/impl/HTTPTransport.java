@@ -35,10 +35,10 @@ public class HTTPTransport implements Fetcher
 
     private static final Log logger = LogFactory.getLog( HTTPTransport.class );
 
-    private ContentSource fetchLocation;
-    private HttpClient client;
-    private HttpMethod method;
-    private boolean useAuthentification = false;
+    private ContentSource _fetchLocation;
+    private HttpClient _client;
+    private HttpMethod _method;
+    private boolean _useAuthentification = false;
 
     /*
      * (non-Javadoc)
@@ -47,17 +47,25 @@ public class HTTPTransport implements Fetcher
      */
     public void setFetchLocation( ContentSource source) throws TransportConfigurationException
     {
-        this.fetchLocation = source;
-        this.client = new HttpClient();
+        this._fetchLocation = source;
+        this._client = new HttpClient();
 
-        method = registerConfiguration();
+        _method = _registerConfiguration();
 
         if (source.getIsAuthentificationRequired())
         {
-            registerAuthentificationConfiguration();
-            method.setDoAuthentication( true );
+            _registerAuthentificationConfiguration();
+            _method.setDoAuthentication( true );
         }
     }
+    
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.transport.Fetcher#getFetchLocation()
+     */
+    public ContentSource getFetchLocation()
+    {
+        return this._fetchLocation;
+    }    
 
     /*
      * (non-Javadoc)
@@ -71,11 +79,11 @@ public class HTTPTransport implements Fetcher
         try
         {
             // execute the method.
-            client.executeMethod( method );
-            String encoding = ((GetMethod) method).getResponseCharSet();
-            Header header = ((GetMethod) method).getResponseHeader( "Content-Type" );
+            _client.executeMethod( _method );
+            String encoding = ((GetMethod) _method).getResponseCharSet();
+            Header header = ((GetMethod) _method).getResponseHeader( "Content-Type" );
             String contentType = header.getValue();
-            Document doc = MetaFormatFactory.createDocumentForContentType( contentType, method.getResponseBody(),
+            Document doc = MetaFormatFactory.createDocumentForContentType( contentType, _method.getResponseBody(),
                     encoding );
             documents.add( doc );
         }
@@ -90,7 +98,7 @@ public class HTTPTransport implements Fetcher
         finally
         {
             //always release the connection after we're done
-            method.releaseConnection();
+            _method.releaseConnection();
         }
 
         return documents;
@@ -99,17 +107,17 @@ public class HTTPTransport implements Fetcher
     /**
      * @throws TransportConfigurationException
      */
-    private void registerAuthentificationConfiguration() throws TransportConfigurationException
+    private void _registerAuthentificationConfiguration() throws TransportConfigurationException
     {
         try
         {
-            Map auth_attributes = this.fetchLocation.getAuthentificationAttributesAsNamedMap();
+            Map auth_attributes = this._fetchLocation.getAuthentificationAttributesAsNamedMap();
             String user = (String) auth_attributes.get( ATTRIBUTE_HTTP_USER_NAME );
             String pwd = (String) auth_attributes.get( ATTRIBUTE_HTTP_PASSWORD );
 
             if (user != null && pwd != null)
             {
-                client.getState().setCredentials( null, null, new UsernamePasswordCredentials( user, pwd ) );
+                _client.getState().setCredentials( null, null, new UsernamePasswordCredentials( user, pwd ) );
             }
         }
         catch ( TorqueException e)
@@ -123,13 +131,13 @@ public class HTTPTransport implements Fetcher
     /**
      * @return @throws TransportConfigurationException
      */
-    private HttpMethod registerConfiguration() throws TransportConfigurationException
+    private HttpMethod _registerConfiguration() throws TransportConfigurationException
     {
         HttpMethod method = null;
 
         try
         {
-            Map attributes = this.fetchLocation.getNonAuthentificationAttributesAsNamedMap();
+            Map attributes = this._fetchLocation.getNonAuthentificationAttributesAsNamedMap();
             String host = (String) attributes.get( ATTRIBUTE_HTTP_SERVER );
 
             if (host != null)

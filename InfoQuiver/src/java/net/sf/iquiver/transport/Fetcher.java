@@ -19,6 +19,12 @@ public interface Fetcher
     public void setFetchLocation(ContentSource source) throws TransportConfigurationException;
     
     /**
+     * Returns the last configured fetch location or null if no fetch location was configured
+     * @return
+     */
+    public ContentSource getFetchLocation();
+    
+    /**
      * @return
      */
     public List fetch();
