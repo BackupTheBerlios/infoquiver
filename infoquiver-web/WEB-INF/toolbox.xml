@@ -16,11 +16,6 @@
         <class>org.apache.velocity.tools.view.tools.LinkTool</class>
     </tool>
     <tool>
-        <key>cookie</key>
-        <scope>request</scope>
-        <class>org.apache.velocity.tools.view.tools.CookieTool</class>
-    </tool>
-    <tool>
         <key>params</key>
         <scope>request</scope>
         <class>org.apache.velocity.tools.view.tools.ParameterParser</class>
@@ -35,4 +30,9 @@
         <scope>session</scope>
         <class>net.sf.iquiver.web.IQuiverDelegate</class>
     </tool>
+    <tool>
+       <key>search</key>
+       <scope>request</scope>
+       <class>net.sf.iquiver.web.IQuiverSearch</class>
+     </tool>    
 </toolbox>

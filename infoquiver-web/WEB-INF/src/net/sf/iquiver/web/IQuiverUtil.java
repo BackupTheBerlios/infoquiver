@@ -2,8 +2,8 @@
  * IQuiverUtil.java
  * created on 30.11.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/infoquiver-web/WEB-INF/src/net/sf/iquiver/web/IQuiverUtil.java,v $
- * $Date: 2004/12/01 19:39:46 $
- * $Revision: 1.3 $
+ * $Date: 2004/12/02 22:35:05 $
+ * $Revision: 1.4 $
  *********************************************************************/
 
 package net.sf.iquiver.web;
@@ -13,14 +13,21 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.velocity.app.Velocity;
+import org.apache.xmlrpc.XmlRpcClient;
+import org.apache.xmlrpc.XmlRpcException;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -29,9 +36,9 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  * @author netseeker aka Michael Manske
  */
 public class IQuiverUtil
-{    
+{
     private static XStream xstream = new XStream( new DomDriver() );
-    
+
     /**
      * @param context
      */
@@ -40,34 +47,35 @@ public class IQuiverUtil
         Hashtable bundles = new Hashtable();
         String path = context.getRealPath( "/" );
         File file = new File( path + "WEB-INF/resources" );
-        if( file.exists() )
+        if (file.exists())
         {
-        File[] files = file.listFiles();
-        for (int i = 0; i < files.length; i++)
-        {
-            if (files[i].isFile() && files[i].getName().endsWith( ".properties" ))
+            File[] files = file.listFiles();
+            for (int i = 0; i < files.length; i++)
             {
-                try
+                if (files[i].isFile() && files[i].getName().endsWith( ".properties" ))
                 {
-                    ResourceBundle rb = new PropertyResourceBundle( new FileInputStream( files[i] ) );
-                    String name = rb.getLocale().toString();
-                    if (name.length() == 0)
+                    try
                     {
-                        name = "default";
+                        ResourceBundle rb = new PropertyResourceBundle( new FileInputStream( files[i] ) );
+                        String name = rb.getLocale().toString();
+                        if (name.length() == 0)
+                        {
+                            name = "default";
+                        }
+                        bundles.put( name, rb );
                     }
-                    bundles.put( name, rb );
-                }
-                catch ( IOException e )
-                {
-                    Velocity.error( e );
+                    catch ( IOException e )
+                    {
+                        Velocity.error( e );
+                    }
                 }
             }
         }
-        }
         else
         {
-            Velocity.error("Resource directory " + path + "WEB-INF/resources could not be found!");
+            Velocity.error( "Resource directory " + path + "WEB-INF/resources could not be found!" );
         }
+        
         context.setAttribute( "net.sf.iquiver.web.RESOURCES", bundles );
     }
 
@@ -90,7 +98,7 @@ public class IQuiverUtil
 
         return locale;
     }
-    
+
     /**
      * @param object
      * @return
@@ -99,4 +107,70 @@ public class IQuiverUtil
     {
         return xstream.toXML( object );
     }
+    
+    /**
+     * @param xml
+     * @return
+     */
+    public static Object xmlToObject( String xml )
+    {
+        return xstream.fromXML( xml );
+    }
+    
+    /**
+     * @param xml
+     * @return
+     */
+    public static Object xmlToObject( Document xml )
+    {
+        return xstream.fromXML( xml.asXML() );
+    }
+    
+    /**
+     * @param request
+     * @return
+     */
+    public static XmlRpcClient getXmlRpcClient( HttpServletRequest request )
+    {
+        HttpSession session = request.getSession();
+        XmlRpcClient client = (XmlRpcClient)session.getAttribute("net.sf.iquiver.web.XmlRpcClient");
+        
+        if( client == null )
+        {
+            String path = session.getServletContext().getRealPath("/");
+            try
+            {
+                Properties properties = new Properties();
+                properties.load( new FileInputStream( path + "/WEB-INF/iquiver-web.properties") );
+                client = new XmlRpcClient(properties.getProperty("host"), Integer.parseInt( properties.getProperty("port") ) );
+                session.setAttribute( "net.sf.iquiver.web.XmlRpcClient", client );
+            }
+            catch ( IOException e )
+            {
+                Velocity.error( e );
+            }            
+        }
+        
+        return client;
+    }
+    
+    /**
+     * @param rpcClient
+     * @param method
+     * @param params
+     * @return
+     * @throws XmlRpcException
+     * @throws IOException
+     * @throws DocumentException
+     */
+    public static Document execute(XmlRpcClient rpcClient, String method, Vector params ) throws XmlRpcException, IOException, DocumentException
+    {
+        String xml = (String)rpcClient.execute("default." + method, params );
+        if( xml != null && xml.length() > 0 )
+        {
+            return DocumentHelper.parseText( xml );
+        }
+        
+        return null;
+    }     
 }

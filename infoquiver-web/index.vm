@@ -1,11 +1,16 @@
 #if ( $iquiver.isLoggedIn( $request ) )
-    <table>
-    	<tr>
-    		<td>
-    			hallo
-    		</td>
-    	</tr>
-    </table>
+	<form method="post" action="$link.setURI("search.vm")">
+    	<table border="0" align="center">
+        	<tr>
+        		<td>
+        			<input type="text" name="criteria" value="">
+        		</td>
+    			<td>
+    				<input type="submit" value="Search">
+    			</td>
+        	</tr>
+        </table>
+	</form>
 #else
 	#parse("login.vm")
 #end

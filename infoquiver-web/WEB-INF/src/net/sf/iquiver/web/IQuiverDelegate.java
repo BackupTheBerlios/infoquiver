@@ -2,15 +2,13 @@
  * IQuiverDelegate.java
  * created on 28.11.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/infoquiver-web/WEB-INF/src/net/sf/iquiver/web/IQuiverDelegate.java,v $
- * $Date: 2004/12/01 20:37:51 $
- * $Revision: 1.5 $
+ * $Date: 2004/12/02 22:35:05 $
+ * $Revision: 1.6 $
 *********************************************************************/
 
 package net.sf.iquiver.web;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Properties;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +22,6 @@ import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcException;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
 
 /**
  * @author netseeker aka Michael Manske
@@ -42,18 +39,7 @@ public class IQuiverDelegate implements ViewTool
         if( rpcClient == null )
         {
             ViewContext context = (ViewContext)obj;
-            String path = context.getServletContext().getRealPath("/");
-
-            try
-            {
-                Properties properties = new Properties();
-                properties.load( new FileInputStream( path + "/WEB-INF/iquiver-web.properties") );
-                rpcClient = new XmlRpcClient(properties.getProperty("host"), Integer.parseInt( properties.getProperty("port") ) );
-            }
-            catch ( IOException e )
-            {
-                e.printStackTrace();
-            }
+            rpcClient = IQuiverUtil.getXmlRpcClient( context.getRequest() );
         }
     }    
     
@@ -70,7 +56,7 @@ public class IQuiverDelegate implements ViewTool
         Vector params = new Vector(2);
         params.add( login );
         params.add( password );
-        Document user = execute( "doLogin", params );
+        Document user = IQuiverUtil.execute(rpcClient, "doLogin", params );
         HttpSession session = request.getSession();
         
         if( user != null )
@@ -113,7 +99,7 @@ public class IQuiverDelegate implements ViewTool
         params.add( rpcSessionId );
         params.add( objectType );
         params.add( IQuiverUtil.objectToXml( criteria ) );
-        return execute( "doSelect", params );        
+        return IQuiverUtil.execute(rpcClient, "doSelect", params );        
     }
     
     /**
@@ -144,7 +130,7 @@ public class IQuiverDelegate implements ViewTool
         Vector params = new Vector(2);
         params.add( rpcSessionId );
         params.add( object.asXML() );
-        return execute( "doSave", params );                
+        return IQuiverUtil.execute(rpcClient, "doSave", params );                
     }
     
     /**
@@ -161,7 +147,7 @@ public class IQuiverDelegate implements ViewTool
         params.add( rpcSessionId );
         params.add( objectType );
         params.add( IQuiverUtil.objectToXml( key ) );
-        return execute( "retrieveByPk", params );                
+        return IQuiverUtil.execute(rpcClient, "retrieveByPk", params );                
     }
     
     /**
@@ -178,25 +164,6 @@ public class IQuiverDelegate implements ViewTool
         params.add( rpcSessionId );
         params.add( objectType );
         params.add( IQuiverUtil.objectToXml( keys ) );
-        return execute( "retrieveByPks", params );        
-    }
-    
-    /**
-     * @param method
-     * @param params
-     * @return
-     * @throws XmlRpcException
-     * @throws IOException
-     * @throws DocumentException
-     */
-    private Document execute( String method, Vector params ) throws XmlRpcException, IOException, DocumentException
-    {
-        String xml = (String)rpcClient.execute("default." + method, params );
-        if( xml != null && xml.length() > 0 )
-        {
-            return DocumentHelper.parseText( xml );
-        }
-        
-        return null;
-    }    
+        return IQuiverUtil.execute(rpcClient, "retrieveByPks", params );        
+    }      
 }

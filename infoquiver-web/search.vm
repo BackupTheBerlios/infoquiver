@@ -1,0 +1,45 @@
+#if ( $iquiver.isLoggedIn( $request ) )
+	<form method="post" action="$link.setRelative("search.vm")">
+    	<table border="0" align="center">
+        	<tr>
+        		<td>
+        			<input type="text" name="criteria" value="$!search.criteria">
+        		</td>
+    			<td>
+    				<input type="submit" value="Search">
+    			</td>
+        	</tr>
+        </table>
+	</form>
+   #if( $search.hasResults() )
+   Showing $!search.pageDescription<br>
+     #set( $i = $search.index )
+     #foreach( $result in $search.page )
+       ${i}. $!result <br>
+       #set( $i = $i + 1 )
+     #end
+     <br>
+     #if ( $search.pagesAvailable > 1 )
+       #set( $searchlink = $link.setRelative('search.vm').addQueryData("find",$!search.criteria).addQueryData("show",$!search.itemsPerPage) )
+       #if( $search.prevIndex )
+           <a href="$searchlink.addQueryData('index',$!search.prevIndex)">Prev</a>
+       #end
+       #foreach( $index in $search.slip )
+         #if( $index == $search.index )
+           <b>$search.pageNumber</b>
+         #else
+           <a href="$searchlink.addQueryData('index',$!index)">$!search.getPageNumber($index)</a>
+         #end
+       #end
+       #if( $search.nextIndex )
+           <a href="$searchlink.addQueryData('index',$!search.nextIndex)">Next</a>
+       #end
+     #end
+   #elseif( $search.criteria )
+   Sorry, no matches were found for "$!search.criteria".
+   #else
+   Please enter a search term
+   #end	
+#else
+	#parse("login.vm")
+#end
