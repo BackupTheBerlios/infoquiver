@@ -2,13 +2,14 @@
  * EMail.java
  * created on 16.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/util/mail/EMail.java,v $
- * $Date: 2004/11/26 22:50:10 $
- * $Revision: 1.3 $
+ * $Date: 2004/11/27 20:43:48 $
+ * $Revision: 1.4 $
  *********************************************************************/
 
 package net.sf.iquiver.util.mail;
 
 import java.io.InputStream;
+import java.rmi.server.UID;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -83,34 +84,111 @@ public class EMail
             e.printStackTrace();
         }
     }
+    
+    /**
+     * Adds an attachment while adding the contents of <var>in</var>.
+     * using <var>targetName</var> as attachement name. 
+     * @param in InputStream which contents will be used as attachment
+     * @param targetName name of the body part (attachment)
+     * @return the CID of the added attachment
+     * @throws MessagingException
+     */
+    public String addAttachment( InputStream in, String targetName ) throws MessagingException
+    {
+        return addAttachment( in, targetName, false );
+    }
 
     /**
-     * @param in
-     * @param fileName
+     * Adds an attachment while adding the contents of <var>in</var>.
+     * using <var>targetName</var> as attachement name.
+     * @param in InputStream which contents will be used as attachment
+     * @param targetName name of the body part (attachment)
+     * @param useTargetNameAsCID if true <var>targetName</var> will be used as CID of the attachment
+     * otherwise a new unique one will be generated
+     * @return the CID of the added attachment
+     * @throws MessagingException
      */
-    public void addAttachment( InputStream in, String fileName ) throws MessagingException
+    public String addAttachment( InputStream in, String targetName, boolean useTargetNameAsCID ) throws MessagingException
     {
         MimeBodyPart mbp = new MimeBodyPart();
         ContentTypeFileTypeMap ctfm = ContentTypeFileTypeMap.getInstance();
 
-        String contentType = ctfm.getContentTypeFor( fileName );
+        String contentType = ctfm.getContentTypeFor( targetName );
         mbp.setDataHandler( new DataHandler( new InputStreamDataSource( in, contentType ) ) );
-        mbp.setFileName( fileName );
+        mbp.setFileName( targetName );
+        
+        if( useTargetNameAsCID )
+        {
+            mbp.setContentID( targetName );
+        }
+        else
+        {
+            mbp.setContentID( new UID().toString() );
+        }        
         mp.addBodyPart( mbp );
+        
+        return mbp.getContentID();
     }
-
+    
     /**
-     * @param filePath
+     * Adds an attachement while adding the file specified by <var>filePath</var>.
+     * The orignal fileName will be used as name of the attachment
+     * @param filePath path to the file to add as attachment
+     * @return the CID of the added attachment 
      */
-    public void addAttachment( String filePath ) throws MessagingException
+    public String addAttachment( String filePath ) throws MessagingException
     {
         MimeBodyPart mbp = new MimeBodyPart();
         FileDataSource fds = new FileDataSource( filePath );
         mbp.setDataHandler( new DataHandler( fds ) );
-        mbp.setFileName( fds.getFile().getName() );
+        mbp.setContentID( new UID().toString() );
         mp.addBodyPart( mbp );
+        
+        return mbp.getContentID();
+
     }
 
+    /**
+     * Adds an attachment while adding the file specified by <var>filePath</var> using <var>targetName</var> as attachement name.
+     * @param filePath path to the file to add as attachment
+     * @param targetName name of the body part (attachment)
+     * @return the CID of the added attachment
+     * @throws MessagingException
+     */
+    public String addAttachment( String filePath, String targetName ) throws MessagingException
+    {
+        return addAttachment( filePath, targetName, false );
+    }    
+
+    /**
+     * Adds an attachement while adding the file specified by <var>filePath</var> using <var>targetName</var> as attachement name.
+     * @param filePath path to the file to add as attachment
+     * @param targetName name of the body part (attachement)
+     * @param useTargetNameAsCID if true <var>targetName</var> will be used as CID of the attachment
+     * otherwise a new unique one will be generated
+     * @return the CID of the added attachment
+     * @throws MessagingException
+     */
+    public String addAttachment( String filePath, String targetName, boolean useTargetNameAsCID ) throws MessagingException
+    {
+        MimeBodyPart mbp = new MimeBodyPart();
+        FileDataSource fds = new FileDataSource( filePath );
+        mbp.setDataHandler( new DataHandler( fds ) );
+        mbp.setFileName( targetName );
+        if( useTargetNameAsCID )
+        {
+            mbp.setContentID( targetName );
+        }
+        else
+        {
+            mbp.setContentID( new UID().toString() );
+        }
+        
+        mp.addBodyPart( mbp );
+        
+        return mbp.getContentID();
+    }    
+    
     /**
      * @return
      */
