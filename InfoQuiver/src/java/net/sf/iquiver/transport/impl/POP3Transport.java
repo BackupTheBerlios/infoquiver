@@ -151,7 +151,7 @@ public class POP3Transport implements Fetcher
      */
     public boolean isParsingRequired()
     {
-        return true;
+        return false;
     }
 
 }
