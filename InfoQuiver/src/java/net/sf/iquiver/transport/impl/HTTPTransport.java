@@ -67,39 +67,23 @@ public class HTTPTransport implements Fetcher
     public List fetch()
     {
         List documents = new ArrayList();
-        int statusCode = -1;
         
         // We will retry up to 3 times.
-        for ( int attempt = 0; statusCode == -1 && attempt < 3; attempt++ )
-        {
             try
             {   
                 // execute the method.
-                statusCode = client.executeMethod( method);                                
+                client.executeMethod( method);
+                documents.add(method.getResponseBody());                
             }
-            catch ( HttpRecoverableException e )
-            {
-                logger.error( "A recoverable exception occurred, retrying.", e);
-            }
-            catch ( IOException e )
+            catch ( Exception e )
             {
                 logger.error( "Failed to download file.", e);
-                break;
             }
-        }
-
-        // Check that we didn't run out of retries.
-        if ( statusCode != -1 )
-        {    
-            DefaultDocument doc = new DefaultDocument(method.getResponseBody());
-            doc.setEncoding(((GetMethod)method).getResponseCharSet());
-            documents.add(doc);
-            method.releaseConnection();            
-        }
-        else
-        {
-            logger.error( "Failed to recover from exception.");
-        }
+            finally
+            {
+                //always release the connection after we're done                 
+                method.releaseConnection();            
+            }
                 
         return documents;
     }
