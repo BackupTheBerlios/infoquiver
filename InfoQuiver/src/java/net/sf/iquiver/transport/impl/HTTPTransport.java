@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.iquiver.IQuiver;
 import net.sf.iquiver.metaformat.Document;
 import net.sf.iquiver.metaformat.impl.MetaFormatFactory;
 import net.sf.iquiver.om.ContentSource;
@@ -19,6 +20,8 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.util.DateParseException;
+import org.apache.commons.httpclient.util.DateParser;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.torque.TorqueException;
@@ -45,27 +48,30 @@ public class HTTPTransport implements Fetcher
      * 
      * @see net.sf.iquiver.transport.Fetcher#setFetchLocation(net.sf.iquiver.om.ContentSource)
      */
-    public void setFetchLocation( ContentSource source) throws TransportConfigurationException
+    public void setFetchLocation( ContentSource source ) throws TransportConfigurationException
     {
         this._fetchLocation = source;
         this._client = new HttpClient();
-
+        
         _method = _registerConfiguration();
+        _method.setRequestHeader("User-Agent", IQuiver.NAME + " " + IQuiver.VERSION);
 
         if (source.getIsAuthentificationRequired())
         {
             _registerAuthentificationConfiguration();
-            _method.setDoAuthentication( true );
+            _method.setDoAuthentication( true );            
         }
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.transport.Fetcher#getFetchLocation()
      */
     public ContentSource getFetchLocation()
     {
         return this._fetchLocation;
-    }    
+    }
 
     /*
      * (non-Javadoc)
@@ -83,15 +89,44 @@ public class HTTPTransport implements Fetcher
             String encoding = ((GetMethod) _method).getResponseCharSet();
             Header header = ((GetMethod) _method).getResponseHeader( "Content-Type" );
             String contentType = header.getValue();
+            header = ((GetMethod) _method).getResponseHeader( "Date" );
+            String created = header.getValue();
+            header = ((GetMethod) _method).getResponseHeader( "Last-Modified" );
+            String modified = header.getValue();
+
             Document doc = MetaFormatFactory.createDocumentForContentType( contentType, _method.getResponseBody(),
                     encoding );
+
+            if (created != null)
+            {
+                try
+                {
+                    doc.setDateOfCreation( DateParser.parseDate( created ) );
+                }
+                catch ( DateParseException e )
+                {
+                    logger.error( "Unparseable date of creation: " + created, e );
+                }
+            }
+            if (modified != null)
+            {
+                try
+                {
+                    doc.setDateOfLastModification( DateParser.parseDate( modified ) );
+                }
+                catch ( DateParseException e )
+                {
+                    logger.error( "Unparseable date of last modification: " + modified, e );
+                }
+            }
+
             documents.add( doc );
         }
-        catch ( UnsupportedEncodingException ue)
+        catch ( UnsupportedEncodingException ue )
         {
             logger.error( "Failed to convert downloaded file content to " + Document.DEFAULT_ENCODING, ue );
         }
-        catch ( Exception e)
+        catch ( Exception e )
         {
             logger.error( "Failed to download file.", e );
         }
@@ -120,7 +155,7 @@ public class HTTPTransport implements Fetcher
                 _client.getState().setCredentials( null, null, new UsernamePasswordCredentials( user, pwd ) );
             }
         }
-        catch ( TorqueException e)
+        catch ( TorqueException e )
         {
             String msg = "Could not register authentification attributes.";
             logger.error( msg, e );
@@ -145,7 +180,7 @@ public class HTTPTransport implements Fetcher
                 method = new GetMethod( host );
             }
         }
-        catch ( TorqueException e)
+        catch ( TorqueException e )
         {
             String msg = "Could not register transport attributes.";
             logger.error( msg, e );

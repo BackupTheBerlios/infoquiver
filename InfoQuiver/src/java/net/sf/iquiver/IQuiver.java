@@ -29,6 +29,11 @@ import org.apache.commons.logging.impl.SimpleLog;
 public class IQuiver extends Thread implements Disposable, Configurable, Startable
 {
     /**
+     * The one and only name
+     */
+    public static final String NAME = "InfoQuiver";
+    
+    /**
      * The one and only version information
      */
     public static final String VERSION = "0.0.1";

@@ -32,7 +32,7 @@ public class ContentFetchService extends BaseService
      * default fetch interval between contacting content sources
      */
     public static final long DEFAULT_FETCH_UPDATE_INTERVAL = 3600000;
-    
+
     /**
      * Commons Logger for this class
      */
@@ -51,20 +51,20 @@ public class ContentFetchService extends BaseService
         logger.info( "Starting..." );
         this._startTime = System.currentTimeMillis();
         this._restartCount++;
-        
+
         List transports = _getTransports();
-        for(Iterator it = transports.iterator(); it.hasNext(); )
+        for (Iterator it = transports.iterator(); it.hasNext();)
         {
-            Fetcher fetcher = (Fetcher)it.next();
+            Fetcher fetcher = (Fetcher) it.next();
             long interval = fetcher.getFetchLocation().getContentSourceUpdateTimespan();
-            if(interval <= 0)
+            if (interval <= 0)
             {
                 interval = DEFAULT_FETCH_UPDATE_INTERVAL;
             }
-            
-            ContentFetchThread thread = new ContentFetchThread(fetcher);
+
+            ContentFetchThread thread = new ContentFetchThread( fetcher );
             Timer timer = new Timer();
-            timer.scheduleAtFixedRate( thread, 1000, interval);
+            timer.scheduleAtFixedRate( thread, 1000, interval );
         }
     }
 
@@ -98,54 +98,55 @@ public class ContentFetchService extends BaseService
     {
         return _restartCount;
     }
-    
+
     /**
      * @return
      */
     private List _getTransports()
-    {      
+    {
         List transports = new ArrayList();
-        
+
         try
         {
             List sources = ContentSourcePeer.doSelectAll();
-            for( Iterator it = sources.iterator(); it.hasNext(); )
+            for (Iterator it = sources.iterator(); it.hasNext();)
             {
-                ContentSource source = (ContentSource)it.next(); 
+                ContentSource source = (ContentSource) it.next();
                 Transport transport = source.getTransport();
-                if(transport != null)
+                if (transport != null)
                 {
                     String className = transport.getTransportImplementation();
-                    
+
                     try
                     {
-                        Fetcher impl = (Fetcher)Class.forName(className).newInstance();
+                        Fetcher impl = (Fetcher) Class.forName( className ).newInstance();
                         impl.setFetchLocation( source );
                     }
                     catch ( ClassNotFoundException e1 )
                     {
-                        logger.error("The implementation class " + className + " could not be found.", e1);
+                        logger.error( "The implementation class " + className + " could not be found.", e1 );
                     }
                     catch ( TransportConfigurationException e )
                     {
-                        logger.error( "Configuration of transport id=" + transport.getTransportId() + " failed.", e);
+                        logger.error( "Configuration of transport id=" + transport.getTransportId() + " failed.", e );
                     }
                     catch ( Exception e )
                     {
-                        logger.error("Unknown error occurred while loading transport implementation for transport id=" + transport.getTransportId(), e);
+                        logger.error( "Unknown error occurred while loading transport implementation for transport id="
+                                + transport.getTransportId(), e );
                     }
                 }
                 else
                 {
-                    logger.warn("No transport found for ContentSource id=" + source.getContentSourceId());
+                    logger.warn( "No transport found for ContentSource id=" + source.getContentSourceId() );
                 }
             }
         }
         catch ( TorqueException e )
         {
-            logger.error("Error while fetching content sources from database.", e);
+            logger.error( "Error while fetching content sources from database.", e );
         }
-        
+
         return transports;
     }
 
@@ -158,16 +159,19 @@ public class ContentFetchService extends BaseService
          * The transport used to fetch content from a content source
          */
         private Fetcher fetcher;
-        
+
+        private boolean isRunning = false;
+
         /**
          * Creates a new instance of ContentFetchThread
+         * 
          * @param fetcher transport used to fetch content from a content source
          */
         public ContentFetchThread(Fetcher fetcher)
         {
             this.fetcher = fetcher;
         }
-        
+
         /*
          * (non-Javadoc)
          * 
@@ -175,19 +179,25 @@ public class ContentFetchService extends BaseService
          */
         public void run()
         {
-            List documents = fetcher.fetch();
-            
-            for (Iterator it = documents.iterator(); it.hasNext();)
+            if (!isRunning)
             {
-                Document doc = (Document)it.next();
-                Content content = new Content( doc );
-                try
+                isRunning = true;
+                long contentSourceId = fetcher.getFetchLocation().getContentSourceId();
+                List documents = fetcher.fetch();
+
+                for (Iterator it = documents.iterator(); it.hasNext();)
                 {
-                    content.save();
-                }
-                catch ( Exception e )
-                {
-                    e.printStackTrace();
+                    Document doc = (Document) it.next();
+                    Content content = new Content( doc );
+                    try
+                    {
+                        content.setContentSourceId( contentSourceId );
+                        content.save();
+                    }
+                    catch ( Exception e )
+                    {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
