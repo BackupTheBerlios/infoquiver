@@ -213,13 +213,13 @@ public class DocumentIndexer
     {
         org.apache.lucene.document.Document lDoc = convertDocument( doc );
 
-        if ( logger.isDebugEnabled() )
+        if (logger.isDebugEnabled())
         {
             logger.debug( "Indexing document UID="
                     + doc.getUID()
                     + " --> "
-                    + ObjectUtils.defaultIfNull( doc.getName(), ObjectUtils.defaultIfNull( doc.getTitle(), doc
-                            .getShortDescription() ) ) );
+                    + ObjectUtils.defaultIfNull( doc.getName(), ObjectUtils.defaultIfNull( doc.getTitle(), ObjectUtils
+                            .defaultIfNull( doc.getShortDescription(), doc.getFileName() ) ) ) );
         }
 
         writer.addDocument( lDoc );
@@ -227,7 +227,7 @@ public class DocumentIndexer
         // we should optimize the index after EACH document
         writer.optimize();
 
-        if ( doc.hasChildren() )
+        if (doc.hasChildren())
         {
             for (Iterator it = doc.getChildren().iterator(); it.hasNext();)
             {
@@ -268,11 +268,11 @@ public class DocumentIndexer
         try
         {
             for (Iterator it = docs.iterator(); it.hasNext();)
-            {                
+            {
                 Document doc = (Document) it.next();
-                if( !doc.isRemoved() )
+                if (!doc.isRemoved())
                 {
-                    addDocument( (Document) it.next(), writer );
+                    addDocument( doc, writer );
                 }
             }
         }

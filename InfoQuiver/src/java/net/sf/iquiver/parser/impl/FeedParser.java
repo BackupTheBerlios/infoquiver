@@ -3,6 +3,7 @@
  */
 package net.sf.iquiver.parser.impl;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Iterator;
@@ -44,7 +45,7 @@ public class FeedParser extends RawXmlParser
             doc = MetaFormatFactory.createDocumentForContentType( ContentTypeFactory.CT_APPLICATION_XML );
 
             ChannelIF channel = de.nava.informa.parsers.FeedParser.parse( new ChannelBuilder(),
-                    new ByteArrayInputStream( rawContent ) );
+                    new BufferedInputStream( new ByteArrayInputStream( rawContent ) ) );
 
             doc.setAuthor( channel.getPublisher() );
             doc.setDateOfCreation( channel.getPubDate() );
@@ -103,14 +104,14 @@ public class FeedParser extends RawXmlParser
         ChannelIF channel = null;
         try
         {
-            channel = de.nava.informa.parsers.FeedParser.parse( new ChannelBuilder(), new ByteArrayInputStream(
-                    rawContent ) );
+            channel = de.nava.informa.parsers.FeedParser.parse( new ChannelBuilder(), new BufferedInputStream(
+                    new ByteArrayInputStream( rawContent ) ) );
         }
         catch ( Exception e )
         {
             throw new ParsingException( e.getMessage(), -1 );
         }
-        
+
         sb.append( channel.getTitle() );
         sb.append( "\n\n" );
         sb.append( channel.getDescription() );

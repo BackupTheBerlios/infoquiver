@@ -4,6 +4,8 @@
  */
 package net.sf.iquiver.parser.impl;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -36,7 +38,7 @@ public class HtmlParser extends Parser
     public Document parse( byte[] rawContent ) throws ParsingException
     {
         org.apache.lucene.demo.html.HTMLParser parser = new org.apache.lucene.demo.html.HTMLParser(
-                new ByteArrayInputStream( rawContent ) );
+                new BufferedInputStream( new ByteArrayInputStream( rawContent ) ) );
         Document doc = null;
         try
         {
@@ -67,7 +69,7 @@ public class HtmlParser extends Parser
                 {
                     logger.warn( "Unable to parse creation date: " + date, e );
                 }
-            }            
+            }
             doc.setShortDescription( metas.getProperty( "description" ) );
             doc.setKeywords( metas.getProperty( "keywords" ) );
 
@@ -87,18 +89,18 @@ public class HtmlParser extends Parser
     public String getStripped( byte[] rawContent ) throws ParsingException
     {
         org.apache.lucene.demo.html.HTMLParser parser = new org.apache.lucene.demo.html.HTMLParser(
-                new ByteArrayInputStream( rawContent ) );        
-        
+                new BufferedInputStream( new ByteArrayInputStream( rawContent ) ) );
+
         String content = null;
         try
         {
-            content = IOUtils.toString( parser.getReader() );
+            content = IOUtils.toString( new BufferedReader( parser.getReader() ) );
         }
         catch ( IOException e )
         {
-            throw new ParsingException( e.getMessage(), -1);
+            throw new ParsingException( e.getMessage(), -1 );
         }
-        
+
         return content;
     }
 }

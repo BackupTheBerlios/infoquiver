@@ -3,6 +3,7 @@
  */
 package net.sf.iquiver.parser.impl;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.GregorianCalendar;
@@ -45,7 +46,7 @@ public class PdfParser extends Parser
 
         try
         {
-            parser = new org.pdfbox.pdfparser.PDFParser( new ByteArrayInputStream( rawContent ) );
+            parser = new org.pdfbox.pdfparser.PDFParser( new BufferedInputStream( new ByteArrayInputStream( rawContent ) ) );
             doc = MetaFormatFactory.createDocumentForContentType( ContentTypeFactory.CT_APPLICATION_PDF );
             doc.setRawContent( rawContent );
         }
@@ -115,7 +116,7 @@ public class PdfParser extends Parser
 
         try
         {
-            parser = new org.pdfbox.pdfparser.PDFParser( new ByteArrayInputStream( rawContent ) );
+            parser = new org.pdfbox.pdfparser.PDFParser( new BufferedInputStream( new ByteArrayInputStream( rawContent ) ) );
         }
         catch ( Exception e )
         {

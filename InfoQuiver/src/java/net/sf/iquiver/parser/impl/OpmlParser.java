@@ -3,6 +3,7 @@
  */
 package net.sf.iquiver.parser.impl;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Collection;
@@ -43,7 +44,7 @@ public class OpmlParser extends RawXmlParser
         {
             doc = MetaFormatFactory.createDocumentForContentType( ContentTypeFactory.CT_APPLICATION_XML );
             doc.setRawContent( rawContent );
-            Collection feeds = OPMLParser.parse( new ByteArrayInputStream( rawContent ) );
+            Collection feeds = OPMLParser.parse( new BufferedInputStream( new ByteArrayInputStream( rawContent ) ) );
 
             for (Iterator it = feeds.iterator(); it.hasNext();)
             {
@@ -92,24 +93,23 @@ public class OpmlParser extends RawXmlParser
 
         try
         {
-            Collection feeds = OPMLParser.parse( new ByteArrayInputStream( rawContent ) );
+            Collection feeds = OPMLParser.parse( new BufferedInputStream( new ByteArrayInputStream( rawContent ) ) );
             for (Iterator it = feeds.iterator(); it.hasNext();)
             {
                 FeedIF item = (FeedIF) it.next();
                 sb.append( item.getTitle() );
                 sb.append( "\n\n" );
                 sb.append( item.getText() );
-                if( it.hasNext() )
+                if (it.hasNext())
                 {
                     sb.append( "\n\n" );
                 }
-            }            
+            }
         }
         catch ( Exception e )
         {
             throw new ParsingException( e.getMessage(), -1 );
         }
-        
 
         return sb.toString();
     }

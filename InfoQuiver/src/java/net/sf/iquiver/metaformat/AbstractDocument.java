@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import net.sf.iquiver.parser.UnsupportedContentTypeException;
+
 /**
  * @author netseeker aka Michael Manske
  */
@@ -281,7 +283,7 @@ public abstract class AbstractDocument implements Document
     {
         return this._fileName;
     }
-    
+
     /* (non-Javadoc)
      * @see net.sf.iquiver.metaformat.Document#setFileName(java.lang.String)
      */
@@ -289,7 +291,7 @@ public abstract class AbstractDocument implements Document
     {
         this._fileName = filename;
     }
-    
+
     /* (non-Javadoc)
      * @see net.sf.iquiver.metaformat.Document#addChild(net.sf.iquiver.metaformat.Document)
      */
@@ -318,7 +320,7 @@ public abstract class AbstractDocument implements Document
     {
         return (this._children != null && !this._children.isEmpty());
     }
-    
+
     /* (non-Javadoc)
      * @see net.sf.iquiver.metaformat.Document#getScore()
      */
@@ -326,7 +328,7 @@ public abstract class AbstractDocument implements Document
     {
         return this._score;
     }
-    
+
     /* (non-Javadoc)
      * @see net.sf.iquiver.metaformat.Document#setScore(float)
      */
@@ -334,10 +336,10 @@ public abstract class AbstractDocument implements Document
     {
         this._score = score;
     }
-    
+
     /* (non-Javadoc)
      * @see net.sf.iquiver.metaformat.Document#isRemoved()
-     */    
+     */
     public boolean isRemoved()
     {
         return _isRemoved;
@@ -345,12 +347,12 @@ public abstract class AbstractDocument implements Document
 
     /* (non-Javadoc)
      * @see net.sf.iquiver.metaformat.Document#setRemoved(boolean)
-     */        
+     */
     public void setRemoved( boolean removed )
     {
         this._isRemoved = removed;
     }
-    
+
     /**
      * 
      */
@@ -370,6 +372,73 @@ public abstract class AbstractDocument implements Document
         _children = null;
         _score = 0;
         _isRemoved = false;
+    }
+
+    /**
+     * copies the member values from one document to another if a particular member is not set
+     * in the target document 
+     * @param source the Document to read the values from
+     * @param result the Document to fill with values from <code>source</code>
+     */
+    public static synchronized void fillMissingContentValues( Document toRead, Document toFill )
+    {
+        if (toFill.getAuthor() == null && toRead.getAuthor() != null)
+        {
+            toFill.setAuthor( toRead.getAuthor() );
+        }
+        if (toFill.getContentTypeStr() == null && toRead.getContentTypeStr() != null)
+        {
+            try
+            {
+                toFill.setContentTypeStr( toRead.getContentTypeStr() );
+            }
+            catch ( UnsupportedContentTypeException e )
+            {
+                //do nothing
+            }
+        }
+        if (toFill.getDateOfCreation() == null && toRead.getDateOfCreation() != null)
+        {
+            toFill.setDateOfCreation( toRead.getDateOfCreation() );
+        }
+        if (toFill.getDateOfLastModification() == null && toRead.getDateOfLastModification() != null)
+        {
+            toFill.setDateOfLastModification( toRead.getDateOfLastModification() );
+        }
+        /*
+        if (toFill.getEncoding() == null && toRead.getEncoding() != null)
+        {
+            toFill..encoding = toRead.getEncoding();
+        }
+        */
+        if (toFill.getFileName() == null && toRead.getFileName() != null)
+        {
+            toFill.setFileName( toRead.getFileName() );
+        }
+        if (toFill.getInfoURL() == null && toRead.getInfoURL() != null)
+        {
+            toFill.setInfoURL( toRead.getInfoURL() );
+        }
+        if (toFill.getKeywords() == null && toRead.getKeywords() != null)
+        {
+            toFill.setKeywords( toRead.getKeywords() );
+        }
+        if (toFill.getLocale() == null && toRead.getLocale() != null)
+        {
+            toFill.setLocale( toRead.getLocale() );
+        }
+        if (toFill.getName() == null && toRead.getName() != null)
+        {
+            toFill.setName( toRead.getName() );
+        }
+        if (toFill.getShortDescription() == null && toRead.getShortDescription() != null)
+        {
+            toFill.setShortDescription( toRead.getShortDescription() );
+        }
+        if (toFill.getTitle() == null && toRead.getTitle() != null)
+        {
+            toFill.setTitle( toRead.getTitle() );
+        }
     }
 
     /*

@@ -107,7 +107,7 @@ public class FSTransport implements Fetcher, Dispatcher
                     Document doc = MetaFormatFactory.createDocumentForContentType( ContentTypeFactory
                             .getContentTypeForFile( file.getName() ) );
                     doc.setName( file.getName() );
-                    doc.setFileName( file.getName() );
+                    doc.setFileName( file.getAbsolutePath() );
                     Date date = new Date( file.lastModified() );
                     doc.setDateOfCreation( date );
                     doc.setDateOfLastModification( date );

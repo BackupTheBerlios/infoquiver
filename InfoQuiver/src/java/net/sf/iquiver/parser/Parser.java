@@ -5,28 +5,32 @@
 package net.sf.iquiver.parser;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
+import net.sf.iquiver.metaformat.AbstractDocument;
 import net.sf.iquiver.metaformat.Document;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.netseeker.util.CompatibleDate;
+import de.netseeker.util.FileUtil;
+
 /**
  * @author netseeker aka Michael Manske
  */
 public abstract class Parser
 {
-    private static final Log logger = LogFactory.getLog(Parser.class);
-    
+    private Log logger = LogFactory.getLog( getClass() );
+
     private long parseStartTime;
-    private long parseEndTime;    
-    
+    private long parseEndTime;
+
     private String _arguments;
-    
+
     /**
      * @param source
      * @return
@@ -36,11 +40,11 @@ public abstract class Parser
     {
         startParseMonitoring();
         Document doc = parse( source.getBytes() );
+        fillSafeDocumentDates( doc );
         stopParseMonitoring();
-        
         return doc;
     }
-    
+
     /**
      * @param in
      * @return
@@ -53,16 +57,17 @@ public abstract class Parser
         try
         {
             doc = parse( IOUtils.toByteArray( in ) );
+            fillSafeDocumentDates( doc );
         }
         catch ( Exception e )
         {
-            throw new ParsingException( e.getMessage(), -1);
+            throw new ParsingException( e.getMessage(), -1 );
         }
         stopParseMonitoring();
-        
+
         return doc;
     }
-        
+
     /**
      * @param source
      * @return
@@ -71,20 +76,53 @@ public abstract class Parser
      */
     public Document parse( File source ) throws ParsingException, IOException
     {
-        return parse( new FileInputStream(source) );
-    }          
-    
+        Document doc = parse( FileUtil.fastToByteArray( source ) );
+        doc.setFileName( source.getAbsolutePath() );
+        if (doc.getName() == null)
+        {
+            doc.setName( source.getName() );
+        }
+        if (doc.getDateOfCreation() == null)
+        {
+            doc.setDateOfCreation( new CompatibleDate( source.lastModified() ).getDate() );
+        }
+        if (doc.getDateOfLastModification() == null)
+        {
+            doc.setDateOfLastModification( new CompatibleDate( source.lastModified() ).getDate() );
+        }
+
+        return doc;
+    }
+
     /**
      * @param source
      * @return
      * @throws ParsingException
      * @throws IOException
      */
-    public Document parse( Document source) throws ParsingException, IOException
+    public Document parse( Document source ) throws ParsingException, IOException
     {
-        return parse(source.getRawContent());
+        startParseMonitoring();
+        Document doc = parse( source.getRawContent() );
+        AbstractDocument.fillMissingContentValues( source, doc );
+        fillSafeDocumentDates( doc );
+        stopParseMonitoring();
+        return doc;
     }
-    
+
+    private void fillSafeDocumentDates( Document doc )
+    {
+        Date now = new Date();
+        if (doc.getDateOfCreation() == null)
+        {
+            doc.setDateOfCreation( now );
+        }
+        if (doc.getDateOfLastModification() == null)
+        {
+            doc.setDateOfLastModification( now );
+        }
+    }
+
     /**
      * @return
      */
@@ -92,19 +130,19 @@ public abstract class Parser
     {
         return parseEndTime - parseStartTime;
     }
-    
+
     private void startParseMonitoring()
     {
         parseStartTime = System.currentTimeMillis();
-        logger.debug("Start Parsing at " + parseStartTime);        
+        logger.debug( "Start Parsing at " + parseStartTime );
     }
-    
+
     private void stopParseMonitoring()
     {
         parseEndTime = System.currentTimeMillis();
-        logger.debug("Parsing finished at " + parseEndTime);        
+        logger.debug( "Parsing finished at " + parseEndTime );
     }
-    
+
     /**
      * @param arguments
      */
@@ -112,7 +150,7 @@ public abstract class Parser
     {
         this._arguments = arguments;
     }
-    
+
     /**
      * @return
      */
@@ -120,7 +158,8 @@ public abstract class Parser
     {
         return this._arguments;
     }
-       
-    public abstract Document parse ( byte[] rawContent ) throws ParsingException;
-    public abstract String getStripped ( byte[] rawContent ) throws ParsingException;
- }
+
+    public abstract Document parse( byte[] rawContent ) throws ParsingException;
+
+    public abstract String getStripped( byte[] rawContent ) throws ParsingException;
+}
