@@ -5,10 +5,69 @@
     <author email="netseeker@manskes.de">Michael Manske</author>
   </properties>
   <body>
+    <section name="What are Parsers?">
+        <p>
+            In InfoQuiver parsers are modules which are able to:
+            <ul>
+                <li>convert a raw data structure, eg. binary, into a <a href="../apidocs/net/sf/iquiver/metaformat/Document.html">Document</a></li>
+                <li>convert a raw data structure into a (more or less) readable String</li>
+            </ul>
+            One example for a parser could be a PDF-Parser which is able to convert a pdf-file into a Document and can return the
+            contents of the pdf a string without any control characters used by pdf.
+        </p>
+    </section>
     <section name="Creating Custom Parsers">
         <p>
-            To be done.
+            Creating custom Parsers is usually a simple task. To implement a custom parser you have to follow these steps:
+            <ol>
+                <li>Create a subclass of <a href="../apidocs/net/sf/iquiver/parser/Parser.html">net.sf.iquiver.parser.Parser</a></li>
+                <li>implement the two abstract methods <a href="../apidocs/net/sf/iquiver/parser/Parser.html#parse(byte[])">parse(byte[] rawContent)</a>
+                    and <a href="../apidocs/net/sf/iquiver/parser/Parser.html#getStripped(byte[])">getStripped(byte[] rawContent)</a></li>
+                <li>install the parser with the <a href="pa_install.html">Parser Installer</a></li>
+                <li>create an entry in iq_content_type and associate your parser with one or more content types (at the time of this writing this has to be done manually)</li>
+            </ol>
+            Here is InfoQuivers parser class diagram as the time of this writing:
+        <img src="../images/net_sf_iquiver_parser_impl.png" alt="class diagram" border="0"/>
         </p>
+        <p>                        
+            InfoQuiver comes with a bunch of ready to use parser implementations, including html, pdf, plain text, opml feeds, rss feeds, atom feeds as well as an delegate parser which is able to delegate
+            parsing to an external application. 
+        </p>
+        <subsection name="parse(byte[] rawContent)">
+            <p>
+                When implementing the parse() method you have to
+                <ol>
+                    <li><b>If your parser will handle binary content types only you can ignore this step.</b><br/>
+                        If your parser will handle one or more text based content types, you should check if InfoQuivers <a href="../apidocs/net/sf/iquiver/metaformat/impl/ContentTypeFactory.html">ContentTypeFactory</a>
+                        already knows your content type(s). If not your parser should implement an constructor and add your content type(s) to the list of known text based content types in the construction code:
+<source>
+...
+public static final String CT_TEXT_IKNOWTHISISTEXTBASED = &quot;text/iknowthisistextbased&quot;;
+...
+public MyParser()
+{
+    if( !ContentTypeFactory.isTextBasedContentType(CT_TEXT_IKNOWTHISISTEXTBASED) )
+    {
+        ContentTypeFactory.addTextBasedContentType( CT_TEXT_IKNOWTHISISTEXTBASED );
+    }
+}
+</source>
+                    </li>
+                    <li>create a new instance of <a href="../apidocs/net/sf/iquiver/metaformat/Document.html">Document</a> by using
+                         <a href="../apidocs/net/sf/iquiver/metaformat/impl/MetaFormatFactory.html#createDocumentForContentType(String)">MetaFormatFactory.createDocumentForContentType(String contentType)</a></li>
+                    <li>fill as many fields in the new document instance as you are able to, you should at least copy the raw content
+                        into your new document instance and set the creation date.</li>
+                </ol>
+            </p>
+        </subsection>
+        <subsection name="getStripped(byte[] rawContent)">
+            <p>
+                When implementing the getStripped() method you just have to return more or less readable string representation of
+                the given raw content. The returned string should not contain ANY control characters.
+                If your parser parses a content type which just does not support such a readable representation,
+                eg. for compressed file archives or executables, you should simply return null.                
+            </p>
+        </subsection>        
     </section>
   </body>
 </document>    

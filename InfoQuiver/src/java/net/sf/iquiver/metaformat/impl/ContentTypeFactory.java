@@ -39,7 +39,7 @@ public class ContentTypeFactory
     public static final String CT_APPLICATION_OCTET_STREAM = "application/octet-stream";
     public static final String CT_APPLICATION_ZIP = "application/zip";
 
-    private static final String[] TEXT_CTS = new String[] { CT_TEXT_PLAIN, CT_TEXT_HTML, CT_TEXT_XML,
+    private static String[] TEXT_CTS = new String[] { CT_TEXT_PLAIN, CT_TEXT_HTML, CT_TEXT_XML,
             CT_APPLICATION_XML, CT_APPLICATION_ATOM_XML, CT_APPLICATION_RSS_XML, CT_APPLICATION_OPML_XML,
             CT_TEXT_TAB_SEPARATED, CT_APPLICATION_RTF, CT_APPLICATION_PS, CT_APPLICATION_XSHAR, CT_APPLICATION_XTROFF,
             CT_APPLICATION_XTROFF_MS, CT_APPLICATION_XTEX, CT_APPLICATION_XLATEX };
@@ -114,5 +114,28 @@ public class ContentTypeFactory
     public static String getFirstFileType( String contentType )
     {
         return ContentTypeFileTypeMap.getInstance().getFirstFileType( contentType );
+    }
+    
+    /**
+     * Returns all known text based content types
+     * @return
+     */
+    public static String[] getTextBasedContentTypes()
+    {
+        return TEXT_CTS;
+    }
+    
+    /**
+     * Use this method to add more known text based content types
+     * @param contentType
+     */
+    public static synchronized void addTextBasedContentType( String contentType )
+    {
+        if( !ArrayUtil.contains( TEXT_CTS, contentType ) )
+        {
+            String[] array = new String[ TEXT_CTS.length + 1 ];
+            System.arraycopy( TEXT_CTS, 0, array, 0, TEXT_CTS.length );
+            array[ TEXT_CTS.length ] = contentType;
+        }
     }
 }

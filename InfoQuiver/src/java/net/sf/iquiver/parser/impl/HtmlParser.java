@@ -21,6 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
+ * A simple HTML parser using Lucenes demo html parser.
  * @author netseeker aka Michael Manske
  */
 public class HtmlParser extends Parser
