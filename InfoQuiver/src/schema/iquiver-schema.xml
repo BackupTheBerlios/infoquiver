@@ -30,20 +30,6 @@
             <index-column name="USER_PASSWORD"/>
         </index>
     </table>
-    <table name="iq_user_content_source_lnk" javaName="UserContentSourceLnk" idMethod="none">        
-        <column name="USER_ID" primaryKey="true" required="true" type="BIGINT"/>
-        <column name="CONTENT_SOURCE_ID" primaryKey="true" required="true" type="BIGINT"/>        
-        <foreign-key foreignTable="iq_content_source">
-            <reference local="CONTENT_SOURCE_ID" foreign="CONTENT_SOURCE_ID" />
-        </foreign-key>                
-        <foreign-key foreignTable="iq_user">
-            <reference local="USER_ID" foreign="USER_ID" />
-        </foreign-key>                
-        <unique name="IQ_USRCONTENTSRCLNK_PKI">
-            <unique-column name="USER_ID"/>
-            <unique-column name="CONTENT_SOURCE_ID"/>
-        </unique>        
-    </table>    
     <table name="iq_client" javaName="Client" idMethod="none">
         <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>
         <column name="CLIENT_NAME" primaryKey="false" type="VARCHAR" size="32"/>
@@ -99,6 +85,16 @@
             <reference local="CREATED_BY" foreign="USER_ID" />
         </foreign-key>                                
     </table>
+    <table name="iq_user_group_content_source_lnk" javaName="UserGroupContentSourceLnk" idMethod="none">        
+        <column name="USER_GROUP_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <column name="CONTENT_SOURCE_ID" primaryKey="true" required="true" type="BIGINT"/>        
+        <foreign-key foreignTable="iq_content_source">
+            <reference local="CONTENT_SOURCE_ID" foreign="CONTENT_SOURCE_ID" />
+        </foreign-key>                
+        <foreign-key foreignTable="iq_user_group">
+            <reference local="USER_GROUP_ID" foreign="USER_GROUP_ID" />
+        </foreign-key>                
+    </table>    
     <table name="iq_user_group_lnk" javaName="UserGroupLnk">
         <column name="USER_GROUP_ID" primaryKey="true" required="true" type="BIGINT"/>
         <column name="USER_ID" primaryKey="true" required="true" type="BIGINT"/>
@@ -342,6 +338,7 @@
         <column name="MODIFIED_BY" type="BIGINT"/>           
         <column name="USER_ID" type="BIGINT"/>        
         <column name="USER_GROUP_ID" type="BIGINT"/>
+        <column name="CLIENT_ID" type="INTEGER"/>        
         <foreign-key foreignTable="iq_user">
             <reference local="USER_ID" foreign="USER_ID" />
         </foreign-key>                
@@ -354,6 +351,9 @@
         <foreign-key foreignTable="iq_user_group">
             <reference local="USER_GROUP_ID" foreign="USER_GROUP_ID" />
         </foreign-key>                        
+        <foreign-key foreignTable="iq_client">
+            <reference local="CLIENT_ID" foreign="CLIENT_ID" />
+        </foreign-key>        
     </table>
     
     <!--

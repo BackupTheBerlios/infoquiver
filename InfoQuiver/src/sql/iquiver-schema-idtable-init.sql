@@ -1,9 +1,9 @@
 insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (101, 'iq_user', 1000, 10);
-insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (102, 'iq_user_content_source_lnk', 1000, 10);
-insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (103, 'iq_client', 1000, 10);
-insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (104, 'iq_client_content_source_lnk', 1000, 10);
-insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (105, 'iq_address', 1000, 10);
-insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (106, 'iq_user_group', 1000, 10);
+insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (102, 'iq_client', 1000, 10);
+insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (103, 'iq_client_content_source_lnk', 1000, 10);
+insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (104, 'iq_address', 1000, 10);
+insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (105, 'iq_user_group', 1000, 10);
+insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (106, 'iq_user_group_content_source_lnk', 1000, 10);
 insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (107, 'iq_user_group_lnk', 1000, 10);
 insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (108, 'iq_user_group_client_lnk', 1000, 10);
 insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES (109, 'iq_transport', 1000, 10);

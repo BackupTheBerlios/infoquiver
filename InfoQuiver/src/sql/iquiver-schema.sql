@@ -31,23 +31,6 @@ CREATE TABLE iq_user
 );
 
 # -----------------------------------------------------------------------
-# iq_user_content_source_lnk
-# -----------------------------------------------------------------------
-drop table if exists iq_user_content_source_lnk;
-
-CREATE TABLE iq_user_content_source_lnk
-(
-		            USER_ID BIGINT NOT NULL,
-		            CONTENT_SOURCE_ID BIGINT NOT NULL,
-    PRIMARY KEY(USER_ID,CONTENT_SOURCE_ID),
-    FOREIGN KEY (CONTENT_SOURCE_ID) REFERENCES iq_content_source (CONTENT_SOURCE_ID)
-    ,
-    FOREIGN KEY (USER_ID) REFERENCES iq_user (USER_ID)
-    ,
-    UNIQUE (USER_ID, CONTENT_SOURCE_ID)
-);
-
-# -----------------------------------------------------------------------
 # iq_client
 # -----------------------------------------------------------------------
 drop table if exists iq_client;
@@ -122,6 +105,22 @@ CREATE TABLE iq_user_group
     FOREIGN KEY (CLIENT_ID) REFERENCES iq_client (CLIENT_ID)
     ,
     FOREIGN KEY (CREATED_BY) REFERENCES iq_user (USER_ID)
+    
+);
+
+# -----------------------------------------------------------------------
+# iq_user_group_content_source_lnk
+# -----------------------------------------------------------------------
+drop table if exists iq_user_group_content_source_lnk;
+
+CREATE TABLE iq_user_group_content_source_lnk
+(
+		            USER_GROUP_ID BIGINT NOT NULL,
+		            CONTENT_SOURCE_ID BIGINT NOT NULL,
+    PRIMARY KEY(USER_GROUP_ID,CONTENT_SOURCE_ID),
+    FOREIGN KEY (CONTENT_SOURCE_ID) REFERENCES iq_content_source (CONTENT_SOURCE_ID)
+    ,
+    FOREIGN KEY (USER_GROUP_ID) REFERENCES iq_user_group (USER_GROUP_ID)
     
 );
 
@@ -442,6 +441,7 @@ CREATE TABLE iq_search_query
 		            MODIFIED_BY BIGINT,
 		            USER_ID BIGINT,
 		            USER_GROUP_ID BIGINT,
+		            CLIENT_ID INTEGER,
     PRIMARY KEY(SEARCH_QUERY_ID),
     FOREIGN KEY (USER_ID) REFERENCES iq_user (USER_ID)
     ,
@@ -450,6 +450,8 @@ CREATE TABLE iq_search_query
     FOREIGN KEY (MODIFIED_BY) REFERENCES iq_user (USER_ID)
     ,
     FOREIGN KEY (USER_GROUP_ID) REFERENCES iq_user_group (USER_GROUP_ID)
+    ,
+    FOREIGN KEY (CLIENT_ID) REFERENCES iq_client (CLIENT_ID)
     
 );
   
