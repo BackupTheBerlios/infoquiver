@@ -142,7 +142,7 @@ public class HTTPTransport implements Fetcher
                 }
             }
 
-            doc.setFileName( ((GetMethod) _method).getName() );
+            doc.setFileName( ((GetMethod) _method).getPath() );
             documents.add( doc );
         }
         catch ( UnsupportedEncodingException ue )

@@ -1,0 +1,88 @@
+BODY
+{
+    BORDER-RIGHT: 0px;
+    BORDER-TOP: 0px;
+    FONT-SIZE: 11px;
+    MARGIN: 0px;
+    BORDER-LEFT: 0px;
+    COLOR: #000000;
+    BORDER-BOTTOM: 0px;
+    FONT-FAMILY: Verdana, Arial, Geneva, Helvetica, sans-serif;
+    BACKGROUND-COLOR: #efefef
+}
+.error
+{
+    FONT-SIZE: 11px;
+    COLOR: red;
+    FONT-FAMILY: verdana, arial, helvetica, sans-serif;
+    TEXT-DECORATION: none
+}
+TD
+{
+    FONT-SIZE: 11px;
+    COLOR: #000000;
+    FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
+}
+H1
+{
+    FONT-SIZE: 12px;
+    FONT-WEIGHT: bold;
+    COLOR: #000000;
+    FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
+}
+H2
+{
+    FONT-SIZE: 11px;
+    FONT-WEIGHT: bold;    
+    COLOR: #000000;
+    FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
+}
+H3
+{
+    FONT-SIZE: 11px;
+    COLOR: #000000;
+    FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
+}
+BLOCKQUOTE
+{
+    FONT-SIZE: 11px;
+    COLOR: #000000;
+    FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
+}
+.copyright
+{
+    FONT-WEIGHT: normal;
+    FONT-SIZE: 11px;
+    COLOR: #999999;
+    FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif
+}
+A
+{
+    COLOR: #000000;
+    FONT-FAMILY: Verdana, Arial, Geneva, Helvetica, sans-serif;
+    TEXT-DECORATION: underline
+}
+A
+{
+    COLOR: #000000;
+    FONT-FAMILY: Verdana, Arial, Geneva, Nimbus, Helvetica, sans-serif;
+    TEXT-DECORATION: underline
+}
+A:active
+{
+    COLOR: #255aa6
+}
+A:visited
+{
+    COLOR: #000000
+}
+A:hover
+{
+    COLOR: #255aa6
+}
+.stroke
+{
+    COLOR: black;
+    FONT-FAMILY: Arial;
+    TEXT-DECORATION: line-through
+}

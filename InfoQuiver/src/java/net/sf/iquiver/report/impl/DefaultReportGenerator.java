@@ -2,8 +2,8 @@
  * DefaultReportGenerator.java
  * created on 24.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/impl/DefaultReportGenerator.java,v $
- * $Date: 2004/10/25 19:37:11 $
- * $Revision: 1.2 $
+ * $Date: 2004/11/09 19:37:20 $
+ * $Revision: 1.3 $
  *********************************************************************/
 
 package net.sf.iquiver.report.impl;
@@ -89,6 +89,8 @@ public class DefaultReportGenerator extends ReportGenerator
             }
 
             sb.append( "</root>" );
+            
+            logger.debug( "generate report for xml:\n" + sb );
 
             //build a dom4j document from the report result xml string
             org.dom4j.Document document = DocumentHelper.parseText( sb.toString() );
