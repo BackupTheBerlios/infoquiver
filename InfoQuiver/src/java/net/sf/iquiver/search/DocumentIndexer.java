@@ -124,16 +124,20 @@ public class DocumentIndexer
         {
             lDoc.add( Field.Keyword( "modified", doc.getDateOfLastModification() ) );
         }
+        if (doc.getFileName() != null)
+        {
+            lDoc.add( Field.Keyword( "modified", doc.getFileName() ) );
+        }
 
         if (doc.getRawContent() != null)
         {
             try
             {
                 Parser parser = ParserFactory.getParserForContentType( doc.getContentTypeStr() );
-                if( doc.getRawContent() != null )
+                if (doc.getRawContent() != null)
                 {
-                    lDoc.add( Field.UnStored( "contents", parser.getStripped( doc.getRawContent() ) ) );    
-                }                
+                    lDoc.add( Field.UnStored( "contents", parser.getStripped( doc.getRawContent() ) ) );
+                }
             }
             catch ( UnsupportedContentTypeException e )
             {
@@ -178,27 +182,29 @@ public class DocumentIndexer
             writer.close();
         }
     }
-    
+
     /**
-     * Deletes an document from an lucene index, also deletes all child documents recursively 
+     * Deletes an document from an lucene index, also deletes all child documents recursively
+     * 
      * @param doc
      * @param reader
      * @throws IOException
      */
-    private synchronized void deleteDocument( Document doc, IndexReader reader) throws IOException
+    private synchronized void deleteDocument( Document doc, IndexReader reader ) throws IOException
     {
-        reader.delete( new Term( "uid", doc.getUID() ) );        
-        if( doc.hasChildren() )
+        reader.delete( new Term( "uid", doc.getUID() ) );
+        if (doc.hasChildren())
         {
-            for( Iterator it = doc.getChildren().iterator(); it.hasNext(); )
+            for (Iterator it = doc.getChildren().iterator(); it.hasNext();)
             {
-                deleteDocument((Document)it.next(), reader);
+                deleteDocument( (Document) it.next(), reader );
             }
         }
     }
-    
+
     /**
-     * Adds an document to an lucene index, also adds all child documents recursively 
+     * Adds an document to an lucene index, also adds all child documents recursively
+     * 
      * @param doc
      * @param writer
      * @throws IOException
@@ -209,7 +215,9 @@ public class DocumentIndexer
 
         if (logger.isDebugEnabled())
         {
-            logger.debug( "Indexing document UID=" + doc.getUID() + " --> " 
+            logger.debug( "Indexing document UID="
+                    + doc.getUID()
+                    + " --> "
                     + ObjectUtils.defaultIfNull( doc.getName(), ObjectUtils.defaultIfNull( doc.getTitle(), doc
                             .getShortDescription() ) ) );
         }
@@ -218,13 +226,13 @@ public class DocumentIndexer
         // according to http://www.javaranch.com/newsletter/200404/Lucene.html
         // we should optimize the index after EACH document
         writer.optimize();
-        
-        if( doc.hasChildren() )
+
+        if (doc.hasChildren())
         {
-            for( Iterator it = doc.getChildren().iterator(); it.hasNext(); )
+            for (Iterator it = doc.getChildren().iterator(); it.hasNext();)
             {
-                addDocument((Document)it.next(), writer);
-            }            
+                addDocument( (Document) it.next(), writer );
+            }
         }
     }
 
@@ -261,7 +269,7 @@ public class DocumentIndexer
         {
             for (Iterator it = docs.iterator(); it.hasNext();)
             {
-                addDocument((Document) it.next(), writer);
+                addDocument( (Document) it.next(), writer );
             }
         }
         finally

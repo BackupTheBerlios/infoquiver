@@ -39,7 +39,7 @@ public class QueryTask
      * List of used search fields
      */
     public static final String[] SEARCH_FIELDS = { "author", "name", "title",
-            "keywords", "description", "url", "created", "modified", "contents" };
+            "keywords", "description", "url", "created", "modified", "contents", "filename" };
 
     /**
      * Searches all hits for the given search criteria on an existing lucene index
