@@ -2,8 +2,8 @@
  * DefaultReportGenerator.java
  * created on 24.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/impl/DefaultReportGenerator.java,v $
- * $Date: 2004/11/24 21:45:38 $
- * $Revision: 1.7 $
+ * $Date: 2004/11/25 21:46:33 $
+ * $Revision: 1.8 $
  *********************************************************************/
 
 package net.sf.iquiver.report.impl;
@@ -130,7 +130,10 @@ public class DefaultReportGenerator extends ReportGenerator
             File[] images = dir.listFiles();
             for( int i = 0; i < images.length; i++)
             {
-                FileUtil.fastFileCopy( images[i].getAbsolutePath(), path + images[i].getName() );
+                if( images[i].isFile() )
+                {
+                    FileUtil.fastFileCopy( images[i].getAbsolutePath(), path + images[i].getName() );
+                }
             }
 /*
             //create xml report            
