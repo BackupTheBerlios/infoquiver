@@ -255,7 +255,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
     {
         if (getContentContent() != null)
         {
-            return getContentContent().getBytes();
+            return getContentContent();
         }
 
         return null;
@@ -356,7 +356,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
      */
     public void setRawContent( byte[] content ) throws UnsupportedEncodingException
     {
-        this.setContentContent( new String( content ) );
+        this.setContentContent( content );
     }
 
     /*
