@@ -4,7 +4,6 @@
  */
 package net.sf.iquiver.service.impl;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +23,7 @@ import net.sf.iquiver.om.ContentSourcePeer;
 import net.sf.iquiver.om.Transport;
 import net.sf.iquiver.parser.Parser;
 import net.sf.iquiver.parser.impl.ParserFactory;
-import net.sf.iquiver.search.DocumentIndexer;
+import net.sf.iquiver.search.IndexScheduler;
 import net.sf.iquiver.service.BaseService;
 import net.sf.iquiver.transport.Fetcher;
 import net.sf.iquiver.transport.TransportConfigurationException;
@@ -63,7 +62,7 @@ public class ContentFetchService extends BaseService
     protected void doStart()
     {
         this._timers = new LinkedHashMap();
-        String indexDirectory = IQuiver.getConfiguration().getString("lucene.index.path");
+        String indexDirectory = IQuiver.getConfiguration().getString( "lucene.index.path" );
 
         List transports = _getTransports();
         for (Iterator it = transports.iterator(); it.hasNext();)
@@ -127,7 +126,7 @@ public class ContentFetchService extends BaseService
             crit.addSelectColumn( ContentPeer.CONTENT_ID );
             crit.add( ContentPeer.CONTENT_SOURCE_ID, source.getContentSourceId() );
             crit.add( ContentPeer.CONTENT_TO_DELETE, false );
-            
+
             if (logger.isDebugEnabled())
             {
                 logger.debug( crit );
@@ -138,16 +137,16 @@ public class ContentFetchService extends BaseService
                 //first fetch for this content source?
                 isFetchRequired = ContentPeer.doSelectVillageRecords( crit ).isEmpty();
                 //already fetched this content source in past, check if update is neccessary
-                if(!isFetchRequired)
+                if (!isFetchRequired)
                 {
-	                crit.clear();
-	                crit.addSelectColumn( ContentPeer.CONTENT_ID );
-	                crit.add( ContentPeer.CONTENT_SOURCE_ID, source.getContentSourceId() );
-	                crit.add( ContentPeer.CONTENT_TO_DELETE, false );
-	                crit.add( ContentPeer.CONTENT_RECEIVE_DATETIME, new Date( fetchPeriod ), Criteria.GREATER_THAN );
-	                crit.setDistinct();            
-	
-	                isFetchRequired = ContentPeer.doSelectVillageRecords( crit ).isEmpty();
+                    crit.clear();
+                    crit.addSelectColumn( ContentPeer.CONTENT_ID );
+                    crit.add( ContentPeer.CONTENT_SOURCE_ID, source.getContentSourceId() );
+                    crit.add( ContentPeer.CONTENT_TO_DELETE, false );
+                    crit.add( ContentPeer.CONTENT_RECEIVE_DATETIME, new Date( fetchPeriod ), Criteria.GREATER_THAN );
+                    crit.setDistinct();
+
+                    isFetchRequired = ContentPeer.doSelectVillageRecords( crit ).isEmpty();
                 }
             }
             catch ( TorqueException e )
@@ -210,8 +209,7 @@ public class ContentFetchService extends BaseService
     }
 
     /**
-     * Fetches and parses content from a content source
-     * Also adds the fetched content to the search index
+     * Fetches and parses content from a content source Also adds the fetched content to the search index
      * 
      * @author netseeker aka Michael Manske
      */
@@ -221,11 +219,11 @@ public class ContentFetchService extends BaseService
          * The transport used to fetch content from a content source
          */
         private Fetcher fetcher;
-        
+
         private String indexDir;
 
         private boolean isRunning = false;
-        
+
         private short failures = 0;
 
         /**
@@ -254,50 +252,57 @@ public class ContentFetchService extends BaseService
                 try
                 {
                     documents = fetcher.fetch();
-                    if( failures != 0)
+                    if (failures != 0)
                     {
                         failures = 0;
                     }
                 }
-                catch( TransportException e)
+                catch ( TransportException e )
                 {
                     logger.error( e );
                     failures++;
 
-                    // stopping this content fetch thread for the current application session after three sequenced failures 
-                    if( failures >= 3 )
-                    {                        
+                    // stopping this content fetch thread for the current application session after three sequenced
+                    // failures
+                    if (failures >= 3)
+                    {
                         String id = fetcher.getFetchLocation().getContentSourceName();
-                        logger.error("Content fetching from content source \"" + id + "\" failed for three times. Content fetching for this source will be stopped now for this session.");
-                        Timer timer = (Timer)_timers.get( id );
+                        logger
+                                .error( "Content fetching from content source \""
+                                        + id
+                                        + "\" failed for three times. Content fetching for this source will be stopped now for this session." );
+                        Timer timer = (Timer) _timers.get( id );
                         timer.cancel();
                         _timers.remove( id );
                     }
 
-                    isRunning = false;                    
+                    isRunning = false;
                     return;
                 }
 
+                List contentDocs = new ArrayList();
+                
                 for (Iterator it = documents.iterator(); it.hasNext();)
                 {
                     Document doc = (Document) it.next();
                     try
                     {
                         Content content = null;
-                        
-                        if( fetcher.isParsingRequired() )
+
+                        if (fetcher.isParsingRequired())
                         {
                             Parser parser = ParserFactory.getParserForContentType( doc.getContentTypeStr() );
-                            content  = new Content( parser.parse( doc ) );
+                            content = new Content( parser.parse( doc ) );
                         }
                         else
                         {
-                            content = new Content( doc );    
+                            content = new Content( doc );
                         }
-                        
-                        content.setContentReceiveDatetime(new Date());
+
+                        content.setContentReceiveDatetime( new Date() );
                         content.setContentSourceId( contentSourceId );
                         content.save();
+                        contentDocs.add( content );
                     }
                     catch ( UnsupportedEncodingException e )
                     {
@@ -308,17 +313,10 @@ public class ContentFetchService extends BaseService
                         logger.error( "Error while saving retrieved content!", e );
                     }
                 }
-                
+
                 // Add the documents to the search index
-                DocumentIndexer indexer = new DocumentIndexer( indexDir );
-                try
-                {
-                    indexer.indexDocuments( documents );
-                }
-                catch ( IOException e )
-                {
-                    logger.error("Indexing fetched contents failed! IOException while accessing the search index.", e);
-                }
+                IndexScheduler scheduler = IndexScheduler.getInstance( indexDir );
+                scheduler.scheduleForIndexing( contentDocs );
 
                 isRunning = false;
             }
