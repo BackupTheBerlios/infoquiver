@@ -1,8 +1,5 @@
 /*
  * Created on 01.04.2004
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
  */
 package net.sf.iquiver.admin.panels;
 
@@ -26,10 +23,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 /**
- * @author netseeker
+ * @author netseeker aka Michael Manske
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class LoginPanelBuilder extends AdminPanelBuilder
 {
