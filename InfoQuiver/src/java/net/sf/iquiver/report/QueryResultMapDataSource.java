@@ -2,8 +2,8 @@
  * QueryResultMapDataSource.java
  * created on 17.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/QueryResultMapDataSource.java,v $
- * $Date: 2004/07/20 19:45:30 $
- * $Revision: 1.3 $
+ * $Date: 2004/07/22 18:26:37 $
+ * $Revision: 1.4 $
  *********************************************************************/
 
 package net.sf.iquiver.report;
@@ -36,6 +36,7 @@ public class QueryResultMapDataSource implements JRDataSource
     private IReportSource _source;
     private ListMap _queryResults;
     private int _index = -1;
+    private int _counter = 0;
     
     /**
      * @param source
@@ -56,6 +57,7 @@ public class QueryResultMapDataSource implements JRDataSource
         {
 	        List docs = (List)_queryResults.getValueAt( 0 );
 	        _index++;
+	        _counter++;
 	        if( _index > 0 )
 	        {            
 	            docs.remove( 0 );
@@ -63,6 +65,7 @@ public class QueryResultMapDataSource implements JRDataSource
 	            if( docs.isEmpty() )
 	            {
 	                _queryResults.removeAt( 0 );
+	                _counter = 0;
 	            }
 	        }
 	        
@@ -84,6 +87,10 @@ public class QueryResultMapDataSource implements JRDataSource
         {
             SearchQuery query = (SearchQuery) _queryResults.getKeyAt( 0 );
             value = query.getSearchQueryCriteria();
+        }
+        else if( fieldName.equals( "Counter") )
+        {
+            value = new Integer( _counter );
         }
         else
         {
