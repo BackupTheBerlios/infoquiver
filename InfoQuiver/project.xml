@@ -1,49 +1,155 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <project>
-    <extend />
     <pomVersion>3</pomVersion>
-    <id>MODEL_2</id>
-    <name>Model 2</name>
-    <groupId>org.devaki</groupId>
-    <currentVersion>0.1</currentVersion>
-    <organization>
-        <name />
-        <url />
-        <logo />
-    </organization>
-    <inceptionYear />
-    <package>org.devaki.nomodels.om</package>
-    <logo />
-    <gumpRepositoryId />
-    <description />
-    <shortDescription />
-    <url />
-    <issueTrackingUrl />
-    <siteAddress />
-    <siteDirectory />
-    <distributionDirectory />
+    <id>InfoQuiver</id>
+    <name>InfoQuiver</name>
+    <currentVersion>0.1-dev</currentVersion>
+    <inceptionYear>2004</inceptionYear>
+    <package>net.sf.iquiver</package>
+    <shortDescription>Information retrieval system, report generator and report dispatcher</shortDescription>
+    <description>        
+        InfoQuiver will be a server demon, which supports automatic querying and indexing of many kinds of information datasources.
+        It will include build-in support for most diverse information formats and protocols as well as report generation and -dispatching.
+        IQuiver fetches content from defined content sources, stores it in its own xml based format in a database and
+        will run user defined searches on the stored content.
+        Searchresults will be created and dispatched as reports for each user, usergroup or client.
+        Most of usual transports (HTTP and HTTPS, FTP and SFTP, WEBDAV, SOAP, POP, IMAP, SMPT, local file system, CIFS...)
+        and formats (HTML, RSS, PDF as well as various open XML dialects and open Office formats) are discussed to become
+        medium-term to support.
+    </description>    
+    <url>http://developer.berlios.de/projects/infoquiver/</url>
+    <issueTrackingUrl>http://developer.berlios.de/bugs/?group_id=1542</issueTrackingUrl>
+    <siteAddress>manskes.de</siteAddress>
+    <siteDirectory>/www/htdocs/v081848/iquiver/</siteDirectory>
+    <distributionDirectory>/www/htdocs/v081848/iquiver/builds/</distributionDirectory>
     <repository>
-        <connection>scm:cvs:&lt;provider-parameters&gt;</connection>
-        <url>scm:cvs:&lt;provider-parameters&gt;</url>
+        <connection>scm:cvs:pserver:anonymous@cvs.infoquiver.berlios.de:/cvsroot/infoquiver:infoquiver</connection>
+        <url>http://cvs.berlios.de/cgi-bin/viewcvs.cgi/infoquiver/</url>
     </repository>
-    <mailingLists />
-    <developers />
-    <contributors />
-    <licenses />
-    <dependencies />
+    <versions>
+        <version>
+            <id>0.1</id>
+            <name>0.1-dev</name>
+            <tag>HEAD</tag>
+        </version>
+    </versions>
+    <developers>
+        <developer>
+            <name>Michael Manske</name>
+            <id>netseeker</id>
+            <email>netseeker@manskes.de</email>
+        </developer>
+    </developers>
+    <dependencies>
+        <dependency>
+            <id>dom4j</id>
+            <version>1.4</version>
+            <url>http://www.dom4j.org/</url>
+        </dependency>
+        <dependency>
+            <id>commons-beanutils</id>
+            <version>1.6.1</version>
+            <url>http://jakarta.apache.org/commons/</url>
+        </dependency>
+        <dependency>
+            <id>commons-cli</id>
+            <version>1.0-beta-2</version>
+            <url>http://jakarta.apache.org/commons/cli/</url>
+        </dependency>
+        <dependency>
+            <id>commons-codec</id>
+            <version>1.2</version>
+            <url>http://jakarta.apache.org/commons/codec/</url>
+        </dependency>
+        <dependency>
+            <id>commons-httpclient</id>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <id>commons-net</id>
+            <version>1.1.0</version>
+            <url>http://jakarta.apache.org/commons/net/</url>
+        </dependency>
+        <dependency>
+            <id>commons-configuration</id>
+            <version>1.0-dev</version>
+            <url>http://jakarta.apache.org/commons/configuration/</url>
+        </dependency>
+        <dependency>
+            <id>commons-logging</id>
+            <version>1.0.3</version>
+            <url>http://jakarta.apache.org/commons/logging/</url>
+        </dependency>
+        <dependency>
+            <id>commons-lang</id>
+            <version>2.0</version>
+            <url>http://jakarta.apache.org/commons/lang.html</url>
+        </dependency>
+        <!--
+        <dependency>
+            <id>commons-vfs</id>
+            <version>1.0-dev</version>
+            <url>http://jakarta.apache.org/commons/sandbox/vfs/</url>
+        </dependency>
+        -->
+        <dependency>
+            <id>commons-collections</id>
+            <version>3.0</version>
+            <url>http://jakarta.apache.org/commons/collections/</url>
+        </dependency>
+        <!--
+        <dependency>
+            <id>jgroups</id>
+            <version>2.2</version>
+            <url>http://www.jgroups.org/</url>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>avalon-framework</groupId>
+            <artifactId>avalon-framework</artifactId>
+            <version>4.1.4</version>
+            <url>http://avalon.apache.org/framework/</url>
+        </dependency>
+        <dependency>
+            <groupId>torque</groupId>
+            <artifactId>torque</artifactId>
+            <version>3.1</version>
+            <url>http://db.apache.org/torque/</url>
+        </dependency>
+        <dependency>
+            <groupId>xmlrpc</groupId>
+            <artifactId>xmlrpc</artifactId>
+            <version>1.2-b1</version>
+            <url>http://ws.apache.org/xmlrpc/</url>
+        </dependency>
+        <dependency>
+            <groupId>xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.0.1</version>
+            <url>http://xstream.codehaus.org/</url>
+        </dependency>
+    </dependencies>
     <build>
-        <nagEmailAddress />
-        <unitTestSourceDirectory />
-        <integrationUnitTestSourceDirectory />
-        <sourceDirectory />
-        <aspectSourceDirectory />
-        <unitTest>
-            <directory />
-            <targetPath />
-            <includes />
-            <excludes />
-        </unitTest>
-        <resources />
+        <sourceDirectory>src/java</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/conf</directory>
+                <includes>
+                    <include>iquiver.properties</include>
+                    <include>log</include>
+                    <include>torque.properties</include>
+                    <include>cache.properties</include>                                                            
+                </includes>
+            </resource>
+        </resources>
     </build>
+    <reports>
+        <report>maven-changes-plugin</report>
+        <report>maven-changelog-plugin</report>
+        <report>maven-file-activity-plugin</report>
+        <report>maven-developer-activity-plugin</report>
+        <report>maven-javadoc-plugin</report>
+        <report>maven-jxr-plugin</report>
+        <report>maven-junit-report-plugin</report>
+    </reports>
 </project>
-
