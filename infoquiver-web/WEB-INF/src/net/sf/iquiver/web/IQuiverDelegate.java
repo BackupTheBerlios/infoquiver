@@ -2,8 +2,8 @@
  * IQuiverDelegate.java
  * created on 28.11.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/infoquiver-web/WEB-INF/src/net/sf/iquiver/web/IQuiverDelegate.java,v $
- * $Date: 2004/12/01 19:40:09 $
- * $Revision: 1.4 $
+ * $Date: 2004/12/01 20:37:51 $
+ * $Revision: 1.5 $
 *********************************************************************/
 
 package net.sf.iquiver.web;
@@ -191,7 +191,7 @@ public class IQuiverDelegate implements ViewTool
      */
     private Document execute( String method, Vector params ) throws XmlRpcException, IOException, DocumentException
     {
-        String xml = (String)rpcClient.execute( method, params );
+        String xml = (String)rpcClient.execute("default." + method, params );
         if( xml != null && xml.length() > 0 )
         {
             return DocumentHelper.parseText( xml );
