@@ -8,14 +8,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
-import org.apache.commons.io.IOUtils;
-
 import net.sf.iquiver.metaformat.Document;
 import net.sf.iquiver.metaformat.impl.ContentTypeFactory;
 import net.sf.iquiver.metaformat.impl.MetaFormatFactory;
 import net.sf.iquiver.parser.Parser;
 import net.sf.iquiver.parser.ParsingException;
 import net.sf.iquiver.parser.UnsupportedContentTypeException;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * A parser implementation which delegates parsing to an external application and reads

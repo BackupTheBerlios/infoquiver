@@ -8,22 +8,21 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import net.sf.iquiver.metaformat.Document;
+import net.sf.iquiver.parser.Parser;
+import net.sf.iquiver.parser.ParsingException;
+import net.sf.iquiver.parser.UnsupportedContentTypeException;
+import net.sf.iquiver.parser.impl.ParserFactory;
+
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
-
-import net.sf.iquiver.metaformat.Document;
-import net.sf.iquiver.parser.Parser;
-import net.sf.iquiver.parser.ParsingException;
-import net.sf.iquiver.parser.UnsupportedContentTypeException;
-import net.sf.iquiver.parser.impl.ParserFactory;
 
 /**
  * @author netseeker aka Michael Manske

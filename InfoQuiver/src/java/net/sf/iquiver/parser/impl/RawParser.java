@@ -2,14 +2,11 @@
  * RawParser.java
  * created on 18.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/parser/impl/RawParser.java,v $
- * $Date: 2004/10/23 18:24:47 $
- * $Revision: 1.2 $
+ * $Date: 2004/11/26 19:27:00 $
+ * $Revision: 1.3 $
 *********************************************************************/
 
 package net.sf.iquiver.parser.impl;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -26,6 +23,9 @@ import net.sf.iquiver.metaformat.impl.MetaFormatFactory;
 import net.sf.iquiver.parser.Parser;
 import net.sf.iquiver.parser.ParsingException;
 import net.sf.iquiver.parser.UnsupportedContentTypeException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * A raw parser for binary and text based data (kind of multipart), 

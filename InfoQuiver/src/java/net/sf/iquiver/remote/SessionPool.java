@@ -3,16 +3,15 @@
  */
 package net.sf.iquiver.remote;
 
-import org.apache.avalon.framework.activity.Disposable;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.commons.pool.KeyedPoolableObjectFactory;
 
 /**

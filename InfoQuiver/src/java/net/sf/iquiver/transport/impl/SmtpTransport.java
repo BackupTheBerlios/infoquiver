@@ -2,12 +2,13 @@
  * SmtpTransport.java
  * created on 15.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/transport/impl/SmtpTransport.java,v $
- * $Date: 2004/10/17 15:29:00 $
- * $Revision: 1.1 $
+ * $Date: 2004/11/26 19:27:22 $
+ * $Revision: 1.2 $
  *********************************************************************/
 
 package net.sf.iquiver.transport.impl;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Map;
@@ -168,7 +169,7 @@ public class SmtpTransport implements Dispatcher
             }
         }
 
-        mail.addAttachment( new ByteArrayInputStream( doc.getRawContent() ), fileName );
+        mail.addAttachment( new BufferedInputStream( new ByteArrayInputStream( doc.getRawContent() ) ), fileName );
 
         try
         {

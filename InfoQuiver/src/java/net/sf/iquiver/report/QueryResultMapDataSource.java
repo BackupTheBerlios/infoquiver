@@ -2,20 +2,21 @@
  * QueryResultMapDataSource.java
  * created on 17.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/QueryResultMapDataSource.java,v $
- * $Date: 2004/07/22 18:26:37 $
- * $Revision: 1.4 $
+ * $Date: 2004/11/26 19:29:29 $
+ * $Revision: 1.5 $
  *********************************************************************/
 
 package net.sf.iquiver.report;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
 import net.sf.iquiver.metaformat.Document;
 import net.sf.iquiver.om.SearchQuery;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.netseeker.util.ListMap;
 import dori.jasper.engine.JRDataSource;
 import dori.jasper.engine.JRException;

@@ -2,8 +2,8 @@
  * ContentSearchService.java
  * created on 15.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/ContentSearchService.java,v $
- * $Date: 2004/11/20 12:30:33 $
- * $Revision: 1.12 $
+ * $Date: 2004/11/26 19:26:44 $
+ * $Revision: 1.13 $
  *********************************************************************/
 
 package net.sf.iquiver.service.impl;
@@ -106,48 +106,52 @@ public class ContentSearchService extends BaseService
      */
     private void createSearchReports( IReportSource obj ) throws TorqueException
     {
-        List queries = obj.getSearchQuerys(); 
-        List contentSources = obj.getContentSources();
-        List documents = null;
-        ListMap queryResults = new ArrayMap();
-        String[] tmp, indeces;
-
-        // determine all indeces to use for searching, one index per content source
-        tmp = new String[contentSources.size()];
-        int count = 0;
-        for (int i = 0; i < contentSources.size(); i++)
-        {
-            ContentSource source = (ContentSource) contentSources.get( i );
-            String index = _indexDirectory + File.separator + String.valueOf( source.getContentSourceId() );
-            File testFile = new File( index );
-            if( testFile.exists() )
-            {
-                tmp[i] = index;
-                count++;
-            }
-        }
+        List queries = obj.getSearchQuerys();
         
-        indeces = new String[ count ];
-        System.arraycopy( tmp, 0, indeces, 0, count);
-
-        for (Iterator it = queries.iterator(); it.hasNext();)
+        if (!queries.isEmpty())
         {
-            SearchQuery query = (SearchQuery) it.next();
-            try
+            List contentSources = obj.getContentSources();
+            List documents = null;
+            ListMap queryResults = new ArrayMap();
+            String[] tmp, indeces;
+
+            // determine all indeces to use for searching, one index per content source
+            tmp = new String[contentSources.size()];
+            int count = 0;
+            for (int i = 0; i < contentSources.size(); i++)
             {
-                documents = QueryTask.search( indeces, query.getSearchQueryCriteria() );
-                queryResults.put( query, documents );
+                ContentSource source = (ContentSource) contentSources.get( i );
+                String index = _indexDirectory + File.separator + String.valueOf( source.getContentSourceId() );
+                File testFile = new File( index );
+                if (testFile.exists())
+                {
+                    tmp[i] = index;
+                    count++;
+                }
             }
-            catch ( IOException e )
+
+            indeces = new String[count];
+            System.arraycopy( tmp, 0, indeces, 0, count );
+
+            for (Iterator it = queries.iterator(); it.hasNext();)
             {
-                logger.error( e );
+                SearchQuery query = (SearchQuery) it.next();
+                try
+                {
+                    documents = QueryTask.search( indeces, query.getSearchQueryCriteria() );
+                    queryResults.put( query, documents );
+                }
+                catch ( IOException e )
+                {
+                    logger.error( e );
+                }
+                catch ( ParseException e )
+                {
+                    logger.error( e );
+                }
             }
-            catch ( ParseException e )
-            {
-                logger.error( e );
-            }
+
+            ReportGeneratorFactory.getReportGenerator().generate( obj, queryResults );
         }
-        
-        ReportGeneratorFactory.getReportGenerator().generate( obj, queryResults );
     }
 }

@@ -6,10 +6,10 @@ package net.sf.iquiver.test.junit;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.lucene.queryParser.ParseException;
-
 import net.sf.iquiver.IQuiver;
 import net.sf.iquiver.search.QueryTask;
+
+import org.apache.lucene.queryParser.ParseException;
 
 /**
  * @author netseeker aka Michael Manske
