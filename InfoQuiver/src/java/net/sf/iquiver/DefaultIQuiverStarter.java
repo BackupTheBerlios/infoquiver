@@ -4,7 +4,6 @@
  */
 package net.sf.iquiver;
 
-import java.io.File;
 import java.io.IOException;
 
 import net.sf.iquiver.configuration.Configuration;

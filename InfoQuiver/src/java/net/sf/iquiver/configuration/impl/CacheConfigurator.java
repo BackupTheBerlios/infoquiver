@@ -4,15 +4,12 @@
  */
 package net.sf.iquiver.configuration.impl;
 
-import java.util.StringTokenizer;
-
 import net.sf.iquiver.configuration.Configuration;
 import net.sf.iquiver.configuration.Reconfigurable;
 import net.sf.iquiver.om.cache.CacheBackedPeerInitializer;
 import net.sf.iquiver.util.om.CacheBackedPeer;
 
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

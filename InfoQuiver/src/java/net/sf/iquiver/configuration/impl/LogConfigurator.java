@@ -4,11 +4,9 @@
  */
 package net.sf.iquiver.configuration.impl;
 
-import java.io.File;
 import java.util.Iterator;
 
 import net.sf.iquiver.configuration.Configuration;
-import net.sf.iquiver.configuration.ConfigurationConstants;
 import net.sf.iquiver.configuration.Reconfigurable;
 
 import org.apache.avalon.framework.configuration.ConfigurationException;

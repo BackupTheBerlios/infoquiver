@@ -4,10 +4,7 @@
  */
 package net.sf.iquiver;
 
-import java.io.File;
 import java.io.IOException;
-
-import javax.swing.JOptionPane;
 
 import net.sf.iquiver.configuration.Configurable;
 import net.sf.iquiver.configuration.Configuration;
@@ -17,10 +14,8 @@ import net.sf.iquiver.configuration.impl.CacheConfigurator;
 import net.sf.iquiver.configuration.impl.DefaultProperiesConfiguration;
 import net.sf.iquiver.configuration.impl.LogConfigurator;
 import net.sf.iquiver.configuration.impl.PersistenceConfigurator;
-import net.sf.iquiver.util.StringUtil;
 
 import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.activity.Startable;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.context.DefaultContext;
