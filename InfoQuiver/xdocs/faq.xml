@@ -15,7 +15,8 @@
       <a name="demon"/>
       <subsection name="How can I install InfoQuiver as system demon?">
         <p>
-            Use Quartz.
+            Take a look at the &quot;<a href="http://wrapper.tanukisoftware.org/">Java Service Wrapper</a>&quot;. It provides the neccessary
+            features to run InfoQuiver as a Windows Service or Unix Daemon.
         </p>
       </subsection>
       <subsection name="How can i avoid OutOfMemoryExceptions?">

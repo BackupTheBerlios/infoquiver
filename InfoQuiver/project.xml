@@ -7,10 +7,10 @@
   <organization>
     <name>netseeker</name>
     <url>http://www.manskes.de</url>
-    <logo>/images/header.jpg</logo>
   </organization>    
     <inceptionYear>2004</inceptionYear>
     <package>net.sf.iquiver</package>
+    <logo>/images/iquiver.gif</logo>
     <shortDescription>Information retrieval system, report generator and report dispatcher</shortDescription>
     <description> InfoQuiver will be a server demon, which supports automatic querying and indexing of many kinds of 
         information datasources. It will include build-in support for most diverse information formats and protocols as 
