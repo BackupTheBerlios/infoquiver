@@ -14,7 +14,7 @@ import net.sf.iquiver.om.Content;
 /**
  * @author netseeker aka Michael Manske
  */
-public interface Document
+public interface Document extends Branch
 {
     public String getName();
     public void setName(String name);
@@ -32,11 +32,5 @@ public interface Document
     public void setInfoURL(URL url);
     public Locale getLocale();
     public void setLocale(Locale locale);
-    public List getElements();
-    public void setElements(List elements);
-    public List getElements(String name);
-    public void setElements(String name, List elements);
-    public Element addElement(Element element);
-    public void removeAllElements();
     public void clear();
 }
