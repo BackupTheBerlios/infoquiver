@@ -51,7 +51,7 @@ public class RawXmlParser extends Parser
         {
             return parser.getStripped( rawContent );
         }
-        
+                
         return new String( rawContent );
     }    
 }
