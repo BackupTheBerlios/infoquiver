@@ -13,6 +13,8 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.xmlrpc.WebServer;
 
 /**
+ * XML-RPC Server interface, allowing clients to communicate with the infoquiver
+ * server demon via XML-RPC.
  * @author netseeker aka Michael Manske
  */
 public class XmlRpcServer extends BaseRemoteService implements IServer
@@ -54,7 +56,6 @@ public class XmlRpcServer extends BaseRemoteService implements IServer
         }
     }
     
-
     /* (non-Javadoc)
      * @see net.sf.iquiver.remote.IServer#start(net.sf.iquiver.configuration.Configuration)
      */
