@@ -25,6 +25,8 @@ public abstract class Parser
     private long parseStartTime;
     private long parseEndTime;    
     
+    private String _arguments;
+    
     /**
      * @param source
      * @return
@@ -101,6 +103,22 @@ public abstract class Parser
     {
         parseEndTime = System.currentTimeMillis();
         logger.debug("Parsing finished at " + parseEndTime);        
+    }
+    
+    /**
+     * @param arguments
+     */
+    public void setArguments( String arguments )
+    {
+        this._arguments = arguments;
+    }
+    
+    /**
+     * @return
+     */
+    public String getArguments()
+    {
+        return this._arguments;
     }
        
     public abstract Document parse ( byte[] rawContent ) throws ParsingException;

@@ -92,6 +92,7 @@ public class ParserFactory
                 ContentParser cParser = contentType.getContentParser();
                 clazz = cParser.getContentParserImplementation();
                 parser = (Parser) Class.forName( clazz ).newInstance();
+                parser.setArguments( contentType.getContentParserArgs() );
                 _parsers.put( contentType.getContentTypeName(), parser );
             }
             catch ( TorqueException e )

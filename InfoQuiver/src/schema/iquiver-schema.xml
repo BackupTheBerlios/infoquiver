@@ -128,7 +128,7 @@
         <column name="TRANSPORT_NAME" required="true" type="VARCHAR" size="32"/>
         <column name="TRANSPORT_TYPE" required="true" type="TINYINT" description="RECEIVER=0|SENDER=1|BOTH=2"/>
         <column name="TRANSPORT_DESC" type="VARCHAR" size="255"/>
-        <column name="TRANSPORT_START_TIMEOUT" type="INTEGER" size="32"/>
+        <column name="TRANSPORT_START_TIMEOUT" type="INTEGER" size="32" default="60000"/>
         <column name="TRANSPORT_IMPLEMENTATION" required="true" type="VARCHAR" size="255" description="complete name of corresponding java class"/>
         <column name="IS_AUTHENTIFICATION_REQUIRED" type="BOOLEANINT" description="does the transport require authentification?"/>
     </table>
