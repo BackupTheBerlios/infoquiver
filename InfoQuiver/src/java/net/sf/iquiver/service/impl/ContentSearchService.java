@@ -1,6 +1,10 @@
-/*
- * Created on 15.07.2004
- */
+/*********************************************************************
+ * ContentSearchService.java
+ * created on 15.07.2004 by netseeker
+ * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/ContentSearchService.java,v $\
+ * $Date: 2004/07/15 17:01:51 $\
+ * $Revision: 1.3 $\
+*********************************************************************/
 package net.sf.iquiver.service.impl;
 
 import java.util.Iterator;
