@@ -264,6 +264,7 @@ public class ContentFetchService extends BaseService
                     logger.error( e );
                     failures++;
                     isRunning = false;
+                    // stopping this content fetch thread for the current application session after three sequenced failures 
                     if( failures >= 3 )
                     {                        
                         String id = fetcher.getFetchLocation().getContentSourceName();
