@@ -9,8 +9,6 @@ import net.sf.iquiver.service.BaseService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import sun.net.www.content.text.Generic;
-
 /**
  * @author netseeker aka Michael Manske
  */

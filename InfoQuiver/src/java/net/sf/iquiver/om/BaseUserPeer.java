@@ -829,7 +829,7 @@ public abstract class BaseUserPeer
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in UserPeer.
+     * actually need in UserDelegate.
      *
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
@@ -900,7 +900,7 @@ public abstract class BaseUserPeer
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in UserPeer.
+     * actually need in UserDelegate.
      *
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.

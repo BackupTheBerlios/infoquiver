@@ -218,7 +218,7 @@ public abstract class BaseUserGroupLnk extends BaseObject
                may be undesirable in many circumstances.
                As it can lead to a db query with many results that may
                never be used.
-               User obj = UserPeer.retrieveByPK(this.userId);
+               User obj = UserDelegate.retrieveByPK(this.userId);
                obj.addUserGroupLnks(this);
             */
         }
