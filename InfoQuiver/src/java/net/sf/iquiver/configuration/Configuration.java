@@ -10,5 +10,6 @@ package net.sf.iquiver.configuration;
 public interface Configuration extends org.apache.commons.configuration.Configuration
 {
     public String getFileName();
+    public String getFilePath();
     public Configuration getSubset(String key);
 }

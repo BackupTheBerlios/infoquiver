@@ -4,6 +4,7 @@
  */
 package net.sf.iquiver.configuration.impl;
 
+import java.io.File;
 import java.io.IOException;
 
 import net.sf.iquiver.configuration.Configuration;
@@ -54,7 +55,7 @@ public class DefaultProperiesConfiguration extends PropertiesConfiguration imple
     public DefaultProperiesConfiguration( String arg0 ) throws IOException
     {
         super( arg0 );
-        setFileName(arg0);
+        setFileName(new File(arg0).getName());
     }
 
     /**
@@ -65,7 +66,7 @@ public class DefaultProperiesConfiguration extends PropertiesConfiguration imple
     public DefaultProperiesConfiguration( String arg0, org.apache.commons.configuration.Configuration arg1 ) throws IOException
     {
         super( arg0, arg1 );
-        setFileName(arg0);
+        setFileName(new File(arg0).getName());
     }
 
     /**
@@ -76,7 +77,7 @@ public class DefaultProperiesConfiguration extends PropertiesConfiguration imple
     public DefaultProperiesConfiguration( String arg0, String arg1 ) throws IOException
     {
         super( arg0, arg1 );
-        setFileName(arg0);
+        setFileName(new File(arg0).getName());
     }
     
     public String getFileName()
@@ -84,4 +85,16 @@ public class DefaultProperiesConfiguration extends PropertiesConfiguration imple
         return super.fileName;
     }
 
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.configuration.Configuration#getFilePath()
+     */
+    public String getFilePath()
+    {
+        if(getBasePath() != null && getFileName() != null)
+        {    
+            return getBasePath() + File.separator + getFileName();
+        }
+        
+        return null;
+    }
 }
