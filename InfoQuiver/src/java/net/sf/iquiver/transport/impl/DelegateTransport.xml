@@ -3,6 +3,6 @@
     <type>2</type>
     <attribute name="Timeout" type="java.lang.Integer"/>
     <attribute name="Executable" mandatory="true" type="java.lang.String"/>
-    <attribute name="Arguments" type="java.lang.String"/>
+    <attribute name="Arguments" type="java.lang.String[]"/>
     <attribute name="FetchResultRequiresParsing" type="java.lang.Boolean"/>
 </transport>
