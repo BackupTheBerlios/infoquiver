@@ -6,7 +6,11 @@ package net.sf.iquiver.remote;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.apache.commons.pool.KeyedPoolableObjectFactory;
 
@@ -18,8 +22,8 @@ public class SessionPool
     /**
      * Commons Logger for this class
      */
-    private static final Log logger = LogFactory.getLog(SessionPool.class);
-    
+    private static final Log logger = LogFactory.getLog( SessionPool.class );
+
     /**
      * The default cap on the total number of active instances from the pool.
      * 
@@ -38,18 +42,21 @@ public class SessionPool
     private long collectorTimeSpan = DEFAULT_TIME_BETWEEN_SESSION_COLLECTOR_RUNS;
 
     /**
-     * Creates a new SessionPool instance with default values for the supported max. amount of concurrent
-     * sessions as well as the timespan between session collector runs
+     * Creates a new SessionPool instance with default values for the supported max. amount of concurrent sessions as
+     * well as the timespan between session collector runs
+     * 
      * @param factory the object pool factory responsible for creating new sessions
      */
     public SessionPool(KeyedPoolableObjectFactory factory)
     {
         this.factory = factory;
-        pool = new LinkedHashMap(DEFAULT_MAX_ACTIVE);
+        pool = new LinkedHashMap( DEFAULT_MAX_ACTIVE );
+        new Timer().scheduleAtFixedRate(new SessionCollector(), DEFAULT_TIME_BETWEEN_SESSION_COLLECTOR_RUNS, DEFAULT_TIME_BETWEEN_SESSION_COLLECTOR_RUNS);
     }
 
     /**
      * Creates a new SessionPool instance with the default value for the timespan between session collector runs
+     * 
      * @param factory the object pool factory responsible for creating new sessions
      * @param maxActive maximum amount of concurrent sessions we are able to handle
      */
@@ -57,72 +64,85 @@ public class SessionPool
     {
         this.factory = factory;
         this.maxActive = maxActive;
-        pool = new LinkedHashMap(maxActive);
+        pool = new LinkedHashMap( maxActive );
+        new Timer().scheduleAtFixedRate(new SessionCollector(), DEFAULT_TIME_BETWEEN_SESSION_COLLECTOR_RUNS, DEFAULT_TIME_BETWEEN_SESSION_COLLECTOR_RUNS);
     }
 
     /**
      * Creates a new SessionPool instance
+     * 
      * @param factory the object pool factory responsible for creating new sessions
      * @param maxActive maximum amount of concurrent sessions we are able to handle
      * @param collectorTimeSpan timespan between session collector runs
      */
     public SessionPool(KeyedPoolableObjectFactory factory, int maxActive, long collectorTimeSpan)
     {
-        this(factory, maxActive);
+        this( factory, maxActive );
         this.collectorTimeSpan = collectorTimeSpan;
+        new Timer().scheduleAtFixedRate(new SessionCollector(), collectorTimeSpan, collectorTimeSpan);
     }
-    
+
     /**
      * Creates a new session in this pool
+     * 
      * @param key the session identifier
      */
-    public synchronized void addSession( String key ) throws SessionLimitExceededException
+    public void addSession( String key ) throws SessionLimitExceededException
     {
-        Session session = (Session) pool.get( key );
-        if (session == null)
+        synchronized ( pool )
         {
-            if(pool.size() >= maxActive)
+            Session session = (Session) pool.get( key );
+            if (session == null)
             {
-                throw new SessionLimitExceededException(maxActive);
-            }
-            
-            try
-            {
-                session = (Session) factory.makeObject( key );
-                if(session != null)
+                if (pool.size() >= maxActive)
                 {
-                    pool.put( key, session );
-                    notifyAll();
+                    throw new SessionLimitExceededException( maxActive );
+                }
+
+                try
+                {
+                    session = (Session) factory.makeObject( key );
+                    if (session != null)
+                    {
+                        pool.put( key, session );
+                    }
+                }
+                catch ( Exception e )
+                {
+                    //do nothing
                 }
             }
-            catch(Exception e)
-            {
-                //do nothing
-            }
         }
+
+        pool.notifyAll();
     }
-    
+
     /**
      * Returns an existing session for a given identifier or null if the identifier is unknown in this pool
+     * 
      * @param key session identifier
-     * @return a valid session for the given key or null 
+     * @return a valid session for the given key or null
      */
-    public synchronized Session getSession( String key )
+    public Session getSession( String key )
     {
-        Session session = (Session)pool.get( key ); 
-        if( session != null )
+        synchronized ( pool )
         {
-            try
+            Session session = (Session) pool.get( key );
+            if (session != null)
             {
-                factory.activateObject( key, session );
+                try
+                {
+                    factory.activateObject( key, session );
+                }
+                catch ( Exception e )
+                {
+                    // do nothing
+                }
             }
-            catch ( Exception e )
-            {
-                // do nothing
-            }
+
+            pool.notifyAll();
+            return session;
         }
-        
-        return session;
     }
 
     /**
@@ -130,22 +150,27 @@ public class SessionPool
      */
     public void clear()
     {
-        synchronized ( this )
+        synchronized ( pool )
         {
             pool.clear();
         }
 
-        notifyAll();
+        pool.notifyAll();
     }
 
     /**
      * Removes a session from this pool
+     * 
      * @param key
      */
-    public synchronized void destroy( String key )
+    public void destroy( String key )
     {
-        pool.remove( key );
-        notifyAll();
+        synchronized ( pool )
+        {
+            pool.remove( key );
+        }
+
+        pool.notifyAll();
     }
 
     /**
@@ -169,6 +194,39 @@ public class SessionPool
     public synchronized void setMaxActive( int maxActive )
     {
         this.maxActive = maxActive;
-        notifyAll();
+    }
+
+    /**
+     * @author netseeker aka Michael Manske
+     */
+    private class SessionCollector extends TimerTask
+    {
+        /*
+         * (non-Javadoc)
+         * 
+         * @see java.util.TimerTask#run()
+         */
+        public void run()
+        {
+            synchronized ( pool )
+            {
+                ArrayList garbage = new ArrayList(); 
+                for (Iterator it = pool.keySet().iterator(); it.hasNext();)
+                {
+                    String id = (String) it.next();
+                    if (!factory.validateObject( id, pool.get( id ) ))
+                    {
+                        garbage.add(id);
+                    }
+                }
+                
+                for(Iterator it = garbage.iterator(); it.hasNext();)
+                {
+                    pool.remove( it.next() );
+                }
+            }
+            
+            notifyAll();
+        }
     }
 }
