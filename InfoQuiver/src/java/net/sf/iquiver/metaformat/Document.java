@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import net.sf.iquiver.parser.UnsupportedContentTypeException;
@@ -47,6 +48,9 @@ public interface Document extends Serializable
     public void setContentTypeStr( String contentTypeStr ) throws UnsupportedContentTypeException;
     public String getUID();
     public void setUID( String uid );
+    public boolean hasChildren();
+    public List getChildren();
+    public void addChild( Document doc );
     public void clear();
     
 }

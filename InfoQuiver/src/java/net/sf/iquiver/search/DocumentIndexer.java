@@ -157,7 +157,7 @@ public class DocumentIndexer
         IndexReader reader = IndexReader.open( _directory );
         try
         {
-            reader.delete( new Term( "uid", doc.getUID() ) );
+            deleteDocument( doc, reader );
         }
         finally
         {
@@ -168,19 +168,60 @@ public class DocumentIndexer
         IndexWriter writer = new IndexWriter( _directory, analyzer, false );
         try
         {
-            if (logger.isDebugEnabled())
-            {
-                logger.debug( "Indexing document UID=" + doc.getUID() + " --> " 
-                        + ObjectUtils.defaultIfNull( doc.getName(), ObjectUtils.defaultIfNull( doc.getTitle(), doc
-                                .getShortDescription() ) ) );
-            }
-            
-            writer.addDocument( lDoc );
-            writer.optimize();
+            addDocument( doc, writer );
         }
         finally
         {
             writer.close();
+        }
+    }
+    
+    /**
+     * Deletes an document from an lucene index, also deletes all child documents recursively 
+     * @param doc
+     * @param reader
+     * @throws IOException
+     */
+    private void deleteDocument( Document doc, IndexReader reader) throws IOException
+    {
+        reader.delete( new Term( "uid", doc.getUID() ) );        
+        if( doc.hasChildren() )
+        {
+            for( Iterator it = doc.getChildren().iterator(); it.hasNext(); )
+            {
+                deleteDocument((Document)it.next(), reader);
+            }
+        }
+    }
+    
+    /**
+     * Adds an document to an lucene index, also adds all child documents recursively 
+     * @param doc
+     * @param writer
+     * @throws IOException
+     */
+    private void addDocument( Document doc, IndexWriter writer ) throws IOException
+    {
+        org.apache.lucene.document.Document lDoc = convertDocument( doc );
+
+        if (logger.isDebugEnabled())
+        {
+            logger.debug( "Indexing document UID=" + doc.getUID() + " --> " 
+                    + ObjectUtils.defaultIfNull( doc.getName(), ObjectUtils.defaultIfNull( doc.getTitle(), doc
+                            .getShortDescription() ) ) );
+        }
+
+        writer.addDocument( lDoc );
+        // according to http://www.javaranch.com/newsletter/200404/Lucene.html
+        // we should optimize the index after EACH document
+        writer.optimize();
+        
+        if( doc.hasChildren() )
+        {
+            for( Iterator it = doc.getChildren().iterator(); it.hasNext(); )
+            {
+                addDocument((Document)it.next(), writer);
+            }            
         }
     }
 
@@ -201,8 +242,7 @@ public class DocumentIndexer
         {
             for (Iterator it = docs.iterator(); it.hasNext();)
             {
-                Document doc = (Document) it.next();
-                reader.delete( new Term( "uid", doc.getUID() ) );
+                deleteDocument( (Document) it.next(), reader );
             }
         }
         finally
@@ -218,20 +258,7 @@ public class DocumentIndexer
         {
             for (Iterator it = docs.iterator(); it.hasNext();)
             {
-                Document doc = (Document) it.next();
-                org.apache.lucene.document.Document lDoc = convertDocument( doc );
-
-                if (logger.isDebugEnabled())
-                {
-                    logger.debug( "Indexing document UID=" + doc.getUID() + " --> " 
-                            + ObjectUtils.defaultIfNull( doc.getName(), ObjectUtils.defaultIfNull( doc.getTitle(), doc
-                                    .getShortDescription() ) ) );
-                }
-
-                writer.addDocument( lDoc );
-                // according to http://www.javaranch.com/newsletter/200404/Lucene.html
-                // we should optimize the index after EACH document
-                writer.optimize();
+                addDocument((Document) it.next(), writer);
             }
         }
         finally

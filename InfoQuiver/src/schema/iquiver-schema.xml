@@ -245,6 +245,7 @@
     </table>
     <table name="iq_content" javaName="Content">
         <column name="CONTENT_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <column name="CONTENT_PARENT_ID" type="BIGINT"/>
         <column name="CONTENT_TYPE_ID" required="true" type="INTEGER"/>
         <column name="CONTENT_SOURCE_ID" required="true" type="BIGINT"/>
         <column name="CONTENT_UID" type="VARCHAR" size="64"/>
@@ -260,6 +261,9 @@
         <column name="CONTENT_KEYWORDS" type="LONGVARCHAR" size="1000"/>
         <column name="CONTENT_CONTENT" type="BLOB" size="65536"/>
         <column name="CONTENT_TO_DELETE" type="BOOLEANINT"/>
+        <foreign-key foreignTable="iq_content">
+            <reference local="CONTENT_PARENT_ID" foreign="CONTENT_ID" />
+        </foreign-key>   
         <foreign-key foreignTable="iq_content_source">
             <reference local="CONTENT_SOURCE_ID" foreign="CONTENT_SOURCE_ID" />
         </foreign-key>   

@@ -3,7 +3,10 @@ package net.sf.iquiver.om;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -30,6 +33,8 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
      * Commons Logger for this class
      */
     private static final Log logger = LogFactory.getLog( Content.class );
+
+    private List _children;
 
     /**
      * Creates a new instance of Content
@@ -59,6 +64,13 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
         this.setRawContent( doc.getRawContent() );
         this.setContentTypeStr( doc.getContentTypeStr() );
         this.setKeywords( doc.getKeywords() );
+        if( doc.hasChildren() )
+        {
+            for( Iterator it = doc.getChildren().iterator(); it.hasNext();)
+            {
+                addChild( (Document)it.next() );
+            }
+        }
     }
 
     /*
@@ -279,6 +291,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
         this.setContentShortDescription( null );
         this.setContentTitle( null );
         this.setContentKeywords( null );
+        this._children = null;
     }
 
     /*
@@ -378,20 +391,103 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
     {
         this.setContentKeywords( keywords );
     }
-        
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#getUID()
      */
     public String getUID()
     {
         return this.getContentUid();
-    }    
-    
-    /* (non-Javadoc)
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.metaformat.Document#setUID(java.lang.String)
      */
     public void setUID( String uid )
     {
         this.setContentUid( uid );
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.sf.iquiver.metaformat.Document#hasChildren()
+     */
+    public boolean hasChildren()
+    {
+        return (this._children != null && !this._children.isEmpty());
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.sf.iquiver.metaformat.Document#getChildren()
+     */
+    public List getChildren()
+    {
+        if (!hasChildren() && !isNew())
+        {
+            Criteria crit = new Criteria();
+            crit.add( ContentPeer.CONTENT_PARENT_ID, this.getContentId() );
+
+            try
+            {
+                this._children = ContentPeer.doSelect( crit );
+            }
+            catch ( TorqueException e )
+            {
+                logger.error( "Fetching child contents failed!", e );
+            }
+        }
+
+        return this._children;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.sf.iquiver.metaformat.Document#addChild(net.sf.iquiver.metaformat.Document)
+     */
+    public void addChild( Document doc )
+    {
+        if (this._children == null)
+        {
+            this._children = new ArrayList();
+        }
+        
+        Content content;
+        try
+        {
+            content = new Content( doc );
+            this._children.add( doc );
+        }
+        catch ( Exception e )
+        {
+            logger.error( "Error occured while adding child document " + doc.getUID(), e );
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.torque.om.Persistent#save(java.sql.Connection)
+     */
+    public void save( Connection con ) throws TorqueException
+    {
+        if (hasChildren())
+        {
+            for (Iterator it = _children.iterator(); it.hasNext();)
+            {
+                Content content = (Content) it.next();
+                content.setContentParentId( this.getContentId() );
+                content.save( con );
+            }
+        }
+
+        super.save( con );
     }
 }

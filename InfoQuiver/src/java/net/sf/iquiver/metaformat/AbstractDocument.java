@@ -6,7 +6,9 @@ package net.sf.iquiver.metaformat;
 
 import java.net.URL;
 import java.rmi.server.UID;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -26,6 +28,7 @@ public abstract class AbstractDocument implements Document
     private String encoding;
     private String contentTypeStr;
     private String _uid;
+    private List _children;
 
     /*
      * (non-Javadoc)
@@ -250,11 +253,11 @@ public abstract class AbstractDocument implements Document
      */
     public String getUID()
     {
-        if(this._uid == null)
+        if (this._uid == null)
         {
             this._uid = new UID().toString();
         }
-        
+
         return _uid;
     }
 
@@ -268,6 +271,38 @@ public abstract class AbstractDocument implements Document
         this._uid = id;
     }
 
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#addChild(net.sf.iquiver.metaformat.Document)
+     */
+    public void addChild( Document doc )
+    {
+        if (this._children == null)
+        {
+            this._children = new ArrayList();
+        }
+
+        this._children.add( doc );
+    }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#getChildren()
+     */
+    public List getChildren()
+    {
+        return this._children;
+    }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#hasChildren()
+     */
+    public boolean hasChildren()
+    {
+        return (this._children != null && !this._children.isEmpty());
+    }
+
+    /**
+     * 
+     */
     protected void clearDocumentMembers()
     {
         _name = null;
@@ -281,6 +316,7 @@ public abstract class AbstractDocument implements Document
         encoding = null;
         contentTypeStr = null;
         _uid = null;
+        _children = null;
     }
 
     /*
