@@ -12,7 +12,7 @@ import net.sf.iquiver.om.ContentSource;
 /**
  * @author netseeker aka Michael Manske
  */
-public interface Dispatcher extends Transport
+public interface Dispatcher
 {
     /**
      * @param location

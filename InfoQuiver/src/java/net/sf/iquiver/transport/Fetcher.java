@@ -11,7 +11,7 @@ import net.sf.iquiver.om.ContentSource;
 /**
  * @author netseeker aka Michael Manske
  */
-public interface Fetcher extends Transport
+public interface Fetcher
 {
     /**
      * @param source

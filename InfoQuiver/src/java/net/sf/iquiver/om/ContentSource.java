@@ -54,7 +54,7 @@ public  class ContentSource
      * @return
      * @throws TorqueException
      */
-    public Map getAuthentificationAttributesAsMap() throws TorqueException
+    public Map getAuthentificationAttributesAsNamedMap() throws TorqueException
     {
         Map results = new HashMap();
         List auth_attributes = getAuthentificationAttributes();
@@ -62,7 +62,11 @@ public  class ContentSource
         for(Iterator it = auth_attributes.iterator(); it.hasNext();)
         {
             ContentSourceTransportConfig config = (ContentSourceTransportConfig)it.next();
-            results.put(new Integer(config.getTransportAttributeId()), config.getTransportAttributeValue());
+            TransportAttribute attr = new TransportAttribute();
+            attr.setTransportId(config.getTransportAttributeId());            
+            attr = TransportAttributePeer.doSelectSingle(attr);
+            
+            results.put(attr.getTransportAttributeName(), config.getTransportAttributeValue());
         }
         
         return results;
@@ -72,7 +76,7 @@ public  class ContentSource
      * @return
      * @throws TorqueException
      */
-    public Map getNonAuthentificationAttributesAsMap() throws TorqueException
+    public Map getNonAuthentificationAttributesAsNamedMap() throws TorqueException
     {
         Map results = new HashMap();
         List auth_attributes = getNonAuthentificationAttributes();
@@ -80,7 +84,11 @@ public  class ContentSource
         for(Iterator it = auth_attributes.iterator(); it.hasNext();)
         {
             ContentSourceTransportConfig config = (ContentSourceTransportConfig)it.next();
-            results.put(new Integer(config.getTransportAttributeId()), config.getTransportAttributeValue());
+            TransportAttribute attr = new TransportAttribute();
+            attr.setTransportId(config.getTransportAttributeId());            
+            attr = TransportAttributePeer.doSelectSingle(attr);
+            
+            results.put(attr.getTransportAttributeName(), config.getTransportAttributeValue());
         }
         
         return results;
