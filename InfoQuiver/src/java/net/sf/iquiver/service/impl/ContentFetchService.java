@@ -9,7 +9,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,6 +28,7 @@ import net.sf.iquiver.search.DocumentIndexer;
 import net.sf.iquiver.service.BaseService;
 import net.sf.iquiver.transport.Fetcher;
 import net.sf.iquiver.transport.TransportConfigurationException;
+import net.sf.iquiver.transport.TransportException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -50,7 +53,7 @@ public class ContentFetchService extends BaseService
     /**
      * List of active timers, which are responsible for starting content fetching per content source
      */
-    private List _timers;
+    private Map _timers;
 
     /*
      * (non-Javadoc)
@@ -59,7 +62,7 @@ public class ContentFetchService extends BaseService
      */
     protected void doStart()
     {
-        this._timers = new ArrayList();
+        this._timers = new LinkedHashMap();
         String indexDirectory = IQuiver.getConfiguration().getString("lucene.index.path");
 
         List transports = _getTransports();
@@ -75,7 +78,7 @@ public class ContentFetchService extends BaseService
             ContentFetchThread thread = new ContentFetchThread( fetcher, indexDirectory );
             Timer timer = new Timer();
             timer.scheduleAtFixedRate( thread, 5000, interval );
-            _timers.add( timer );
+            _timers.put( fetcher.getFetchLocation().getContentSourceName(), timer );
         }
     }
 
@@ -87,7 +90,7 @@ public class ContentFetchService extends BaseService
     protected void doStop()
     {
         //shut down all timers
-        for (Iterator it = _timers.iterator(); it.hasNext();)
+        for (Iterator it = _timers.values().iterator(); it.hasNext();)
         {
             ((Timer) it.next()).cancel();
         }
@@ -222,6 +225,8 @@ public class ContentFetchService extends BaseService
         private String indexDir;
 
         private boolean isRunning = false;
+        
+        private short failures = 0;
 
         /**
          * Creates a new instance of ContentFetchThread
@@ -245,7 +250,30 @@ public class ContentFetchService extends BaseService
             {
                 isRunning = true;
                 long contentSourceId = fetcher.getFetchLocation().getContentSourceId();
-                List documents = fetcher.fetch();
+                List documents = null;
+                try
+                {
+                    documents = fetcher.fetch();
+                    if( failures != 0)
+                    {
+                        failures = 0;
+                    }
+                }
+                catch( TransportException e)
+                {
+                    logger.error( e );
+                    failures++;
+                    isRunning = false;
+                    if( failures >= 3 )
+                    {                        
+                        String id = fetcher.getFetchLocation().getContentSourceName();
+                        logger.error("Content fetching from content source \"" + id + "\" failed for three times. Content fetching for this source will be stopped now for this session.");
+                        Timer timer = (Timer)_timers.get( id );
+                        timer.cancel();
+                        _timers.remove( id );
+                    }
+                    return;
+                }
 
                 for (Iterator it = documents.iterator(); it.hasNext();)
                 {
