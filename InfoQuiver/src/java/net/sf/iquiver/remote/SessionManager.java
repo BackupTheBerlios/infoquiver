@@ -18,26 +18,26 @@ public class SessionManager extends BaseService
     /**
      * Commons Logger for this class
      */
-    private static final Log logger = LogFactory.getLog(SessionManager.class);
-    
+    private static final Log logger = LogFactory.getLog( SessionManager.class );
+
     /**
      * Default session timeout in milliseconds
      */
     public static final long DEFAULT_SESSION_TIMEOUT_MILLIS = 900000;
-    
+
     /**
-     * Default supported max. amount of concurrent sessions 
+     * Default supported max. amount of concurrent sessions
      */
     public static final int DEFAULT_MAX_SESSIONS = 10;
-    
+
     private int restartCount = -1;
     private long startTime;
-    private boolean isRunning = false; 
+    private boolean isRunning = false;
     private SessionPool sessions;
     private long idCounter = 0;
     private long timeout;
     private int maxSessions;
-    
+
     /**
      * Constructs a new instance of SessionManager with default values for session timeout and max active sessions
      */
@@ -46,9 +46,10 @@ public class SessionManager extends BaseService
         timeout = DEFAULT_SESSION_TIMEOUT_MILLIS;
         maxSessions = DEFAULT_MAX_SESSIONS;
     }
-    
+
     /**
      * Constructs a new instance of SessionManager with custom values for session timeout and max active sessions
+     * 
      * @param timeout
      * @param maxSessions
      */
@@ -57,8 +58,10 @@ public class SessionManager extends BaseService
         this.timeout = timeout;
         this.maxSessions = maxSessions;
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.service.Service#getStartTime()
      */
     public long getStartTime()
@@ -66,7 +69,9 @@ public class SessionManager extends BaseService
         return this.startTime;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.service.Service#getRestartCount()
      */
     public int getRestartCount()
@@ -74,29 +79,34 @@ public class SessionManager extends BaseService
         return this.restartCount;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.avalon.framework.activity.Startable#start()
      */
     public void start() throws Exception
     {
-        logger.info("Starting Session Manager");
-        sessions = new SessionPool(new SessionPoolFactory(this.timeout), maxSessions, timeout);
+        logger.info( "Starting Session Manager" );
+        sessions = new SessionPool( new SessionPoolFactory( this.timeout ), maxSessions );
         isRunning = true;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.avalon.framework.activity.Startable#stop()
      */
     public void stop() throws Exception
     {
-        logger.info("Stopping SessionManager");
+        logger.info( "Stopping SessionManager" );
         sessions.dispose();
         idCounter = 0;
         isRunning = false;
     }
-    
+
     /**
      * Creates a new session id and adds it to the session store
+     * 
      * @param client client id of the user
      * @param user login name of the user
      * @return
@@ -104,35 +114,36 @@ public class SessionManager extends BaseService
     public synchronized String addSession()
     {
         String uid = new UID().toString();
-        idCounter++;        
+        idCounter++;
         uid = uid + idCounter;
-       
+
         try
         {
-            sessions.addSession(uid);
+            sessions.addSession( uid );
         }
         catch ( Exception e )
         {
-            logger.error("Failed to add session " + uid + " to the SessionPool.", e);
+            logger.error( "Failed to add session " + uid + " to the SessionPool.", e );
         }
-        
+
         return uid;
     }
-    
+
     /**
      * Retrieves a session from the session pool
+     * 
      * @param id unique session identifier, MUST be an id returned by addSession()
-     * @return the session for the given <code>id</code> or null if no such session exists 
+     * @return the session for the given <code>id</code> or null if no such session exists
      */
-    public synchronized Session getSession(String id)
+    public synchronized Session getSession( String id )
     {
         try
         {
-            return (Session) sessions.getSession(id);
+            return (Session) sessions.getSession( id );
         }
         catch ( Exception e )
         {
-            logger.debug("Session could not be retrieved from SessionPool", e);
+            logger.debug( "Session could not be retrieved from SessionPool", e );
             return null;
         }
     }
