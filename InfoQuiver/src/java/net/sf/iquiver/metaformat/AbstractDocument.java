@@ -20,7 +20,8 @@ public abstract class AbstractDocument implements Document
     private Date dateOfLastModification;
     private String shortDescription;
     private URL infoURL;
-    private Locale locale;    
+    private Locale locale; 
+    private String encoding;
     
     /* (non-Javadoc)
      * @see net.sf.iquiver.metaformat.Document#getName()
@@ -152,6 +153,20 @@ public abstract class AbstractDocument implements Document
         this.locale = locale;
     }
     
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#getEncoding()
+     */
+    public String getEncoding()
+    {
+        return this.encoding;
+    }
+
+    public void setEncoding(String encoding)
+    {
+        this.encoding = encoding;
+    }
+    
+    
     protected void clearDocumentMembers()
     {
         name = null;
@@ -161,7 +176,8 @@ public abstract class AbstractDocument implements Document
         dateOfLastModification = dateOfCreation;
         shortDescription = null;
         infoURL = null;
-        locale = Locale.getDefault();            
+        locale = Locale.getDefault();   
+        encoding = null;
     }
 
     /* (non-Javadoc)

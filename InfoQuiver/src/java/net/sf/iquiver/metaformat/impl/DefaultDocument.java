@@ -11,7 +11,7 @@ import net.sf.iquiver.metaformat.AbstractDocument;
  */
 public class DefaultDocument extends AbstractDocument
 {    
-    byte[] rawContent;    
+    private byte[] rawContent;
     
     public DefaultDocument()
     {        
@@ -37,23 +37,5 @@ public class DefaultDocument extends AbstractDocument
     {
         super.clearDocumentMembers();
         this.rawContent = null;
-    }
-
-    /* (non-Javadoc)
-     * @see net.sf.iquiver.metaformat.Document#getEncoding()
-     */
-    public String getEncoding()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see net.sf.iquiver.metaformat.Document#setEncoding()
-     */
-    public void setEncoding()
-    {
-        // TODO Auto-generated method stub
-        
     }
 }

@@ -73,11 +73,9 @@ public class HTTPTransport implements Fetcher
         for ( int attempt = 0; statusCode == -1 && attempt < 3; attempt++ )
         {
             try
-            {
+            {   
                 // execute the method.
-                statusCode = client.executeMethod( method);                
-                Document doc = new DefaultDocument(method.getResponseBody());
-                documents.add(doc);
+                statusCode = client.executeMethod( method);                                
             }
             catch ( HttpRecoverableException e )
             {
@@ -89,13 +87,20 @@ public class HTTPTransport implements Fetcher
                 break;
             }
         }
+
         // Check that we didn't run out of retries.
-        if ( statusCode == -1 )
+        if ( statusCode != -1 )
+        {    
+            DefaultDocument doc = new DefaultDocument(method.getResponseBody());
+            doc.setEncoding(((GetMethod)method).getResponseCharSet());
+            documents.add(doc);
+            method.releaseConnection();            
+        }
+        else
         {
             logger.error( "Failed to recover from exception.");
-
         }
-        
+                
         return documents;
     }
 
