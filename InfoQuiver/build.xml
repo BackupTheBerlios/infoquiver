@@ -143,15 +143,16 @@
             namespace="http://iquiver"
             output="${torque.schema.dir}/iquiver.wsdl"
             porttypename="IQuiver"
-            useinheritedmethods="true"
-            stopclasses="java.*,javax.*,org.apache.torque.om.*,org.apache.torque.util.*">
+            stopclasses="java.*,javax.*,org.apache.torque.*">
 			<!-- <mapping namespace="http://iquiver" package="net.sf.iquiver.remote.soap.impl" /> -->
             <mapping namespace="http://iquiver" package="net.sf.iquiver" />
+            <!--
             <mapping namespace="http://iquiver.om" package="net.sf.iquiver.om" />
             <mapping namespace="http://iquiver.om.cache" package="net.sf.iquiver.om.cache" />
             <mapping namespace="http://iquiver.util.om" package="net.sf.iquiver.util.om" />
             <mapping namespace="http://iquiver.torque.om" package="org.apache.torque.om" />
             <mapping namespace="http://iquiver.torque.util" package="org.apache.torque.util" />            
+            -->
 		</java2wsdl>
         
 		<ant target="awk" inheritAll="false">
@@ -167,7 +168,7 @@
         <wsdl2java debug="false" 
             helperGen="false" 
             noimports="false" 
-            output="${java.dir}" 
+            output="src/tmp" 
             url="${torque.schema.dir}/iquiver.wsdl" 
             skeletondeploy="true"
             serverside="true"
@@ -175,12 +176,14 @@
 	            <mapping namespace="http://iquiver-impl" package="${remote.soap.pkg}.impl"/>
 	            <mapping namespace="http://iquiver-intf" package="${remote.soap.pkg}.impl"/>
 	            <mapping namespace="http://iquiver" package="${remote.soap.pkg}.impl"/>
+                <!--
                 <mapping namespace="http://iquiver.om" package="${remote.soap.pkg}.impl.om" />
                 <mapping namespace="http://iquiver.om.cache" package="${remote.soap.pkg}.impl.om.cache" />
                 <mapping namespace="http://iquiver.util.om" package="${remote.soap.pkg}.impl.util.om" />
                 <mapping namespace="http://iquiver.torque.om" package="${remote.soap.pkg}.impl.torque.om" />
                 <mapping namespace="http://iquiver.torque.util" package="${remote.soap.pkg}.impl.torque.util" />            
                 <mapping namespace="http://xml.apache.org/xml-soap" package="${remote.soap.pkg}.impl.xml_soap" />                                            
+                -->
             </wsdl2java>
 
 	</target>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://iquiver.torque.om">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://om.torque.apache.org">
    <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
    <complexType name="ObjectKey">
     <sequence/>
