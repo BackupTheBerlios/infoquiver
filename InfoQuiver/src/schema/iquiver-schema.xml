@@ -25,6 +25,16 @@
             <index-column name="USER_PASSWORD"/>
         </index>
     </table>
+    <table name="iq_user_content_source_lnk" javaName="UserContentSourceLnk" idMethod="none">        
+        <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>
+        <column name="USER_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <foreign-key foreignTable="iq_client">
+            <reference local="CLIENT_ID" foreign="CLIENT_ID" />
+        </foreign-key>
+        <foreign-key foreignTable="iq_user">
+            <reference local="USER_ID" foreign="USER_ID" />
+        </foreign-key>                
+    </table>    
     <table name="iq_client" javaName="Client" idMethod="none">
         <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>
         <column name="CLIENT_NAME" primaryKey="false" type="VARCHAR" size="32"/>
@@ -32,6 +42,16 @@
         <foreign-key foreignTable="iq_address">
             <reference local="ADDRESS_ID" foreign="ADDRESS_ID" />
         </foreign-key>
+    </table>
+    <table name="iq_client_content_source_lnk" javaName="ClientContentSourceLnk" idMethod="none">        
+        <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>
+        <column name="CONTENT_SOURCE_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <foreign-key foreignTable="iq_client">
+            <reference local="CLIENT_ID" foreign="CLIENT_ID" />
+        </foreign-key>
+        <foreign-key foreignTable="iq_content_source">
+            <reference local="CONTENT_SOURCE_ID" foreign="CONTENT_SOURCE_ID" />
+        </foreign-key>                
     </table>
     <table name="iq_address" javaName="Address">
         <column name="ADDRESS_ID" primaryKey="true" required="true" type="BIGINT"/>
