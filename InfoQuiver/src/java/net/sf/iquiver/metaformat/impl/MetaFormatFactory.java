@@ -63,11 +63,11 @@ public class MetaFormatFactory
     {
         if ( isTextBasedContentType( contentType) )
         {
-            return new DefaultDocument();
+            return new DefaultDocument( contentType );
         }
         else if ( isBinaryBasedContentType( contentType ) )
         {
-            return new BinaryDocument();
+            return new BinaryDocument( contentType );
         }
         else
         {
@@ -87,11 +87,11 @@ public class MetaFormatFactory
     {
         if ( isTextBasedContentType( contentType) )
         {
-            return new DefaultDocument( content, encoding );
+            return new DefaultDocument( contentType, content, encoding );
         }
         else if ( isBinaryBasedContentType( contentType ) )
         {
-            return new BinaryDocument(content);
+            return new BinaryDocument(contentType, content);
         }
         else
         {
