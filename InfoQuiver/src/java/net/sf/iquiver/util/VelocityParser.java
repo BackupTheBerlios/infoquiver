@@ -2,8 +2,8 @@
  * VelocityParser.java
  * created on 27.11.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/util/VelocityParser.java,v $
- * $Date: 2004/11/27 17:36:58 $
- * $Revision: 1.1 $
+ * $Date: 2004/11/27 18:38:50 $
+ * $Revision: 1.2 $
  *********************************************************************/
 
 package net.sf.iquiver.util;
@@ -53,17 +53,19 @@ public class VelocityParser
      * @param template path to the velocity template without file extension
      * @param contextVars The variables to pass to the template
      * @param lang the required language
+     * @param resultVars if not null all variables used in the velocity template will be copied
+     * into <var>resultVars</var> even new variables created by the template itself
      * @return a String containing the evaluated template content
      * @throws Exception if parsing fails 
      */
-    public static String parseI18n( String template, Map contextVars, String lang ) throws Exception
+    public static String parseI18n( String template, Map contextVars, String lang, Map resultVars ) throws Exception
     {
         if (template.endsWith( ".vm" ))
         {
             template = template.substring( 0, template.indexOf( ".vm" ) );
         }
 
-        return parse( template + "_" + lang, contextVars );
+        return parse( template + "_" + lang, contextVars, resultVars );
     }
 
     /**
@@ -71,22 +73,26 @@ public class VelocityParser
      * configured in iquiver.properties 
      * @param template path to the velocity template without file extension
      * @param contextVars The variables to pass to the template
+     * @param resultVars if not null all variables used in the velocity template will be copied
+     * into <var>resultVars</var> even new variables created by the template itself 
      * @return a String containing the evaluated template content
      * @throws Exception if parsing fails
      */
-    public static String parseI18n( String template, Map contextVars ) throws Exception
+    public static String parseI18n( String template, Map contextVars, Map resultVars ) throws Exception
     {
-        return parseI18n( template, contextVars, IQuiver.getConfiguration().getString( "default.language" ) );
+        return parseI18n( template, contextVars, IQuiver.getConfiguration().getString( "default.language" ), resultVars );
     }
 
     /**
      * Parses and evaluates an arbitary velocity template
      * @param template path to the velocity template with or without file extension 
      * @param contextVars The variables to pass to the template
+     * @param resultVars if not null all variables used in the velocity template will be copied
+     * into <var>resultVars</var> even new variables created by the template itself
      * @return a String containing the evaluated template content
      * @throws Exception if parsing fails 
      */
-    public static String parse( String template, Map contextVars ) throws Exception
+    public static String parse( String template, Map contextVars, Map resultVars ) throws Exception
     {
         VelocityContext context = new VelocityContext();
 
@@ -98,11 +104,29 @@ public class VelocityParser
         for (Iterator it = contextVars.keySet().iterator(); it.hasNext();)
         {
             String key = (String) it.next();
+            if( logger.isDebugEnabled() )
+            {
+                logger.debug( "Adding " + key + ":" + contextVars.get( key ) + " to Velocity context");
+            }
             context.put( key, contextVars.get( key ) );
         }
 
         StringWriter out = new StringWriter();
         Velocity.mergeTemplate( template, context, out );
+
+        if (resultVars != null)
+        {
+            Object[] keys = context.getKeys();
+            for (int i = 0; i < keys.length; i++)
+            {
+                if( logger.isDebugEnabled() )
+                {
+                    logger.debug( "Adding " + keys[i] + ":" + context.get( (String) keys[i] ) + " to resultVars");
+                }                
+                resultVars.put( keys[i], context.get( (String) keys[i] ) );
+            }
+        }
+
         return out.toString();
     }
 }
