@@ -27,7 +27,7 @@ public interface Fetcher
     /**
      * @return
      */
-    public List fetch();
+    public List fetch() throws TransportException;
     
     /**
      * @return
