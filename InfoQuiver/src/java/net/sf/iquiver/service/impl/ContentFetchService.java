@@ -1,7 +1,11 @@
-/*
- * Created on 20.03.2004
- *
- */
+/*********************************************************************
+ * ContentFetchService.java
+ * created on 20.03.2004 by netseeker
+ * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/ContentFetchService.java,v $
+ * $Date: 2004/07/17 18:02:15 $
+ * $Revision: 1.24 $
+ *********************************************************************/
+
 package net.sf.iquiver.service.impl;
 
 import java.io.File;

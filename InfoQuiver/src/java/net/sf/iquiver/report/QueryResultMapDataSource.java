@@ -2,8 +2,8 @@
  * QueryResultMapDataSource.java
  * created on 17.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/QueryResultMapDataSource.java,v $
- * $Date: 2004/07/17 17:13:41 $
- * $Revision: 1.1 $
+ * $Date: 2004/07/17 18:02:19 $
+ * $Revision: 1.2 $
  *********************************************************************/
 
 package net.sf.iquiver.report;
@@ -20,6 +20,8 @@ import dori.jasper.engine.JRException;
 import dori.jasper.engine.JRField;
 
 /**
+ * A custom jasper datasource, which is able to deal with searchresults
+ * created by net.sf.iquiver.services.impl.ContentSearchService
  * @author netseeker aka Michael Manske
  */
 public class QueryResultMapDataSource implements JRDataSource
