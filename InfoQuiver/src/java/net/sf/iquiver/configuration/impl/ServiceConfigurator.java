@@ -64,7 +64,7 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
             String clazz = config.getString( currentKey );
             Service service = null;
             boolean autostart = subSet.getBoolean( "autostart", false );
-            int restartOnFailure = subSet.getInt( "restartOnFailure", -1 );
+            int restartOnFailure = subSet.getInt( "restartOnFailure", 0 );
             long startTime = System.currentTimeMillis() + 60000;
             long schedulePeriod = -1;
             String[] schedule = subSet.getStringArray( "schedule" );
@@ -133,12 +133,12 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
                 Timer timer = new Timer();
                 if (schedulePeriod != -1)
                 {
-                    timer.scheduleAtFixedRate( new ServiceTask( service ), startTime, schedulePeriod );
+                    timer.scheduleAtFixedRate( new ServiceTask( service, restartOnFailure ), startTime, schedulePeriod );
                     logger.info("Scheduled service " + currentKey + ". First start: " + new Date(startTime).toLocaleString() + " Then every: " + (schedulePeriod * 1000 * 60) + "minutes" );
                 }
                 else
                 {
-                    timer.schedule( new ServiceTask( service ), new Date( startTime ) );
+                    timer.schedule( new ServiceTask( service, restartOnFailure ), new Date( startTime ) );
                     logger.info("Scheduled service for single start" + currentKey + ". Start: " + new Date(startTime).toLocaleString());                    
                 }
 
@@ -217,10 +217,15 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
     private class ServiceTask extends TimerTask
     {
         private Service _service;
+        private int _restartOnFailure = 1;
 
-        public ServiceTask(Service service)
+        public ServiceTask(Service service, int restartOnFailure)
         {
             this._service = service;
+            if(restartOnFailure > 1)
+            {
+                this._restartOnFailure = restartOnFailure;
+            }
         }
 
         /*
@@ -230,13 +235,18 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
          */
         public void run()
         {
-            try
+            int i = 0;
+            while( this._service.getState() != ServiceStateListener.ST_STARTED && i < this._restartOnFailure)
             {
-                this._service.start();
-            }
-            catch ( Exception e )
-            {
-                logger.error( "Error occured while executing service " + this._service.getClass().getName(), e );
+	            ++i;
+                try
+	            {
+	                this._service.start();
+	            }
+	            catch ( Exception e )
+	            {
+	                logger.error( "Error occured while executing service " + this._service.getClass().getName() + "! Remaining restart attempts: " + (this._restartOnFailure - i), e );
+	            }
             }
         }
 
