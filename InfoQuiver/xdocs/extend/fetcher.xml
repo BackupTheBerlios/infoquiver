@@ -32,7 +32,7 @@ public boolean isParsingRequired();
             <p>
                 The ContentFetchService, which is responsible for invoking fetcher transports, will first call setFetchLocation() then
                 fetch(). So in setFetchLocation() you should ensure that the given ContentSource is a valid content source for your
-                transport and does contain a valid set of <a href="../apidocs/net/sf/iquiver/om/TransportAttribute.html">TransportAttribute</a>.
+                transport and does contain a valid set of <a href="../apidocs/net/sf/iquiver/om/TransportAttribute.html">TransportAttributes</a>.
             </p>
 <source>
 public static final String ATTRIBUTE_SERVER = &quot;Server&quot;;

@@ -19,8 +19,6 @@ public class ContentTypeFactory
      */
     private static final Log logger = LogFactory.getLog( ContentTypeFactory.class );
 
-    private static ContentTypeFileTypeMap _fnMap = new ContentTypeFileTypeMap();
-
     public static final String CT_TEXT_PLAIN = "text/plain";
     public static final String CT_TEXT_HTML = "text/html";
     public static final String CT_TEXT_XML = "text/xml";
@@ -56,7 +54,7 @@ public class ContentTypeFactory
      */
     public static String getContentTypeForFile( String filename )
     {
-        String cType = _fnMap.getContentType( filename );
+        String cType = ContentTypeFileTypeMap.getInstance().getContentType( filename );
 
         if (logger.isDebugEnabled())
         {
@@ -106,7 +104,7 @@ public class ContentTypeFactory
      */
     public static String[] getFileTypes( String contentType )
     {
-        return _fnMap.getFileTypes( contentType );
+        return ContentTypeFileTypeMap.getInstance().getFileTypes( contentType );
     }
     
     /**
@@ -115,6 +113,6 @@ public class ContentTypeFactory
      */
     public static String getFirstFileType( String contentType )
     {
-        return _fnMap.getFirstFileType( contentType );
+        return ContentTypeFileTypeMap.getInstance().getFirstFileType( contentType );
     }
 }

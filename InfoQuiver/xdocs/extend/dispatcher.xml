@@ -7,8 +7,95 @@
   <body>
     <section name="Dispatcher Transports">
         <p>
-            To be done.
+            In this guide you will learn how to create your own custom dispatcher transport. The ready to use
+            sample class used in this guide comes with the default InfoQuiver distribution.
+            <ul>
+                <li><a href="../apidocs/net/sf/iquiver/samples/transport/SimpleDispatchTransport.html">javadoc of the used example class</a></li>
+                <li><a href="../xref/net/sf/iquiver/samples/transport/SimpleDispatchTransport.html">xref of the used example class</a></li>
+            </ul>
+            <img src="../images/sample_dispatcher.png" alt="class diagram" border="0"/>
         </p>
+    <subsection name="net.sf.iquiver.transport.Dispatcher">
+        <p>
+            As shown in the class diagram above a dispatcher must implement <a href="../apidocs/net/sf/iquiver/transport/Dispatcher.html">net.sf.iquiver.transport.Dispatcher</a>.
+            <source>public class <a href="../apidocs/net/sf/iquiver/samples/transport/SimpleDispatchTransport.html">SimpleDispatchTransport</a> implements Dispatcher</source>
+            The interface Dispatcher declares four methods:
+            </p>
+<source>
+public void setDispatchLocation(<a href="../apidocs/net/sf/iquiver/om/ContentSource.html">ContentSource</a> source) throws <a href="../apidocs/net/sf/iquiver/transport/TransportConfigurationException.html">TransportConfigurationException</a>;
+public <a href="apidocs/net/sf/iquiver/om/ContentSource.html">ContentSource</a> getDispatchLocation();
+public long dispatch(<a href="apidocs/net/sf/iquiver/metaformat/Document.html">Document</a> doc) throws <a href="apidocs/net/sf/iquiver/transport/TransportException.html">TransportException</a>;
+public long[] dispatch(List docs) throws <a href="apidocs/net/sf/iquiver/transport/TransportException.html">TransportException</a>;
+</source>
+    </subsection>    
+        <subsection name="setDispatchLocation()">
+            <p>
+                The ContentDispatchService, which is responsible for invoking dispatcher transports, will first call setDispatchLocation() then
+                dispatch(). So in setDispatchLocation() you should ensure that the given ContentSource is a valid content source for your
+                transport and does contain a valid set of <a href="../apidocs/net/sf/iquiver/om/TransportAttribute.html">TransportAttributes</a>.
+            </p>
+<source>
+public static final String ATTRIBUTE_FS_DIRECTORY = &quot;Directory&quot;;
+
+private ContentSource _dispatchLocation;
+private Map _dispatchAttributes;
+...
+
+public void setDispatchLocation( ContentSource location ) throws TransportConfigurationException
+{
+    this._dispatchLocation = location;
+    try
+    {
+        this._dispatchAttributes = location.getAttributesAsNamedMap();
+    }
+    catch ( TorqueException e )
+    {
+        throw new TransportConfigurationException( e );
+    }
+}
+</source>
+        </subsection>                                    
+        <subsection name="dispatch(Document doc)">
+            <p>
+            The dispatch(Document doc) is responsible for copying a document to the given dispatch target.
+            It must return the amount of transmitted bytes.
+            </p>
+<source>
+public long dispatch( Document doc ) throws TransportException
+{
+    String dir = (String) this._dispatchAttributes.get( ATTRIBUTE_FS_DIRECTORY );
+    File fDir = new File( dir );
+    
+    if ( !fDir.exists() )
+    {
+        fDir.mkdir();
+    }
+
+    return writeFile( doc, fDir );
+}
+</source>
+        </subsection>
+        <subsection name="dispatch(List docs)">
+            <p>
+            The dispatch(List docs) is responsible for copying a bunch of documents to the given dispatch target.
+            It must return an array containing the amount of transmitted bytes per document.
+            In our example we just wrap dispatch( Document doc )...
+            </p>
+<source>
+public long[] dispatch( List docs ) throws TransportException
+{
+    long[] written = new long[docs.size()];
+
+    for (int i = 0; i &lt; docs.size(); i++)
+    {
+        Document doc = (Document) docs.get( i );
+        written[i] = dispatch( doc );
+    }
+
+    return written;
+}
+</source>
+        </subsection>                
     </section>
   </body>
 </document>    
