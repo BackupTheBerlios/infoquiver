@@ -3,5 +3,8 @@
 		<td class="browsecell" onmouseover="this.style.backgroundColor='#FECB32'; this.style.borderColor='#1C1605';" onmouseout="this.style.backgroundColor='#33CCFF';this.style.borderColor='#2A779D';" onclick="document.location='$link.setRelative("index.vm")'">Search</td>
 		<td class="browsecell" onmouseover="this.style.backgroundColor='#FECB32'; this.style.borderColor='#1C1605';" onmouseout="this.style.backgroundColor='#33CCFF';this.style.borderColor='#2A779D';" onclick="document.location='$link.setRelative("index.vm")'">Serverstatus</td>
 		<td class="browsecell" onmouseover="this.style.backgroundColor='#FECB32'; this.style.borderColor='#1C1605';" onmouseout="this.style.backgroundColor='#33CCFF';this.style.borderColor='#2A779D';" onclick="document.location='$link.setRelative("index.vm")'">Admin</td>
+		#if ( $iquiver.isLoggedIn($request) )
+		<td class="browsecell" onmouseover="this.style.backgroundColor='#FECB32'; this.style.borderColor='#1C1605';" onmouseout="this.style.backgroundColor='#33CCFF';this.style.borderColor='#2A779D';" onclick="document.location='$link.setRelative("index.vm")'">Logout</td>
+		#end
 	</tr>
 </table>
