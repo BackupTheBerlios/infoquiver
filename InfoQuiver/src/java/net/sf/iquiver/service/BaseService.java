@@ -24,6 +24,7 @@ public abstract class BaseService implements Service
      */
     List serviceExecutionListeners = Collections.synchronizedList(new ArrayList());
 
+    private int _state = ServiceStateListener.ST_STOPPED;
     
     /* (non-Javadoc)
      * @see net.sf.iquiver.service.Service#addServiceStateListener(net.sf.iquiver.service.ServiceStateListener)
@@ -97,6 +98,22 @@ public abstract class BaseService implements Service
                 }
             }
         }.start();
+    }
+    
+    /**
+     * The recommended method for all inherited classes to execute all neccessary actions/notifications
+     * if the service state changes 
+     * @param newState
+     * @return the previous state of the service
+     */
+    protected int setState( int newState )
+    {
+        int oldState = this._state;
+        this._state = newState;
+        
+        notifyServiceStateListeners(new ServiceStateChangedEvent(this, oldState, newState));
+        
+        return oldState;
     }
     
     public abstract long getStartTime();

@@ -10,7 +10,7 @@ import java.util.EventObject;
  * @author netseeker aka Michael Manske
  */
 public class ServiceStateChangedEvent extends EventObject
-{
+{    
     private int oldState;
     private int newState;
     private long time;

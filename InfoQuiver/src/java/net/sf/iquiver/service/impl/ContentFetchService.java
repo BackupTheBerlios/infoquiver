@@ -16,6 +16,7 @@ import net.sf.iquiver.om.ContentSource;
 import net.sf.iquiver.om.ContentSourcePeer;
 import net.sf.iquiver.om.Transport;
 import net.sf.iquiver.service.BaseService;
+import net.sf.iquiver.service.ServiceStateListener;
 import net.sf.iquiver.transport.Fetcher;
 import net.sf.iquiver.transport.TransportConfigurationException;
 
@@ -69,6 +70,8 @@ public class ContentFetchService extends BaseService
             timer.scheduleAtFixedRate( thread, 1000, interval );
             _timers.add(timer);
         }
+        
+        setState(ServiceStateListener.ST_STARTED);
     }
 
     /*
@@ -77,13 +80,15 @@ public class ContentFetchService extends BaseService
      * @see net.sf.iquiver.service.BaseService#stop()
      */
     public void stop() throws Exception
-    {
+    {        
         //shut down all timers
         for(Iterator it = _timers.iterator(); it.hasNext();)
         {
             ((Timer)it.next()).cancel();
         }
         _timers = null;
+        
+        setState(ServiceStateListener.ST_STOPPED);        
     }
 
     /*
