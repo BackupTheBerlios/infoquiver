@@ -4,8 +4,8 @@
 package net.sf.iquiver.remote.xmlrpc;
 
 import net.sf.iquiver.configuration.Configuration;
-import net.sf.iquiver.remote.BaseRemoteService;
 import net.sf.iquiver.remote.IServer;
+import net.sf.iquiver.service.impl.BaseRemoteService;
 
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.commons.logging.Log;

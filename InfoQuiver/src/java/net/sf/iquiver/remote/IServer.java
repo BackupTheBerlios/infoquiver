@@ -3,13 +3,13 @@
  */
 package net.sf.iquiver.remote;
 
-import org.apache.avalon.framework.activity.Startable;
+import net.sf.iquiver.configuration.Reconfigurable;
 
-import net.sf.iquiver.configuration.Configurable;
+import org.apache.avalon.framework.activity.Startable;
 
 /**
  * @author netseeker aka Michael Manske
  */
-public interface IServer extends Configurable, Startable
+public interface IServer extends Reconfigurable, Startable
 {
 }
