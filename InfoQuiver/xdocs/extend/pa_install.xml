@@ -12,15 +12,25 @@
             development stage.                    
         </p>
         <subsection name="Usage">
-            <code>java net.sf.iquiver.tools.ParserInstaller -fTorque ... -class ... name</code>
-            <ul>
-                <li>fTorque: specifies the path to the configuration file with settings for the persistence layer<br/>
-                    As long as you are not a InfoQuiver developer this setting should be
-                    <code>PathToInfoQuiverInstallDir/conf/torque.properties</code></li>
-                <li>class: specifies the class containing your transport implementation, eg.
-                    <code>net.sf.iquiver.samples.parser.SimpleParsert</code></li>
-                <li>name: specifies a name for your parser, eg. &quot;SimpleParser&quot;</li>    
-            </ul>
+<source>java net.sf.iquiver.tools.ParserInstaller -fTorque ... -class ... name</source>
+        <table>
+            <tr><th>argument</th><th>description</th></tr>
+            <tr>
+                <td>fTorque</td>
+                <td>specifies the path to the configuration file with settings for the persistence layer<br/>
+                As long as you are not a InfoQuiver developer this setting should be
+                <code>PathToInfoQuiverInstallDir/conf/torque.properties</code></td>
+            </tr>
+            <tr>
+                <td>class:</td>
+                <td>specifies the class containing your transport implementation, eg.
+                 <code>net.sf.iquiver.samples.parser.SimpleParsert</code></td>
+            </tr>
+            <tr>
+                <td>name:</td>
+                <td>specifies a name for your parser, eg. &quot;SimpleParser&quot;</td>
+            </tr>
+        </table>
         </subsection>
     </section>
   </body>

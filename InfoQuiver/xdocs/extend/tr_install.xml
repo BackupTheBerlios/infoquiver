@@ -14,14 +14,21 @@
         <subsection name="Usage">
             Before using the TransportInstaller ensure that both - your transport class and the transport xml descriptor -
             are located in the same directory.            
-            <code>java net.sf.iquiver.tools.TransportInstaller -fTorque ... transport</code>
-            <ul>
-                <li>fTorque: specifies the path to the configuration file with settings for the persistence layer<br/>
+<source>java net.sf.iquiver.tools.TransportInstaller -fTorque ... transport</source>
+        <table>
+            <tr><th>argument</th><th>description</th></tr>
+            <tr>
+                <td>fTorque</td>
+                <td>specifies the path to the configuration file with settings for the persistence layer<br/>
                     As long as you are not a InfoQuiver developer this setting should be
-                    <code>PathToInfoQuiverInstallDir/conf/torque.properties</code></li>
-                <li>transport: specifies the class containing your transport implementation, eg.
-                    <code>net.sf.iquiver.samples.transport.SimpleFetchTransport</code></li>
-            </ul>
+                    <code>PathToInfoQuiverInstallDir/conf/torque.properties</code></td>
+            </tr>
+            <tr>
+                <td>transport:</td>
+                <td>specifies the class containing your transport implementation, eg.
+                    <code>net.sf.iquiver.samples.transport.SimpleFetchTransport</code></td>
+                </tr>
+        </table>
         </subsection>
     </section>
   </body>
