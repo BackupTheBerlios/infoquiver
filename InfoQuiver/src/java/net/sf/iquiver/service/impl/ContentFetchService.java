@@ -14,24 +14,22 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ContentFetchService extends BaseService
 {
+    /**
+     * Commons Logger for this class
+     */
     private static final Log logger = LogFactory.getLog(ContentFetchService.class);
+    
     private int restartCount = 0;
     private long startTime;
     
-    /**
-     * 
-     */
-    public ContentFetchService()
-    {
-    }
-
     /* (non-Javadoc)
      * @see net.sf.iquiver.service.BaseService#start()
      */
     public void start() throws Exception
     {
-        // TODO Auto-generated method stub
-        
+        logger.info("Starting...");
+        this.startTime = System.currentTimeMillis();
+        this.restartCount++;
     }
 
     /* (non-Javadoc)

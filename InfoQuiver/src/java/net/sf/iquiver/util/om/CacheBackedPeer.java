@@ -31,6 +31,7 @@ public class CacheBackedPeer extends BasePeer
 
     /**
      * Initializes and configures the cache
+     * 
      * @param configuration the subset ("cache") of the cache configuration file
      */
     public static final synchronized void configure( Configuration configuration )
@@ -67,13 +68,15 @@ public class CacheBackedPeer extends BasePeer
             }
 
             cacheFactory = new CacheFactory( cacheConfiguration );
+
             if (enableCacheForCriteriaSelects)
             {
                 logger.info( "CacheForCriteriaSelects will be activated" );
             }
             else
             {
-                logger.info( "CacheForCriteriaSelects will NOT be activated (enableCacheForCriteriaSelects=false or not set" );
+                logger
+                        .info( "CacheForCriteriaSelects will NOT be activated (enableCacheForCriteriaSelects=false or not set" );
             }
             logger.info( "Cache initialization completed" );
         }
