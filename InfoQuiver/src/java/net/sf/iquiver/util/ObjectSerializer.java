@@ -11,17 +11,17 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  */
 public class ObjectSerializer
 {
-    private static XStream xstream = new XStream(new DomDriver());
-    
+    private static XStream xstream = new XStream( new DomDriver() );
+
     /**
      * @param object
      * @return
      */
-    public static String objectToXml(Object object)
+    public static String objectToXml( Object object )
     {
         return xstream.toXML( object );
     }
-    
+
     /**
      * @param xml
      * @return
