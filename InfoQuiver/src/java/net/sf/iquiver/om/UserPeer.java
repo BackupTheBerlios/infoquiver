@@ -19,10 +19,11 @@ public class UserPeer
 {
 	final private static Log logger = LogFactory.getLog(UserPeer.class);
 	
-    public static User doLogin(String username, String password)
+    public static User doLogin(long clientId, String username, String password)
     {
         User user = null;
         Criteria crit = new Criteria();
+        crit.add(UserPeer.CLIENT_ID, clientId);
         crit.add(UserPeer.USER_LOGIN, username);
         crit.add(UserPeer.USER_PASSWORD, password);
         
