@@ -8,7 +8,6 @@ import java.io.ByteArrayInputStream;
 import java.util.Properties;
 
 import net.sf.iquiver.metaformat.Document;
-import net.sf.iquiver.metaformat.impl.DefaultDocument;
 import net.sf.iquiver.metaformat.impl.MetaFormatFactory;
 import net.sf.iquiver.parser.Parser;
 import net.sf.iquiver.parser.ParsingException;
@@ -21,9 +20,9 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author netseeker aka Michael Manske
  */
-public class HTMLParser extends Parser
+public class HtmlParser extends Parser
 {
-    private static final Log logger = LogFactory.getLog(HTMLParser.class);
+    private static final Log logger = LogFactory.getLog(HtmlParser.class);
 
     /* (non-Javadoc)
      * @see net.sf.iquiver.parser.Parser#parse(java.io.InputStream)
@@ -31,10 +30,10 @@ public class HTMLParser extends Parser
     public Document parse( byte[] rawContent ) throws ParsingException
     {
         org.apache.lucene.demo.html.HTMLParser parser = new org.apache.lucene.demo.html.HTMLParser( new ByteArrayInputStream( rawContent ));
-        Document doc = new DefaultDocument( MetaFormatFactory.CT_TEXT_HTML );
-        
+        Document doc = null;
         try
         {
+            doc = MetaFormatFactory.createDocumentForContentType( MetaFormatFactory.CT_TEXT_HTML ) ;
             doc.setRawContent( rawContent );
         }
         catch ( Exception e )
@@ -54,7 +53,7 @@ public class HTMLParser extends Parser
             {
                 try
                 {
-                    doc.setDateOfLastModification(DateParser.parseDate(  date ));
+                    doc.setDateOfLastModification(DateParser.parseDate( date ));
                 }
                 catch( DateParseException e )
                 {

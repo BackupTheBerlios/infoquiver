@@ -95,6 +95,7 @@ public class ContentFetchService extends BaseService
         long now = new Date().getTime();
         boolean isFetchRequired = true;
         long fetchPeriod = 0;
+        Criteria crit = new Criteria();
 
         try
         {
@@ -110,13 +111,11 @@ public class ContentFetchService extends BaseService
         {
             ContentSource source = (ContentSource) it.next();
             fetchPeriod = now - source.getContentSourceUpdateTimespan();
-            Criteria crit = new Criteria();
+            crit.clear();
             crit.addSelectColumn( ContentPeer.CONTENT_ID );
             crit.add( ContentPeer.CONTENT_SOURCE_ID, source.getContentSourceId() );
             crit.add( ContentPeer.CONTENT_TO_DELETE, false );
-            crit.add( ContentPeer.CONTENT_RECEIVE_DATETIME, new Date( fetchPeriod ), Criteria.LESS_THAN );
-            crit.setDistinct();
-
+            
             if (logger.isDebugEnabled())
             {
                 logger.debug( crit );
@@ -124,7 +123,21 @@ public class ContentFetchService extends BaseService
 
             try
             {
-                isFetchRequired = !ContentPeer.doSelectVillageRecords( crit ).isEmpty();
+                //first fetch for this content source?
+                isFetchRequired = ContentPeer.doSelectVillageRecords( crit ).isEmpty();
+                //already fetched this content source in past, check if update is neccessary
+                if(!isFetchRequired)
+                {
+	                crit.clear();
+	                crit.addSelectColumn( ContentPeer.CONTENT_ID );
+	                crit.add( ContentPeer.CONTENT_SOURCE_ID, source.getContentSourceId() );
+	                crit.add( ContentPeer.CONTENT_TO_DELETE, false );
+	                crit.add( ContentPeer.CONTENT_RECEIVE_DATETIME, new Date( fetchPeriod ), Criteria.GREATER_THAN );
+	                crit.addDescendingOrderByColumn( ContentPeer.CONTENT_ID );
+	                crit.setDistinct();            
+	
+	                isFetchRequired = ContentPeer.doSelectVillageRecords( crit ).isEmpty();
+                }
             }
             catch ( TorqueException e )
             {
@@ -226,6 +239,7 @@ public class ContentFetchService extends BaseService
                     try
                     {
                         Content content = new Content( doc );
+                        content.setContentReceiveDatetime(new Date());
                         content.setContentSourceId( contentSourceId );
                         content.save();
                     }

@@ -3,20 +3,15 @@
  */
 package net.sf.iquiver.test.junit;
 
-import java.io.IOException;
-
 import net.sf.iquiver.metaformat.Document;
 import net.sf.iquiver.om.Content;
 import net.sf.iquiver.om.ContentPeer;
-import net.sf.iquiver.parser.ParsingException;
-import net.sf.iquiver.parser.impl.HTMLParser;
-
-import org.apache.torque.TorqueException;
+import net.sf.iquiver.parser.impl.HtmlParser;
 
 /**
  * @author netseeker aka Michael Manske
  */
-public class HTMLParserTest extends BaseIQuiverTestCase
+public class HtmlParserTest extends BaseIQuiverTestCase
 {
 
     /*
@@ -24,7 +19,7 @@ public class HTMLParserTest extends BaseIQuiverTestCase
      */
     public void testParseDocument()
     {
-        HTMLParser parser = new HTMLParser();
+        HtmlParser parser = new HtmlParser();
         
         try
         {
@@ -32,19 +27,10 @@ public class HTMLParserTest extends BaseIQuiverTestCase
             Document doc = parser.parse( content );
             System.out.println(doc.getRawContent());
         }
-        catch ( TorqueException e )
+        catch ( Exception e )
         {
             e.printStackTrace();
         }
-        catch ( ParsingException e )
-        {
-            e.printStackTrace();
-        }
-        catch ( IOException e )
-        {
-            e.printStackTrace();
-        }
-        
     }
 
 }
