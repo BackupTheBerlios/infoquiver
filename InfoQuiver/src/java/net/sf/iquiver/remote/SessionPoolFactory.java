@@ -16,25 +16,12 @@ public class SessionPoolFactory implements KeyedPoolableObjectFactory
     private long timeout = 900000;
     
     /**
-     * max. supported amount of concurrent sessions, default is 10
-     */
-    private int maxSessions = 10;
-    
-    /**
-     * 
-     */
-    public SessionPoolFactory()
-    {        
-    }
-    
-    /**
      * @param timeout
      * @param maxSessions
      */
-    public SessionPoolFactory(int timeout, int maxSessions)
+    public SessionPoolFactory( long timeout )
     {
-        this.timeout = timeout * 1000;
-        this.maxSessions = 10;
+        this.timeout = timeout;
     }
     
     /* (non-Javadoc)
@@ -50,7 +37,7 @@ public class SessionPoolFactory implements KeyedPoolableObjectFactory
      */
     public void destroyObject( Object key, Object session ) throws Exception
     {
-        //not supported
+        
     }
 
     /* (non-Javadoc)
@@ -79,7 +66,14 @@ public class SessionPoolFactory implements KeyedPoolableObjectFactory
      */
     public void activateObject( Object key, Object session ) throws Exception
     {
-        ((Session)session).setLastAccessTime(System.currentTimeMillis());
+        if(validateObject(key, session))
+        {
+            ((Session)session).setLastAccessTime(System.currentTimeMillis());
+        }
+        else
+        {
+            throw new Exception("Session timed out.");
+        }
     }
 
     /* (non-Javadoc)
@@ -87,7 +81,7 @@ public class SessionPoolFactory implements KeyedPoolableObjectFactory
      */
     public void passivateObject( Object key, Object session ) throws Exception
     {
-        // not supported
+        ((Session)session).setLastAccessTime(System.currentTimeMillis());
     }
 
 }
