@@ -18,6 +18,8 @@ import net.sf.iquiver.om.ContentPeer;
 import net.sf.iquiver.om.ContentSource;
 import net.sf.iquiver.om.ContentSourcePeer;
 import net.sf.iquiver.om.Transport;
+import net.sf.iquiver.parser.Parser;
+import net.sf.iquiver.parser.impl.ParserFactory;
 import net.sf.iquiver.service.BaseService;
 import net.sf.iquiver.transport.Fetcher;
 import net.sf.iquiver.transport.TransportConfigurationException;
@@ -133,7 +135,6 @@ public class ContentFetchService extends BaseService
 	                crit.add( ContentPeer.CONTENT_SOURCE_ID, source.getContentSourceId() );
 	                crit.add( ContentPeer.CONTENT_TO_DELETE, false );
 	                crit.add( ContentPeer.CONTENT_RECEIVE_DATETIME, new Date( fetchPeriod ), Criteria.GREATER_THAN );
-	                crit.addDescendingOrderByColumn( ContentPeer.CONTENT_ID );
 	                crit.setDistinct();            
 	
 	                isFetchRequired = ContentPeer.doSelectVillageRecords( crit ).isEmpty();
@@ -238,7 +239,18 @@ public class ContentFetchService extends BaseService
                     Document doc = (Document) it.next();
                     try
                     {
-                        Content content = new Content( doc );
+                        Content content = null;
+                        
+                        if( fetcher.isParsingRequired() )
+                        {
+                            Parser parser = ParserFactory.getParserForContentType( doc.getContentTypeStr() );
+                            content  = new Content( parser.parse( doc ) );
+                        }
+                        else
+                        {
+                            content = new Content( doc );    
+                        }
+                        
                         content.setContentReceiveDatetime(new Date());
                         content.setContentSourceId( contentSourceId );
                         content.save();
