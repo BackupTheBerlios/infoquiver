@@ -6,6 +6,7 @@ package net.sf.iquiver.parser.impl;
 import java.io.UnsupportedEncodingException;
 
 import net.sf.iquiver.metaformat.Document;
+import net.sf.iquiver.metaformat.impl.ContentTypeFactory;
 import net.sf.iquiver.metaformat.impl.MetaFormatFactory;
 import net.sf.iquiver.parser.Parser;
 import net.sf.iquiver.parser.ParsingException;
@@ -27,7 +28,7 @@ public class TextParser extends Parser
         
         try
         {
-            doc = MetaFormatFactory.createDocumentForContentType( MetaFormatFactory.CT_TEXT_PLAIN );
+            doc = MetaFormatFactory.createDocumentForContentType( ContentTypeFactory.CT_TEXT_PLAIN );
             doc.setRawContent( rawContent );
         }
         catch ( UnsupportedContentTypeException e )

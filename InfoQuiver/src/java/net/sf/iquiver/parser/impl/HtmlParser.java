@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import net.sf.iquiver.metaformat.Document;
+import net.sf.iquiver.metaformat.impl.ContentTypeFactory;
 import net.sf.iquiver.metaformat.impl.MetaFormatFactory;
 import net.sf.iquiver.parser.Parser;
 import net.sf.iquiver.parser.ParsingException;
@@ -38,7 +39,7 @@ public class HtmlParser extends Parser
         Document doc = null;
         try
         {
-            doc = MetaFormatFactory.createDocumentForContentType( MetaFormatFactory.CT_TEXT_HTML );
+            doc = MetaFormatFactory.createDocumentForContentType( ContentTypeFactory.CT_TEXT_HTML );
             doc.setRawContent( rawContent );
         }
         catch ( Exception e )

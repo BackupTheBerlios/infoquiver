@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import net.sf.iquiver.metaformat.Document;
+import net.sf.iquiver.metaformat.impl.ContentTypeFactory;
 import net.sf.iquiver.metaformat.impl.MetaFormatFactory;
 import net.sf.iquiver.parser.Parser;
 import net.sf.iquiver.parser.ParsingException;
@@ -44,7 +45,7 @@ public class PdfParser extends Parser
         try
         {
             parser = new org.pdfbox.pdfparser.PDFParser( new ByteArrayInputStream( rawContent ) );
-            doc = MetaFormatFactory.createDocumentForContentType( MetaFormatFactory.CT_APPLICATION_PDF );
+            doc = MetaFormatFactory.createDocumentForContentType( ContentTypeFactory.CT_APPLICATION_PDF );
             doc.setRawContent( rawContent );
         }
         catch ( Exception e )

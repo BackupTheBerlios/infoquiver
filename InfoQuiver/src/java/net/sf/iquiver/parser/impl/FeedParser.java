@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import net.sf.iquiver.metaformat.Document;
+import net.sf.iquiver.metaformat.impl.ContentTypeFactory;
 import net.sf.iquiver.metaformat.impl.MetaFormatFactory;
 import net.sf.iquiver.parser.ParsingException;
 import net.sf.iquiver.parser.UnsupportedContentTypeException;
@@ -40,7 +41,7 @@ public class FeedParser extends RawXmlParser
         Document doc = null;
         try
         {
-            doc = MetaFormatFactory.createDocumentForContentType( MetaFormatFactory.CT_APPLICATION_XML );
+            doc = MetaFormatFactory.createDocumentForContentType( ContentTypeFactory.CT_APPLICATION_XML );
 
             ChannelIF channel = de.nava.informa.parsers.FeedParser.parse( new ChannelBuilder(),
                     new ByteArrayInputStream( rawContent ) );
@@ -59,7 +60,7 @@ public class FeedParser extends RawXmlParser
                 try
                 {
                     ItemIF item = (ItemIF) it.next();
-                    Document child = MetaFormatFactory.createDocumentForContentType( MetaFormatFactory.CT_TEXT_PLAIN );
+                    Document child = MetaFormatFactory.createDocumentForContentType( ContentTypeFactory.CT_TEXT_PLAIN );
                     child.setInfoURL( item.getLink() );
                     child.setAuthor( item.getCreator() );
                     child.setName( item.getTitle() );

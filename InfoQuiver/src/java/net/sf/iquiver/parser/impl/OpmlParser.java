@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import net.sf.iquiver.metaformat.Document;
+import net.sf.iquiver.metaformat.impl.ContentTypeFactory;
 import net.sf.iquiver.metaformat.impl.MetaFormatFactory;
 import net.sf.iquiver.parser.ParsingException;
 import net.sf.iquiver.parser.UnsupportedContentTypeException;
@@ -40,7 +41,7 @@ public class OpmlParser extends RawXmlParser
         Document doc = null;
         try
         {
-            doc = MetaFormatFactory.createDocumentForContentType( MetaFormatFactory.CT_APPLICATION_XML );
+            doc = MetaFormatFactory.createDocumentForContentType( ContentTypeFactory.CT_APPLICATION_XML );
             doc.setRawContent( rawContent );
             Collection feeds = OPMLParser.parse( new ByteArrayInputStream( rawContent ) );
 
@@ -49,7 +50,7 @@ public class OpmlParser extends RawXmlParser
                 try
                 {
                     FeedIF item = (FeedIF) it.next();
-                    Document child = MetaFormatFactory.createDocumentForContentType( MetaFormatFactory.CT_TEXT_PLAIN );
+                    Document child = MetaFormatFactory.createDocumentForContentType( ContentTypeFactory.CT_TEXT_PLAIN );
                     child.setInfoURL( item.getSite() );
                     child.setDateOfCreation( item.getDateFound() );
                     child.setDateOfLastModification( item.getLastUpdated() );

@@ -6,8 +6,8 @@ package net.sf.iquiver.parser.impl;
 import java.io.UnsupportedEncodingException;
 
 import net.sf.iquiver.metaformat.Document;
+import net.sf.iquiver.metaformat.impl.ContentTypeFactory;
 import net.sf.iquiver.metaformat.impl.DefaultDocument;
-import net.sf.iquiver.metaformat.impl.MetaFormatFactory;
 import net.sf.iquiver.parser.Parser;
 import net.sf.iquiver.parser.ParsingException;
 
@@ -28,7 +28,7 @@ public class RawXmlParser extends Parser
             return parser.parse( rawContent );
         }
         
-        Document doc = new DefaultDocument( MetaFormatFactory.CT_TEXT_XML );
+        Document doc = new DefaultDocument( ContentTypeFactory.CT_TEXT_XML );
         try
         {
             doc.setRawContent( rawContent );
