@@ -8,6 +8,9 @@
         <column name="USER_FIRST_NAME" primaryKey="false" type="VARCHAR" size="32"/>
         <column name="USER_MID_NAME" primaryKey="false" type="VARCHAR" size="32"/>
         <column name="USER_LAST_NAME" primaryKey="false" type="VARCHAR" size="32"/>
+        <column name="USER_GENDER" type="VARCHAR" size="1"/>
+        <column name="USER_DATE_OF_BIRTH" type="TIMESTAMP"/>        
+        <column name="USER_PICTURE" type="LONGVARBINARY" size="4096"/>
         <column name="ADDRESS_ID" primaryKey="false" required="true" type="BIGINT"/>
         <column name="CLIENT_ID" primaryKey="false" required="true" type="INTEGER"/>
         <foreign-key foreignTable="iq_client">
@@ -39,6 +42,7 @@
         <column name="ADDRESS_PHONE" primaryKey="false" type="VARCHAR" size="16"/>
         <column name="ADDRESS_MOBILE" primaryKey="false" type="VARCHAR" size="16"/>
         <column name="ADDRESS_EMAIL" primaryKey="false" type="VARCHAR" size="32"/>
+        <column name="ADDRESS_URL" primaryKey="false" type="VARCHAR" size="64"/>
         <column name="ADDRESS_NUMBER" primaryKey="false" type="VARCHAR" size="10"/>
         <column name="ADDRESS_COUNTRY" primaryKey="false" type="VARCHAR" size="255"/>
     </table>
@@ -112,18 +116,11 @@
         <foreign-key foreignTable="iq_transport">
             <reference local="TRANSPORT_ID" foreign="TRANSPORT_ID" />
         </foreign-key>
-        <unique name="IQ_CLIENTTRANSPORTLNK_PKI">
-            <unique-column name="CLIENT_ID"/>
-            <unique-column name="TRANSPORT_ID"/>
-        </unique>                
     </table>
     <table name="iq_permission" javaName="Permission" idMethod="none">        
         <column name="PERMISSION_ID" primaryKey="true" required="true" type="INTEGER"/>
         <column name="PERMISSION_NAME" type="VARCHAR" size="32"/>
         <column name="PERMISSION_DESC" type="VARCHAR" size="255"/>        
-        <unique name="IQ_PERMISSION_PKI">
-            <unique-column name="PERMISSION_ID"/>
-        </unique>                        
     </table>
     <table name="iq_client_permission_lnk" javaName="ClientPermissionLnk" idMethod="none">
         <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>
@@ -143,10 +140,20 @@
         <column name="CONTENT_SOURCE_TYPE_NAME" type="VARCHAR" size="32"/>
         <column name="CONTENT_SOURCE_TYPE_DESC" type="VARCHAR" size="255"/>
     </table>
+    <table name="iq_publisher" javaName="Publisher">
+        <column name="PUBLISHER_ID" primaryKey="true" required="true" type="INTEGER"/>
+        <column name="ADDRESS_ID" primaryKey="false" required="true" type="BIGINT"/>
+        <column name="PUBLISHER_NAME" type="VARCHAR" size="32"/>
+        <column name="PUBLISHER_LOGO" type="LONGVARBINARY" size="4096"/>
+        <foreign-key foreignTable="iq_address">
+            <reference local="ADDRESS_ID" foreign="ADDRESS_ID" />
+        </foreign-key>        
+    </table>
     <table name="iq_content_source" javaName="ContentSource">
         <column name="CONTENT_SOURCE_ID" primaryKey="true" required="true" type="BIGINT"/>
-        <column name="CONTENT_SOURCE_TYPE_ID" required="true" type="INTEGER"/>
+        <column name="CONTENT_SOURCE_TYPE_ID" required="true" type="INTEGER"/>        
         <column name="TRANSPORT_ID" required="true" type="INTEGER"/>
+        <column name="PUBLISHER_ID" type="INTEGER"/>        
         <column name="CONTENT_SOURCE_NAME" type="VARCHAR" size="32"/>
         <column name="CONTENT_SOURCE_DESC" type="VARCHAR" size="255"/>
         <column name="IS_AUTHENTIFICATION_REQUIRED" type="BOOLEANCHAR"/>
@@ -156,11 +163,17 @@
         <foreign-key foreignTable="iq_transport">
             <reference local="TRANSPORT_ID" foreign="TRANSPORT_ID" />
         </foreign-key>
+        <foreign-key foreignTable="iq_publisher">
+            <reference local="PUBLISHER_ID" foreign="PUBLISHER_ID" />
+        </foreign-key>        
         <index name="IQ_CONTENTSOURCE_TYPE_FKI">
             <index-column name="CONTENT_SOURCE_TYPE_ID"/>
         </index>        
         <index name="IQ_CONTENTSOURCE_TRANSPORT_FKI">
             <index-column name="TRANSPORT_ID"/>
+        </index>                
+        <index name="IQ_CONTENTSOURCE_PUBLISHER_FKI">
+            <index-column name="PUBLISHER_ID"/>
         </index>                
     </table>
     <table name="iq_content_source_transport_config" javaName="ContentSourceTransportConfig" idMethod="none">
@@ -196,12 +209,24 @@
         <column name="CONTENT_ID" primaryKey="true" required="true" type="BIGINT"/>
         <column name="CONTENT_TYPE_ID" required="true" type="INTEGER"/>
         <column name="CONTENT_SOURCE_ID" required="true" type="BIGINT"/>
-        <column name="LOCALE" type="VARCHAR" size="5"/>
-        <column name="RECEIVE_DATETIME" type="TIMESTAMP"/>
+        <column name="RECEIVE_DATETIME" type="TIMESTAMP"/>        
+        <column name="CONTENT_LOCALE" type="VARCHAR" size="5"/>
         <column name="CONTENT_CONTENT" type="LONGVARCHAR" size="16184"/>
         <foreign-key foreignTable="iq_content_source">
             <reference local="CONTENT_SOURCE_ID" foreign="CONTENT_SOURCE_ID" />
-        </foreign-key>                
+        </foreign-key>   
+        <index name="IQ_CONTENT_TYPE_FKI">
+            <index-column name="CONTENT_TYPE_ID"/>
+        </index>                
+        <index name="IQ_CONTENT_CONTENTSOURCE_FKI">
+            <index-column name="CONTENT_SOURCE_ID"/>
+        </index>                
+        <index name="IQ_CONTENT_LOCALE_CKI">
+            <index-column name="CONTENT_LOCALE"/>
+        </index>                                     
+        <index name="IQ_CONTENT_RECEIVE_DATETIME_CKI">
+            <index-column name="RECEIVE_DATETIME"/>
+        </index>                                             
     </table>
     <table name="iq_client_content_lnk" javaName="ClientContentLnk" idMethod="none">
         <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>        
