@@ -263,7 +263,7 @@ public class ContentFetchService extends BaseService
                 {
                     logger.error( e );
                     failures++;
-                    isRunning = false;
+
                     // stopping this content fetch thread for the current application session after three sequenced failures 
                     if( failures >= 3 )
                     {                        
@@ -273,6 +273,8 @@ public class ContentFetchService extends BaseService
                         timer.cancel();
                         _timers.remove( id );
                     }
+
+                    isRunning = false;                    
                     return;
                 }
 

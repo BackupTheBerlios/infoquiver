@@ -48,20 +48,33 @@ public class DocumentIndexer
     public DocumentIndexer(String indexDirectory)
     {
         _directory = indexDirectory;
-        
+
         File file = new File( _directory + "/segments" );
 
         if (!file.exists())
         {
-            IndexWriter writer;
+            IndexWriter writer = null;
             try
             {
                 writer = new IndexWriter( _directory, new StandardAnalyzer(), true );
-                writer.close();
             }
             catch ( IOException e )
             {
                 logger.error( "Error occured while creating a new lucene index at: " + _directory );
+            }
+            finally
+            {
+                if (writer != null)
+                {
+                    try
+                    {
+                        writer.close();
+                    }
+                    catch ( IOException e1 )
+                    {
+                        logger.error( e1 );
+                    }
+                }
             }
         }
     }
