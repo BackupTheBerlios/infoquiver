@@ -11,7 +11,7 @@ import net.sf.iquiver.metaformat.AbstractDocument;
  */
 public class DefaultDocument extends AbstractDocument
 {    
-    byte[] rawContent;
+    byte[] rawContent;    
     
     /* (non-Javadoc)
      * @see net.sf.iquiver.metaformat.Document#getRawContent()
@@ -29,5 +29,4 @@ public class DefaultDocument extends AbstractDocument
         super.clearDocumentMembers();
         this.rawContent = null;
     }
-
 }
