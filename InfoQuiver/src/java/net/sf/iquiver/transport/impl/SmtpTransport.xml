@@ -1,0 +1,12 @@
+<transport>
+    <name>Basic SMTP transport</name>
+    <type>0</type>
+    <attribute name="Server" mandatory="true" type="java.lang.String"/>
+    <attribute name="Port" type="java.lang.Integer"/>
+    <attribute name="Login" partOfAuthentification="yes" mandatory="true" type="java.lang.String"/>
+    <attribute name="Password" partOfAuthentification="yes" mandatory="true" type="java.lang.String"/>
+    <attribute name="From" mandatory="true" type="java.lang.String"/>
+    <attribute name="To" mandatory="true" type="java.lang.String"/>
+    <attribute name="Subject" mandatory="true" type="java.lang.String"/>
+    <attribute name="Timeout" type="java.lang.Integer"/>
+</transport>
