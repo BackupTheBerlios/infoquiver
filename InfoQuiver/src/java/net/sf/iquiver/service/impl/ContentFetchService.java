@@ -6,6 +6,7 @@ package net.sf.iquiver.service.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
@@ -13,6 +14,7 @@ import java.util.TimerTask;
 
 import net.sf.iquiver.metaformat.Document;
 import net.sf.iquiver.om.Content;
+import net.sf.iquiver.om.ContentPeer;
 import net.sf.iquiver.om.ContentSource;
 import net.sf.iquiver.om.ContentSourcePeer;
 import net.sf.iquiver.om.Transport;
@@ -23,6 +25,7 @@ import net.sf.iquiver.transport.TransportConfigurationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.torque.TorqueException;
+import org.apache.torque.util.Criteria;
 
 /**
  * @author netseeker aka Michael Manske
@@ -41,7 +44,9 @@ public class ContentFetchService extends BaseService
 
     private List _timers;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.service.BaseService#doStart()
      */
     protected void doStart()
@@ -62,21 +67,23 @@ public class ContentFetchService extends BaseService
             ContentFetchThread thread = new ContentFetchThread( fetcher );
             Timer timer = new Timer();
             timer.scheduleAtFixedRate( thread, 5000, interval );
-            _timers.add(timer);
-        }                
+            _timers.add( timer );
+        }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.service.BaseService#doStop()
      */
     protected void doStop()
-    {        
+    {
         //shut down all timers
-        for(Iterator it = _timers.iterator(); it.hasNext();)
+        for (Iterator it = _timers.iterator(); it.hasNext();)
         {
-            ((Timer)it.next()).cancel();
+            ((Timer) it.next()).cancel();
         }
-        _timers = null;                        
+        _timers = null;
     }
 
     /**
@@ -85,49 +92,97 @@ public class ContentFetchService extends BaseService
     private List _getTransports()
     {
         List transports = new ArrayList();
+        List sources = null;
+        long now = new Date().getTime();
+        boolean isFetchRequired = true;
+        long fetchPeriod = 0;
 
         try
         {
-            List sources = ContentSourcePeer.doSelectAll();
-            for (Iterator it = sources.iterator(); it.hasNext();)
-            {
-                ContentSource source = (ContentSource) it.next();
-                Transport transport = source.getTransport();
-                if (transport != null)
-                {
-                    String className = transport.getTransportImplementation();
-
-                    try
-                    {
-                        Fetcher impl = (Fetcher) Class.forName( className ).newInstance();
-                        impl.setFetchLocation( source );
-                        transports.add( impl );
-                    }
-                    catch ( ClassNotFoundException e1 )
-                    {
-                        logger.error( "The implementation class " + className + " could not be found.", e1 );
-                    }
-                    catch ( TransportConfigurationException e )
-                    {
-                        logger.error( "Configuration of transport id=" + transport.getTransportId() + " failed.", e );
-                    }
-                    catch ( Exception e )
-                    {
-                        logger.error( "Unknown error occurred while loading transport implementation for transport id="
-                                + transport.getTransportId(), e );
-                    }
-                }
-                else
-                {
-                    logger.warn( "No transport found for ContentSource id=" + source.getContentSourceId() );
-                }
-            }
+            sources = ContentSourcePeer.doSelectAll();
         }
         catch ( TorqueException e )
         {
-            logger.error( "Error while fetching content sources from database.", e );
+            logger.error( "Error while fetching content sources from database. Cannot proceed!", e );
+            return transports;
         }
 
+        for (Iterator it = sources.iterator(); it.hasNext();)
+        {
+            ContentSource source = (ContentSource) it.next();
+            fetchPeriod = now - source.getContentSourceUpdateTimespan();
+            Criteria crit = new Criteria();
+            crit.addSelectColumn( ContentPeer.CONTENT_ID );
+            crit.add( ContentPeer.CONTENT_SOURCE_ID, source.getContentSourceId() );
+            crit.add( ContentPeer.CONTENT_TO_DELETE, false );
+            crit.add( ContentPeer.CONTENT_RECEIVE_DATETIME, new Date( fetchPeriod ), Criteria.LESS_THAN );
+            crit.setDistinct();
+
+            if (logger.isDebugEnabled())
+            {
+                logger.debug( crit );
+            }
+
+            try
+            {
+                isFetchRequired = !ContentPeer.doSelectVillageRecords( crit ).isEmpty();
+            }
+            catch ( TorqueException e )
+            {
+                logger.error( "Error while fetching content sources from database.", e );
+                isFetchRequired = true;
+            }
+
+            if (isFetchRequired)
+            {
+                try
+                {
+                    Transport transport = source.getTransport();
+                    if (transport != null)
+                    {
+                        String className = transport.getTransportImplementation();
+
+                        try
+                        {
+                            Fetcher impl = (Fetcher) Class.forName( className ).newInstance();
+                            impl.setFetchLocation( source );
+                            transports.add( impl );
+                        }
+                        catch ( ClassNotFoundException e1 )
+                        {
+                            logger.error( "The implementation class " + className + " could not be found.", e1 );
+                        }
+                        catch ( TransportConfigurationException e )
+                        {
+                            logger
+                                    .error( "Configuration of transport id=" + transport.getTransportId() + " failed.",
+                                            e );
+                        }
+                        catch ( Exception e )
+                        {
+                            logger.error(
+                                    "Unknown error occurred while loading transport implementation for transport id="
+                                            + transport.getTransportId(), e );
+                        }
+                    }
+                    else
+                    {
+                        logger.warn( "No transport found for ContentSource id=" + source.getContentSourceId() );
+                    }
+                }
+                catch ( TorqueException e )
+                {
+                    logger.error( "Error while fetching transport for ContentSource id=" + source.getContentSourceId() );
+                }
+            }
+            else
+            {
+                if (logger.isDebugEnabled())
+                {
+                    logger.debug( "Found up-to-date data, ignoring content source " + source.getContentSourceId() );
+                }
+            }
+        }
         return transports;
     }
 
@@ -170,21 +225,21 @@ public class ContentFetchService extends BaseService
                 {
                     Document doc = (Document) it.next();
                     try
-                    {                        
+                    {
                         Content content = new Content( doc );
                         content.setContentSourceId( contentSourceId );
                         content.save();
                     }
-                    catch (UnsupportedEncodingException e)
+                    catch ( UnsupportedEncodingException e )
                     {
-                        logger.error("Encoding of retrieved content is not supported!", e);
+                        logger.error( "Encoding of retrieved content is not supported!", e );
                     }
                     catch ( Exception e )
                     {
-                        logger.error("Error while saving retrieved content!", e);
+                        logger.error( "Error while saving retrieved content!", e );
                     }
                 }
-                
+
                 isRunning = false;
             }
         }
