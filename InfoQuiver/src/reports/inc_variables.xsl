@@ -17,6 +17,7 @@
     <xsl:variable name="percentage">%</xsl:variable>
     <xsl:variable name="star">*</xsl:variable>
     <xsl:variable name="apos">&apos;</xsl:variable>
+    <xsl:variable name="homeurl">http://developer.berlios.de/projects/infoquiver/</xsl:variable>
 	
 	<xsl:variable name="img.images">{$path}/images/</xsl:variable>
 	<xsl:variable name="img.spacer">{$img.images}spacer.gif</xsl:variable>

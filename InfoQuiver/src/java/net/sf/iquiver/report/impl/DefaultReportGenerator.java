@@ -2,8 +2,8 @@
  * DefaultReportGenerator.java
  * created on 24.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/impl/DefaultReportGenerator.java,v $
- * $Date: 2004/11/09 19:37:20 $
- * $Revision: 1.3 $
+ * $Date: 2004/11/24 19:05:01 $
+ * $Revision: 1.4 $
  *********************************************************************/
 
 package net.sf.iquiver.report.impl;
@@ -42,6 +42,7 @@ import org.apache.fop.apps.Driver;
 import org.dom4j.DocumentHelper;
 import org.dom4j.io.DocumentSource;
 
+import de.netseeker.util.FileUtil;
 import de.netseeker.util.ListMap;
 
 /**
@@ -65,6 +66,7 @@ public class DefaultReportGenerator extends ReportGenerator
         try
         {
             String path = getReportFilePathForReportSource( searcher );
+            String templatePath = path + System.currentTimeMillis();
             TransformerFactory tFactory = TransformerFactory.newInstance();
 
             //build an xml string which contains the searcher, all queries and there coressponding query results
@@ -101,7 +103,7 @@ public class DefaultReportGenerator extends ReportGenerator
             //create html report
             try
             {
-                transform( xslTemplate, source, new StreamResult( new FileOutputStream( path + ".html" ) ) );
+                transform( xslTemplate, source, new StreamResult( new FileOutputStream( templatePath + ".html" ) ) );
             }
             catch ( TransformerException te )
             {
@@ -114,12 +116,14 @@ public class DefaultReportGenerator extends ReportGenerator
             //create pdf report
             try
             {
-                transformFop( xslTemplate, source, new FileOutputStream( path + ".pdf" ), Driver.RENDER_PDF );
+                transformFop( xslTemplate, source, new FileOutputStream( templatePath + ".pdf" ), Driver.RENDER_PDF );
             }
             catch ( TransformerException te )
             {
                 logger.error( "!!!PDF Report generation failed!!!", te );
             }
+            
+            FileUtil.fastFileCopy( "images/iquiver.gif", path + "iquiver.gif" );
 /*
             //create xml report            
             try

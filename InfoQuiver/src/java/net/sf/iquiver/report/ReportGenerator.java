@@ -2,8 +2,8 @@
  * ReportGenerator.java
  * created on 16.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/ReportGenerator.java,v $
- * $Date: 2004/10/25 19:37:01 $
- * $Revision: 1.3 $
+ * $Date: 2004/11/24 19:05:01 $
+ * $Revision: 1.4 $
  *********************************************************************/
 
 package net.sf.iquiver.report;
@@ -65,8 +65,7 @@ public abstract class ReportGenerator
             file.mkdirs();
         }
         
-        path.append( File.separator );
-        path.append( System.currentTimeMillis() );      
+        path.append( File.separator );     
         
         return path.toString();
     }
