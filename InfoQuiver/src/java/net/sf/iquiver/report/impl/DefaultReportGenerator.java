@@ -2,8 +2,8 @@
  * DefaultReportGenerator.java
  * created on 24.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/impl/DefaultReportGenerator.java,v $
- * $Date: 2004/11/24 21:21:19 $
- * $Revision: 1.5 $
+ * $Date: 2004/11/24 21:27:25 $
+ * $Revision: 1.6 $
  *********************************************************************/
 
 package net.sf.iquiver.report.impl;
@@ -66,7 +66,7 @@ public class DefaultReportGenerator extends ReportGenerator
         try
         {
             String path = getReportFilePathForReportSource( searcher );
-            String templatePath = path + System.currentTimeMillis();
+            String templatePath = path + filename_formatter.format( new Date() );
             TransformerFactory tFactory = TransformerFactory.newInstance();
 
             //build an xml string which contains the searcher, all queries and there coressponding query results

@@ -2,8 +2,8 @@
  * ReportGenerator.java
  * created on 16.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/ReportGenerator.java,v $
- * $Date: 2004/11/24 21:21:19 $
- * $Revision: 1.5 $
+ * $Date: 2004/11/24 21:27:35 $
+ * $Revision: 1.6 $
  *********************************************************************/
 
 package net.sf.iquiver.report;
@@ -39,6 +39,7 @@ public abstract class ReportGenerator
     protected static String _template = IQuiver.getConfiguration().getString( "reports.templates.searchresults" );  
     
     protected static DateFormat formatter = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+    protected static DateFormat filename_formatter = new SimpleDateFormat("yyyyMMdd");
     
     /**
      * Returns the path to use when saving a report result for a IReportSource.

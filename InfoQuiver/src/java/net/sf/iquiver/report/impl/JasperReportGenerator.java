@@ -2,12 +2,13 @@
  * JasperReportGenerator.java
  * created on 24.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/impl/JasperReportGenerator.java,v $
- * $Date: 2004/11/24 19:05:01 $
- * $Revision: 1.2 $
+ * $Date: 2004/11/24 21:27:25 $
+ * $Revision: 1.3 $
 *********************************************************************/
 
 package net.sf.iquiver.report.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +39,7 @@ public class JasperReportGenerator extends ReportGenerator
     {
         
         String path = getReportFilePathForReportSource( searcher );
-        path += System.currentTimeMillis();
+        String templatePath = path + filename_formatter.format( new Date() );
         QueryResultMapDataSource dataSource = new QueryResultMapDataSource( searcher, queryresults );
         Map parameters = new HashMap();
         parameters.put( "ReportTitle", "InfoQuiver - Search Results" );
