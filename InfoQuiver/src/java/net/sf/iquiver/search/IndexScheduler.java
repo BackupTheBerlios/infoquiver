@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.iquiver.IQuiver;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -34,6 +36,7 @@ public class IndexScheduler extends Thread
     private IndexScheduler(String index)
     {
         _indexer = new DocumentIndexer( index );
+        _indexer.addIndexChangeEventListener( IQuiver.getServerStats().getIndexListener() );
     }
 
     /**
@@ -54,11 +57,12 @@ public class IndexScheduler extends Thread
             {
                 _indexer.indexDocuments( docs );
             }
-            catch ( IOException e )
+            catch ( IOException e ) 
             {
                 logger.error("Indexing fetched contents failed! IOException while accessing the search index.", e);
             }
             
+            /*
             try
             {
                 Thread.sleep( 1000 );
@@ -66,7 +70,8 @@ public class IndexScheduler extends Thread
             catch ( InterruptedException e )
             {
                 logger.error( e );
-            }            
+            } 
+            */           
         }
     }
 

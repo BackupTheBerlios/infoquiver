@@ -5,7 +5,7 @@ package net.sf.iquiver.remote.xmlrpc;
 
 import net.sf.iquiver.configuration.Configuration;
 import net.sf.iquiver.service.BaseRemoteService;
-import net.sf.iquiver.service.ServiceStateListener;
+import net.sf.iquiver.service.ServiceStateChangedEvent;
 
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.commons.logging.Log;
@@ -42,7 +42,7 @@ public class XmlRpcServer extends BaseRemoteService
     public void reconfigure( Configuration config ) throws ConfigurationException
     {        
         boolean restart = false;
-        if(getState() == ServiceStateListener.ST_STARTED)
+        if(getState() == ServiceStateChangedEvent.ST_STARTED)
         {
             super.stop();
             restart = true;

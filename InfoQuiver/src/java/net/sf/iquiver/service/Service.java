@@ -4,6 +4,8 @@
  */
 package net.sf.iquiver.service;
 
+import net.sf.iquiver.event.IQEventListener;
+
 import org.apache.avalon.framework.activity.Startable;
 
 /**
@@ -11,11 +13,13 @@ import org.apache.avalon.framework.activity.Startable;
  */
 public interface Service extends Startable
 {
+    public String getName();
+    public void setName(String name);
     public long getStartTime();
     public int getRestartCount();
-    public void addServiceStateListener(ServiceStateListener listener);
-    public void removeServiceStateListener(ServiceStateListener listener);
-    public void addServiceExecutionListener(ServiceExecutionListener listener);
-    public void removeServiceExecutionListener(ServiceExecutionListener listener);
+    public void addServiceStateListener(IQEventListener listener);
+    public void removeServiceStateListener(IQEventListener listener);
+    public void addServiceExecutionListener(IQEventListener listener);
+    public void removeServiceExecutionListener(IQEventListener listener);
     public int getState ();
 }

@@ -2,8 +2,8 @@
  * EventProcessor.java
  * created on 08.12.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/event/EventProcessor.java,v $
- * $Date: 2004/12/08 21:06:40 $
- * $Revision: 1.1 $
+ * $Date: 2004/12/11 23:20:54 $
+ * $Revision: 1.2 $
 *********************************************************************/
 
 package net.sf.iquiver.event;
@@ -53,5 +53,5 @@ public abstract class EventProcessor extends Thread implements IQEventListener, 
     /**
      * @param evt
      */
-    abstract void processEvent( EventObject evt );    
+    abstract public void processEvent( EventObject evt );    
 }

@@ -1,12 +1,12 @@
 /*********************************************************************
  * ServiceStats.java
  * created on 08.12.2004 by netseeker
- * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/event/Attic/ServiceStats.java,v $
- * $Date: 2004/12/11 18:12:20 $
+ * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/ServiceStats.java,v $
+ * $Date: 2004/12/11 23:20:54 $
  * $Revision: 1.1 $
 *********************************************************************/
 
-package net.sf.iquiver.event;
+package net.sf.iquiver;
 
 import java.util.Date;
 import java.util.EventObject;
@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import net.sf.iquiver.event.EventProcessor;
 import net.sf.iquiver.service.Service;
 import net.sf.iquiver.service.ServiceExecutionEvent;
 import net.sf.iquiver.service.ServiceStateChangedEvent;
@@ -28,15 +29,15 @@ public class ServiceStats extends EventProcessor
     public static final String SERVICE_STATE = "SERVICE_STATE";
     public static final String SERVICE_STATECHANGE_TIME = "SERVICE_STATECHANGE_TIME";
     public static final String SERVICE_STATE_OLD = "SERVICE_STATE_OLD";
-    public static final String SERVICE_STATE_NEW = "SERVICE_STATE_NEW";
     public static final String SERVICE_EXEC_COUNT = "SERVICE_EXEC_COUNT";
+    public static final String SERVICE_RESTART_COUNT = "SERVICE_RESTART_COUNT";
     public static final String SERVICE_EXEC_SUCCESS_COUNT = "SERVICE_EXEC_SUCCESS_COUNT";
     public static final String SERVICE_EXEC_FAILED_COUNT = "SERVICE_EXEC_FAILED_COUNT";
     public static final String SERVICE_EXEC_TIME = "SERVICE_EXEC_TIME";
     public static final String SERVICE_EXEC_MSG = "SERVICE_EXEC_MSG";
     public static final String SERVICE_EXEC_SUCCESS = "SERVICE_EXEC_SUCCESS";
         
-    void processEvent( EventObject evt )
+    public void processEvent( EventObject evt )
     {
         Service service = (Service)evt.getSource();
         Map store = getServiceStore( service.getName() );
@@ -65,8 +66,9 @@ public class ServiceStats extends EventProcessor
         {
             ServiceStateChangedEvent stateEvt = (ServiceStateChangedEvent)evt;
             store.put( SERVICE_STATE_OLD, new Integer( stateEvt.getOldState() ) );
-            store.put( SERVICE_STATE_NEW, new Integer( stateEvt.getNewState() ) );
-            store.put( SERVICE_STATECHANGE_TIME, new Date( stateEvt.getTime() ) );            
+            store.put( SERVICE_STATE, new Integer( stateEvt.getNewState() ) );
+            store.put( SERVICE_STATECHANGE_TIME, new Date( stateEvt.getTime() ) );
+            store.put( SERVICE_RESTART_COUNT, new Integer( service.getRestartCount() ) );
         }
         else
         {

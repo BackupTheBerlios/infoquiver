@@ -14,8 +14,9 @@ import java.util.TimerTask;
 
 import net.sf.iquiver.configuration.Configuration;
 import net.sf.iquiver.configuration.Reconfigurable;
+import net.sf.iquiver.event.IQEventListener;
 import net.sf.iquiver.service.Service;
-import net.sf.iquiver.service.ServiceStateListener;
+import net.sf.iquiver.service.ServiceStateChangedEvent;
 
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -36,6 +37,8 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
 
     private static SimpleDateFormat df = new SimpleDateFormat();
 
+    private IQEventListener _listener;
+    
     /**
      * List of timers, one for each scheduled Service
      */
@@ -46,6 +49,11 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
      */
     private List _services;
 
+    public ServiceConfigurator( IQEventListener listener )
+    {
+        this._listener = listener;
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -74,6 +82,9 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
             try
             {
                 service = (Service) Class.forName( clazz ).newInstance();
+                service.setName( currentKey );
+                service.addServiceExecutionListener( this._listener );
+                service.addServiceStateListener( this._listener );
             }
             catch ( ClassNotFoundException e )
             {
@@ -215,7 +226,7 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
         for (Iterator it = _services.iterator(); it.hasNext();)
         {
             Service service = (Service) it.next();
-            if (service.getState() == ServiceStateListener.ST_STOPPED)
+            if (service.getState() == ServiceStateChangedEvent.ST_STOPPED)
             {
                 try
                 {
@@ -255,7 +266,7 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
         public void run()
         {
             int i = 0;
-            while( this._service.getState() != ServiceStateListener.ST_STARTED && i < this._restartOnFailure)
+            while( this._service.getState() != ServiceStateChangedEvent.ST_STARTED && i < this._restartOnFailure)
             {
 	            ++i;
                 try

@@ -31,26 +31,6 @@ import org.apache.commons.logging.impl.SimpleLog;
 public class IQuiver extends Thread implements Disposable, Configurable, Startable
 {
     /**
-     * The one and only name
-     */
-    public static final String NAME = "InfoQuiver";
-
-    /**
-     * The one and only version information
-     */
-    public static final String VERSION = "0.9.1";
-
-    /**
-     * temporarily storage for all kinds of application wide variables and objects
-     */
-    private static Hashtable context;
-
-    /**
-     * holds the currently active configuration
-     */
-    private static Configuration _configuration;
-
-    /**
      * the configurable default logger
      */
     private static Log logger = LogFactory.getLog( IQuiver.class );
@@ -59,6 +39,31 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
      * for use when the default logger isn't initialized or not available anymore
      */
     private static final SimpleLog log = new SimpleLog( IQuiver.class.getName() );
+
+    /**
+     * The one and only name
+     */
+    public static final String NAME = "InfoQuiver";
+
+    /**
+     * The one and only version information
+     */
+    public static final String VERSION = "0.9.2";
+
+    /**
+     * temporarily storage for all kinds of application wide variables and objects
+     */
+    private static Hashtable context;
+
+    /**
+     * the listener object which collects all statistics
+     */
+    private static ServerStats _serverStats;
+
+    /**
+     * holds the currently active configuration
+     */
+    private static Configuration _configuration;
 
     /**
      * indicates if we are ready for configure()
@@ -144,17 +149,16 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
         {
             throw new IllegalStateException( "IQuiver already running" );
         }
-
-        IQuiver iq = this;
     }
 
     private void initialize()
     {
         context = new Hashtable();
+        _serverStats = new ServerStats();
         this._logConfigurator = new LogConfigurator();
         this._persistConfigurator = new PersistenceConfigurator();
-        this._serviceConfigurator = new ServiceConfigurator();
-        this._remoteConfigurator = new RemoteInterfaceConfigurator();
+        this._serviceConfigurator = new ServiceConfigurator( _serverStats.getServiceListener() );
+        this._remoteConfigurator = new RemoteInterfaceConfigurator( _serverStats.getServiceListener() );
         this._configDir = ConfigurationConstants.DEFAULT_CONFIG_DIR;
         this._isConfigured = false;
         this._isInitialized = true;
@@ -172,6 +176,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
         this._persistConfigurator.dispose();
         this._serviceConfigurator.dispose();
         this._remoteConfigurator.dispose();
+        this._serverStats = null;
         this._configDir = null;
         this._isConfigured = false;
         this._isInitialized = false;
@@ -198,16 +203,20 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
 
             //store the current configuration, some services may need to read additional properties
             _configuration = conf;
-           
+            //configure Logging
             configureLogger( conf );
             //LogFactory should be configured now, so instanciate our default logger
             logger = LogFactory.getLog( IQuiver.class );
 
+            //configure the persistence layer
             configurePersistence( conf );
+            //add caching to the persistence layer
             configureCache( conf );
-            _serviceConfigurator.configure( conf.getSubset("service") );
+            //load all services
+            _serviceConfigurator.configure( conf.getSubset( "service" ) );
+            //load all remote services
             _remoteConfigurator.configure( conf );
-                        
+
             this._isConfigured = true;
         }
         else
@@ -224,7 +233,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
     {
         return context;
     }
-    
+
     /**
      * Returns the last used configuration
      * @return
@@ -233,7 +242,16 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
     {
         return _configuration;
     }
-
+    
+    /**
+     * Returns the one and only server statistics listener object
+     * @return
+     */
+    public static ServerStats getServerStats()
+    {
+        return _serverStats;
+    }
+    
     private void configureLogger( Configuration conf ) throws ConfigurationException
     {
         Configuration logConfig = null;

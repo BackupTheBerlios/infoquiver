@@ -6,6 +6,8 @@ package net.sf.iquiver.service;
 
 import javax.swing.event.EventListenerList;
 
+import net.sf.iquiver.event.IQEventListener;
+
 /**
  * The base class of all service tasks.
  * @author netseeker aka Michael Manske
@@ -22,41 +24,42 @@ public abstract class BaseService implements Service
      */
     EventListenerList serviceExecutionListeners = new EventListenerList();
 
-    private int _state = ServiceStateListener.ST_STOPPED;
+    private int _state = ServiceStateChangedEvent.ST_STOPPED;
 
     private int _restartCount = 0;
     private long _startTime;
+    private String _name;
 
     /* (non-Javadoc)
      * @see net.sf.iquiver.service.Service#addServiceStateListener(net.sf.iquiver.service.ServiceStateListener)
      */
-    public final void addServiceStateListener( ServiceStateListener listener )
+    public final void addServiceStateListener( IQEventListener listener )
     {
-        serviceStateListeners.add(ServiceStateListener.class, listener );
+        serviceStateListeners.add(IQEventListener.class, listener );
     }
 
     /* (non-Javadoc)
      * @see net.sf.iquiver.service.Service#removeServiceStateListener(net.sf.iquiver.service.ServiceStateListener)
      */
-    public final void removeServiceStateListener( ServiceStateListener listener )
+    public final void removeServiceStateListener( IQEventListener listener )
     {
-        serviceStateListeners.remove(ServiceStateListener.class, listener );
+        serviceStateListeners.remove(IQEventListener.class, listener );
     }
 
     /* (non-Javadoc)
      * @see net.sf.iquiver.service.Service#addServiceExecutionListener(net.sf.iquiver.service.ServiceExecutionListener)
      */
-    public final void addServiceExecutionListener( ServiceExecutionListener listener )
+    public final void addServiceExecutionListener( IQEventListener listener )
     {
-            serviceExecutionListeners.add(ServiceExecutionListener.class, listener );
+            serviceExecutionListeners.add(IQEventListener.class, listener );
     }
 
     /* (non-Javadoc)
      * @see net.sf.iquiver.service.Service#removeServiceExecutionListener(net.sf.iquiver.service.ServiceExecutionListener)
      */
-    public final void removeServiceExecutionListener( ServiceExecutionListener listener )
+    public final void removeServiceExecutionListener( IQEventListener listener )
     {
-        serviceExecutionListeners.remove(ServiceExecutionListener.class, listener );
+        serviceExecutionListeners.remove(IQEventListener.class, listener );
     }
 
     /**
@@ -70,7 +73,7 @@ public abstract class BaseService implements Service
         
         for ( int i = 0; i < listeners.length; i+=2 )
         {
-            ((ServiceStateListener)listeners[i+1]).serviceStateChanged( evt );
+            ((IQEventListener)listeners[i+1]).fireEvent( evt );
         }
     }
 
@@ -85,7 +88,7 @@ public abstract class BaseService implements Service
         
         for ( int i = 0; i < listeners.length; i+=2 )
         {
-            ((ServiceExecutionListener)listeners[i+1]).executed( evt );
+            ((IQEventListener)listeners[i+1]).fireEvent( evt );
         }        
     }
 
@@ -112,7 +115,23 @@ public abstract class BaseService implements Service
     {
         return this._state;
     }
-
+       
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.service.Service#getName()
+     */
+    public String getName()
+    {
+        return this._name;
+    }
+    
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.service.Service#setName(java.lang.String)
+     */
+    public void setName( String name )
+    {
+        this._name = name;
+    }
+    
     /* (non-Javadoc)
      * @see org.apache.avalon.framework.activity.Startable#start()
      */
@@ -121,7 +140,7 @@ public abstract class BaseService implements Service
         this._startTime = System.currentTimeMillis();
         this._restartCount++;
         doStart();
-        setState( ServiceStateListener.ST_STARTED );
+        setState( ServiceStateChangedEvent.ST_STARTED );
     }
 
     /* (non-Javadoc)
@@ -130,7 +149,7 @@ public abstract class BaseService implements Service
     public void stop()
     {
         doStop();
-        setState( ServiceStateListener.ST_STOPPED );
+        setState( ServiceStateChangedEvent.ST_STOPPED );
     }
 
     /* (non-Javadoc)
@@ -146,7 +165,7 @@ public abstract class BaseService implements Service
      */
     public int getRestartCount()
     {
-        return _restartCount == 0 ? 0 : _restartCount- 1;
+        return _restartCount == 0 ? 0 : _restartCount - 1;
     }
 
     protected abstract void doStart();

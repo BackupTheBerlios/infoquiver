@@ -2,8 +2,8 @@
  * RemoteInterfaceConfigurator.java
  * created on 1.12.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/configuration/impl/RemoteInterfaceConfigurator.java,v $
- * $Date: 2004/12/01 20:26:27 $
- * $Revision: 1.1 $
+ * $Date: 2004/12/11 23:20:54 $
+ * $Revision: 1.2 $
  *********************************************************************/
 
 package net.sf.iquiver.configuration.impl;
@@ -14,8 +14,9 @@ import java.util.List;
 
 import net.sf.iquiver.configuration.Configuration;
 import net.sf.iquiver.configuration.Reconfigurable;
+import net.sf.iquiver.event.IQEventListener;
 import net.sf.iquiver.service.BaseRemoteService;
-import net.sf.iquiver.service.ServiceStateListener;
+import net.sf.iquiver.service.ServiceStateChangedEvent;
 
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -32,11 +33,21 @@ public class RemoteInterfaceConfigurator implements Reconfigurable, Disposable
      */
     private static final Log logger = LogFactory.getLog( RemoteInterfaceConfigurator.class );
 
+    private IQEventListener _listener;
+    
     /**
      * List of configured service instances
      */
     private List _services;
 
+    /**
+     * @param listener
+     */
+    public RemoteInterfaceConfigurator( IQEventListener listener )
+    {
+        this._listener = listener;
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -56,6 +67,8 @@ public class RemoteInterfaceConfigurator implements Reconfigurable, Disposable
                 try
                 {
                     service = (BaseRemoteService) Class.forName( remotes[i] ).newInstance();
+                    service.addServiceExecutionListener( this._listener );
+                    service.addServiceStateListener( this._listener );
                 }
                 catch ( ClassNotFoundException e )
                 {
@@ -110,7 +123,7 @@ public class RemoteInterfaceConfigurator implements Reconfigurable, Disposable
         for (Iterator it = _services.iterator(); it.hasNext();)
         {
             BaseRemoteService service = (BaseRemoteService) it.next();
-            if (service.getState() == ServiceStateListener.ST_STOPPED)
+            if (service.getState() == ServiceStateChangedEvent.ST_STOPPED)
             {
                 try
                 {

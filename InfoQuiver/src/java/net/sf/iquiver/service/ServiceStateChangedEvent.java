@@ -11,6 +11,11 @@ import java.util.EventObject;
  */
 public class ServiceStateChangedEvent extends EventObject
 {    
+    public final static int ST_STARTED = 1;
+    public final static int ST_STOPPED = 2;
+    public final static int ST_SUSPENDED = 3;
+    public final static int ST_RESUMED = 4;
+
     private int oldState;
     private int newState;
     private long time;

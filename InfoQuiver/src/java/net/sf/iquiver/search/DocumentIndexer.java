@@ -5,9 +5,13 @@ package net.sf.iquiver.search;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.EventObject;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.event.EventListenerList;
+
+import net.sf.iquiver.event.IQEventListener;
 import net.sf.iquiver.metaformat.Document;
 import net.sf.iquiver.parser.Parser;
 import net.sf.iquiver.parser.ParsingException;
@@ -38,6 +42,8 @@ public class DocumentIndexer
      * path to the used lucene index
      */
     private String _directory;
+
+    private EventListenerList _listeners = new EventListenerList();
 
     /**
      * Creates a new instance of DocumentIndexer, which will use the given directory path to store the index
@@ -91,45 +97,39 @@ public class DocumentIndexer
         StringBuffer sb = new StringBuffer();
 
         lDoc.add( Field.Keyword( "uid", doc.getUID() ) );
-        sb.append( doc.getUID());
-        sb.append(" ");
+        sb.append( doc.getUID() );
+        sb.append( " " );
 
         if (doc.getAuthor() != null)
         {
-            lDoc.add( Field.Text( "author", doc.getAuthor() ) );
-            sb.append( doc.getAuthor());
-            sb.append(" ");            
+            sb.append( doc.getAuthor() );
+            sb.append( " " );
         }
         if (doc.getName() != null)
         {
-            lDoc.add( Field.Text( "name", doc.getName() ) );
-            sb.append( doc.getName());
-            sb.append(" ");                        
+            sb.append( doc.getName() );
+            sb.append( " " );
         }
         if (doc.getTitle() != null)
         {
-            lDoc.add( Field.Text( "title", doc.getTitle() ) );
-            sb.append( doc.getTitle());
-            sb.append(" ");                                    
+            sb.append( doc.getTitle() );
+            sb.append( " " );
         }
         if (doc.getKeywords() != null)
-        {            
-            lDoc.add( Field.Text( "keywords", doc.getKeywords() ) );
-            sb.append( doc.getKeywords());
-            sb.append(" ");                                                
+        {
+            sb.append( doc.getKeywords() );
+            sb.append( " " );
         }
         if (doc.getShortDescription() != null)
         {
-            lDoc.add( Field.Text( "descr", doc.getShortDescription() ) );
-            sb.append( doc.getShortDescription());
-            sb.append(" ");                                                
-            
+            sb.append( doc.getShortDescription() );
+            sb.append( " " );
+
         }
         if (doc.getInfoURL() != null)
         {
-            lDoc.add( Field.Keyword( "infourl", doc.getInfoURL().toString() ) );
             sb.append( doc.getInfoURL().toString() );
-            sb.append(" ");                                                            
+            sb.append( " " );
         }
         if (doc.getDateOfCreation() != null)
         {
@@ -141,9 +141,8 @@ public class DocumentIndexer
         }
         if (doc.getFileName() != null)
         {
-            lDoc.add( Field.Keyword( "filename", doc.getFileName() ) );
             sb.append( doc.getFileName() );
-            sb.append(" ");                                                                        
+            sb.append( " " );
         }
 
         if (doc.getRawContent() != null)
@@ -154,7 +153,7 @@ public class DocumentIndexer
                 if (doc.getRawContent() != null)
                 {
                     String stripped = parser.getStripped( doc.getRawContent() );
-                    if( stripped != null )
+                    if (stripped != null)
                     {
                         sb.append( stripped );
                     }
@@ -169,8 +168,8 @@ public class DocumentIndexer
                 logger.warn( "Can't add raw content to lucene index!", e );
             }
         }
-        
-        lDoc.add( Field.UnStored( "complete", sb.toString() ));
+
+        lDoc.add( Field.UnStored( "complete", sb.toString() ) );
 
         return lDoc;
     }
@@ -194,16 +193,21 @@ public class DocumentIndexer
             reader.close();
         }
 
-        Analyzer analyzer = new StandardAnalyzer();
-        IndexWriter writer = new IndexWriter( _directory, analyzer, false );
-        try
+        if (!doc.isRemoved())
         {
-            addDocument( doc, writer );
+            Analyzer analyzer = new StandardAnalyzer();
+            IndexWriter writer = new IndexWriter( _directory, analyzer, false );
+            try
+            {
+                addDocument( doc, writer );
+            }
+            finally
+            {
+                writer.close();
+            }
         }
-        finally
-        {
-            writer.close();
-        }
+
+        notifyIndexChangeEventListeners( doc, doc.isRemoved() );
     }
 
     /**
@@ -215,8 +219,9 @@ public class DocumentIndexer
      */
     private synchronized void deleteDocument( Document doc, IndexReader reader ) throws IOException
     {
-        logger.debug("Trying to delete document: " + doc.getUID());
+        logger.debug( "Trying to delete document: " + doc.getUID() );
         reader.delete( new Term( "uid", doc.getUID() ) );
+
         if (doc.hasChildren())
         {
             for (Iterator it = doc.getChildren().iterator(); it.hasNext();)
@@ -298,11 +303,52 @@ public class DocumentIndexer
                 {
                     addDocument( doc, writer );
                 }
+
+                notifyIndexChangeEventListeners( doc, doc.isRemoved() );
             }
         }
         finally
         {
             writer.close();
+        }
+    }
+
+    /**
+     * Adds an listener which will be notified of all document additions and deletions
+     * in the managed indeces
+     * @param listener
+     */
+    public void addIndexChangeEventListener( IQEventListener listener )
+    {
+        this._listeners.add( IQEventListener.class, listener );
+    }
+
+    /**
+     * Removes an already registered listener
+     * @param listener
+     */
+    public void removeIndexChangeEventListener( IQEventListener listener )
+    {
+        this._listeners.remove( IQEventListener.class, listener );
+    }
+
+    private void notifyIndexChangeEventListeners( Document doc, boolean deleted )
+    {
+        Object[] listeners = this._listeners.getListenerList();
+        EventObject evt = null;
+
+        for (int i = 1; i < listeners.length; i += 2)
+        {
+            if (deleted)
+            {
+                evt = new IndexDeletionEvent( this, doc, this._directory );
+            }
+            else
+            {
+                evt = new IndexAdditionEvent( this, doc, this._directory );
+            }
+            
+            ((IQEventListener) listeners[i]).fireEvent( evt );            
         }
     }
 }
