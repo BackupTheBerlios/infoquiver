@@ -2,8 +2,8 @@
  * ContentFetchThread.java
  * created on 22.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/ContentFetchThread.java,v $
- * $Date: 2004/07/22 20:09:28 $
- * $Revision: 1.2 $
+ * $Date: 2004/10/17 16:07:44 $
+ * $Revision: 1.3 $
  *********************************************************************/
 
 package net.sf.iquiver.service.impl;
@@ -169,13 +169,22 @@ class ContentFetchThread extends TimerTask
                                 + String.valueOf( source.getContentSourceId() ) );
                         scheduler.scheduleForIndexing( contentDocs );
                     }
-                    
+
                     //mark old contents as outdated
-                    for ( Iterator it = contents.iterator(); it.hasNext(); )
+                    try
                     {
-                        Content tmp = (Content)it.next();
-                        tmp.setContentToDelete( true );
-                    }                    
+                        for (Iterator it = contents.iterator(); it.hasNext();)
+                        {
+                            Content tmp = (Content) it.next();
+                            tmp.setContentToDelete( true );
+                            tmp.save();
+                        }
+                    }
+                    catch ( Exception e1 )
+                    {
+                        logger.error( "Error while marking old contents as outdated", e1 );
+                    }
+
                 }
                 catch ( TransportException e )
                 {
@@ -198,7 +207,7 @@ class ContentFetchThread extends TimerTask
                 }
                 catch ( TorqueException e )
                 {
-                    logger.error("Database error occured while fetching already stored contents from database!", e);
+                    logger.error( "Database error occured while fetching already stored contents from database!", e );
                 }
             }
             else
