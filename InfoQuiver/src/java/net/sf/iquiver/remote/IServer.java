@@ -3,13 +3,13 @@
  */
 package net.sf.iquiver.remote;
 
+import org.apache.avalon.framework.activity.Startable;
+
 import net.sf.iquiver.configuration.Configurable;
 
 /**
  * @author netseeker aka Michael Manske
  */
-public interface IServer extends Configurable
+public interface IServer extends Configurable, Startable
 {
-    public void start();
-    public void stop();
 }
