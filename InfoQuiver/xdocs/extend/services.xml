@@ -19,12 +19,12 @@
                 <li><a href="../apidocs/net/sf/iquiver/service/impl/ContentCollectorService.html">ContentCollectorService</a></li>
                 <li><a href="../apidocs/net/sf/iquiver/remote/xmlrpc/XmlRpcServer.html">XmlRpcServer</a></li>
             </ol>            
-            Here is InfoQuivers abstract service class diagram as the time of this writing:
-            <img src="../images/net_sf_iquiver_service.png" alt=" abstract service class diagram" border="0"/>  
+            Here is InfoQuivers abstract service class diagram as the time of this writing:<br/>
+            <img src="../images/net_sf_iquiver_service.png" alt=" abstract service class diagram" border="0" vspace="5"/><br/>
             As you can see there exists one abstract base class (<a href="../apidocs/net/sf/iquiver/service/BaseService.html">net.sf.iquiver.service.BaseService</a>) 
             which contains allmost all common functionality required by the InfoQuiver daemon.<br/>
-            All already existent services extend the BaseService class:
-            <img src="../images/net_sf_iquiver_service_impl.png" alt="service class diagram" border="0"/>
+            All already existent services extend the BaseService class:<br/>
+            <img src="../images/net_sf_iquiver_service_impl.png" alt="service class diagram" border="0" vspace="5"/>
         </p>
     </section>
     <section name="Creating Custom Services">
