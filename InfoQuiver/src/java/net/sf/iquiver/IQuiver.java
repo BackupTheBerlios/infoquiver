@@ -5,6 +5,8 @@
 package net.sf.iquiver;
 
 import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Map;
 
 import net.sf.iquiver.configuration.Configurable;
 import net.sf.iquiver.configuration.Configuration;
@@ -18,7 +20,6 @@ import net.sf.iquiver.util.om.CacheBackedPeer;
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Startable;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.context.DefaultContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.impl.SimpleLog;
@@ -41,7 +42,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
     /**
      * temporarily storage for all kinds of application wide variables and objects
      */
-    private static DefaultContext context;
+    private static Hashtable context;
 
     /**
      * holds the currently active configuration
@@ -147,7 +148,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
 
     private void initialize()
     {
-        context = new DefaultContext();
+        context = new Hashtable();
         this._logConfigurator = new LogConfigurator();
         this._persistConfigurator = new PersistenceConfigurator();
         this._serviceConfigurator = new ServiceConfigurator();
@@ -170,7 +171,8 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
         this._configDir = null;
         this._isConfigured = false;
         this._isInitialized = false;
-        context = null;        
+        context.clear();
+        context = null;
     }
 
     /*
@@ -213,7 +215,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
      * Returns the application wide dynamic context
      * @return
      */
-    public static DefaultContext getContext()
+    public static Map getContext()
     {
         return context;
     }

@@ -65,11 +65,11 @@ public class ObjectSerializer
     {
         List fieldNames = obj.getMemberNames();
         StringBuffer sb = new StringBuffer();
-        String[] nameTokens = obj.getClass().getName().split(".");        
+        String[] nameTokens = obj.getClass().getName().split("\\.");        
         
         sb.append("<");
-        sb.append( nameTokens[ nameTokens.length - 2 ] );
-        sb.append(">");
+        sb.append( nameTokens[ nameTokens.length - 1 ] );
+        sb.append(">\n");
         
         for( Iterator it = fieldNames.iterator(); it.hasNext(); )
         {
@@ -78,8 +78,8 @@ public class ObjectSerializer
         }
         
         sb.append("</");
-        sb.append( nameTokens[ nameTokens.length - 2 ] );
-        sb.append(">");    
+        sb.append( nameTokens[ nameTokens.length - 1 ] );
+        sb.append(">\n");    
 
         return sb.toString();
     }

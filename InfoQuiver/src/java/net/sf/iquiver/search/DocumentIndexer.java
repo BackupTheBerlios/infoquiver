@@ -110,11 +110,11 @@ public class DocumentIndexer
         }
         if (doc.getShortDescription() != null)
         {
-            lDoc.add( Field.Text( "description", doc.getShortDescription() ) );
+            lDoc.add( Field.Text( "descr", doc.getShortDescription() ) );
         }
         if (doc.getInfoURL() != null)
         {
-            lDoc.add( Field.Keyword( "url", doc.getInfoURL().toString() ) );
+            lDoc.add( Field.Keyword( "infourl", doc.getInfoURL().toString() ) );
         }
         if (doc.getDateOfCreation() != null)
         {

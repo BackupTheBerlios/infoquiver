@@ -2,8 +2,8 @@
  * ReportCompileService.java
  * created on 18.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/ReportCompileService.java,v $
- * $Date: 2004/07/18 23:29:57 $
- * $Revision: 1.2 $
+ * $Date: 2004/10/25 19:37:19 $
+ * $Revision: 1.3 $
 *********************************************************************/
 
 package net.sf.iquiver.service.impl;
@@ -34,7 +34,7 @@ public class ReportCompileService extends BaseService
      */
     private static final Log logger = LogFactory.getLog(ReportCompileService.class);
 
-    private static String _targetDir = IQuiver.getConfiguration().getString( "reports.directory", "reports/templates" );
+    private static String _targetDir = IQuiver.getConfiguration().getString( "reports.directory", "reports" );
     
     /* (non-Javadoc)
      * @see net.sf.iquiver.service.BaseService#doStart()

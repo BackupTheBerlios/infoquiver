@@ -2,8 +2,8 @@
  * ReportGenerator.java
  * created on 16.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/ReportGenerator.java,v $
- * $Date: 2004/10/24 16:27:55 $
- * $Revision: 1.2 $
+ * $Date: 2004/10/25 19:37:01 $
+ * $Revision: 1.3 $
  *********************************************************************/
 
 package net.sf.iquiver.report;
@@ -29,10 +29,11 @@ public abstract class ReportGenerator
      */
     private static final Log logger = LogFactory.getLog( ReportGenerator.class );
 
+    protected static String _reportDir = IQuiver.getConfiguration().getString( "reports.directory", "reports" );
     /**
      * directory where the generated report will be saved, default: reports/tmp
      */
-    protected static String _targetDir = IQuiver.getConfiguration().getString( "reports.directory", "reports" ) + File.separator + "tmp";
+    protected static String _targetDir = _reportDir + File.separator + "tmp";
     protected static String _template = IQuiver.getConfiguration().getString( "reports.templates.searchresults" );   
     
     /**

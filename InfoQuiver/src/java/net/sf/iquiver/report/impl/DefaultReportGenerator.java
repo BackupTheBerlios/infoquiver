@@ -2,8 +2,8 @@
  * DefaultReportGenerator.java
  * created on 24.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/impl/DefaultReportGenerator.java,v $
- * $Date: 2004/10/24 16:27:55 $
- * $Revision: 1.1 $
+ * $Date: 2004/10/25 19:37:11 $
+ * $Revision: 1.2 $
  *********************************************************************/
 
 package net.sf.iquiver.report.impl;
@@ -35,7 +35,6 @@ import net.sf.iquiver.util.AvalonLogWrapper;
 import net.sf.iquiver.util.Introspectable;
 import net.sf.iquiver.util.ObjectSerializer;
 
-import org.apache.avalon.framework.context.ContextException;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -70,12 +69,15 @@ public class DefaultReportGenerator extends ReportGenerator
 
             //build an xml string which contains the searcher, all queries and there coressponding query results
             StringBuffer sb = new StringBuffer();
-            sb.append( "<root>" );
+            sb.append( "<root>\n" );
+            sb.append( "<path>" );
+            sb.append( _reportDir );
+            sb.append( "</path>\n" );
             sb.append( ObjectSerializer.objectToXmlString( searcher ) );
 
             for (int i = 0; i < queryresults.size(); i++)
             {
-                sb.append( "<queryresult>" );
+                sb.append( "<queryresult>\n" );
                 Introspectable query = (Introspectable) queryresults.getKeyAt( i );
                 sb.append( ObjectSerializer.objectToXmlString( query ) );
                 List docs = (List) queryresults.getValueAt( i );
@@ -83,7 +85,7 @@ public class DefaultReportGenerator extends ReportGenerator
                 {
                     sb.append( DocumentUtil.documentToXmlString( (Document) it.next() ) );
                 }
-                sb.append( "</queryresult>" );
+                sb.append( "</queryresult>\n" );
             }
 
             sb.append( "</root>" );
@@ -91,18 +93,18 @@ public class DefaultReportGenerator extends ReportGenerator
             //build a dom4j document from the report result xml string
             org.dom4j.Document document = DocumentHelper.parseText( sb.toString() );
             DocumentSource source = new DocumentSource( document );
-            
+
             //get the report template for html output
-            Templates xslTemplate = createXSLTemplate( _template + "_html.xsl", tFactory );                        
+            Templates xslTemplate = createXSLTemplate( _template + "_html.xsl", tFactory );
             //create html report
             try
             {
                 transform( xslTemplate, source, new StreamResult( new FileOutputStream( path + ".html" ) ) );
             }
-            catch( TransformerException te )
+            catch ( TransformerException te )
             {
                 logger.error( "!!!HTML Report generation failed!!!", te );
-            }                
+            }
 
             //get the report template for fop output
             xslTemplate = createXSLTemplate( _template + "_fop.xsl", tFactory );
@@ -112,19 +114,21 @@ public class DefaultReportGenerator extends ReportGenerator
             {
                 transformFop( xslTemplate, source, new FileOutputStream( path + ".pdf" ), Driver.RENDER_PDF );
             }
-            catch( TransformerException te )
+            catch ( TransformerException te )
             {
                 logger.error( "!!!PDF Report generation failed!!!", te );
             }
-            //create xml report
+/*
+            //create xml report            
             try
             {
                 transformFop( xslTemplate, source, new FileOutputStream( path + ".xml" ), Driver.RENDER_XML );
             }
-            catch( TransformerException te )
+            catch ( TransformerException te )
             {
                 logger.error( "!!!XML Report generation failed!!!", te );
-            }            
+            }
+*/            
         }
         catch ( Exception e )
         {
@@ -132,26 +136,28 @@ public class DefaultReportGenerator extends ReportGenerator
         }
     }
 
-    private void transform( Templates template, DocumentSource source, StreamResult result ) throws TransformerException
+    private void transform( Templates template, DocumentSource source, StreamResult result )
+            throws TransformerException
     {
         Transformer transformer = template.newTransformer();
         long timer = System.currentTimeMillis();
         transformer.transform( source, result );
-        logger.debug( "XSL Transforming time for HTML is: " + (System.currentTimeMillis() - timer) + "ms" );        
+        logger.debug( "XSL Transforming time for HTML is: " + (System.currentTimeMillis() - timer) + "ms" );
     }
-    
-    private void transformFop(Templates template, DocumentSource source, OutputStream out, int type ) throws TransformerException
+
+    private void transformFop( Templates template, DocumentSource source, OutputStream out, int type )
+            throws TransformerException
     {
         Driver driver = new Driver();
         driver.setLogger( new AvalonLogWrapper( logger ) );
-        driver.setRenderer( type );        
-        driver.setOutputStream( out );   
+        driver.setRenderer( type );
+        driver.setOutputStream( out );
         Transformer transformer = template.newTransformer();
         long timer = System.currentTimeMillis();
-        transformer.transform(source, new SAXResult(driver.getContentHandler()));
+        transformer.transform( source, new SAXResult( driver.getContentHandler() ) );
         logger.debug( "XSL Transforming time for PDF is: " + (System.currentTimeMillis() - timer) + "ms" );
     }
-    
+
     /**
      * Either returns an already created template instance from the cache or returns a
      * new instance
@@ -161,51 +167,45 @@ public class DefaultReportGenerator extends ReportGenerator
      * @throws TransformerConfigurationException
      * @throws FileNotFoundException
      */
-    protected Templates createXSLTemplate( String xslPath, TransformerFactory tFactory ) throws TransformerConfigurationException, FileNotFoundException
+    protected Templates createXSLTemplate( String xslPath, TransformerFactory tFactory )
+            throws TransformerConfigurationException, FileNotFoundException
     {
         Templates xslTemplate = null;
-        try
+        //first check if the xsl template file does exist
+        File xslFile = new File( xslPath );
+        if (!xslFile.exists())
         {
-            //first check if the xsl template file does exist
-            File xslFile = new File( xslPath );
-            if (!xslFile.exists())
-            {
-                throw new FileNotFoundException( "Stylesheet not found: " + xslFile );
-            }
-
-            // check if file was modified since last call
-            long lastModified = xslFile.lastModified();
-            Long timeStamp = (Long) ObjectUtils.defaultIfNull( IQuiver.getContext().get( xslFile + ".time" ), new Long(
-                    -1 ) );
-
-            if (logger.isDebugEnabled())
-            {
-                logger.debug( "file last modified: " + new Date( lastModified ).toLocaleString() );
-                logger.debug( "the time we know: " + new Date( timeStamp.longValue() ).toLocaleString() );
-            }
-
-            //check if this is the first time we use the xsl template or the template
-            //got modified since last usage
-            if (timeStamp == null || IQuiver.getContext().get( "xslFile" ) == null
-                    || !(timeStamp.longValue() == lastModified))
-            {
-                logger.debug( "XSL File has changed: reparsing...!" );
-                StreamSource ss = new StreamSource( new FileInputStream( xslPath ) );
-
-                xslTemplate = tFactory.newTemplates( ss );
-                IQuiver.getContext().put( xslFile, xslTemplate );
-                IQuiver.getContext().put( xslFile + ".time", new Long( lastModified ) );
-            }
-            //otherwise we just use the cached xsl template
-            else
-            {
-                logger.debug( "RECYCLE existing XSL File!" );
-                xslTemplate = (Templates) IQuiver.getContext().get( xslFile );
-            }
+            throw new FileNotFoundException( "Stylesheet not found: " + xslFile );
         }
-        catch( ContextException e )
+
+        // check if file was modified since last call
+        long lastModified = xslFile.lastModified();
+        Long timeStamp = (Long) ObjectUtils
+                .defaultIfNull( IQuiver.getContext().get( xslFile + ".time" ), new Long( -1 ) );
+
+        if (logger.isDebugEnabled())
         {
-            logger.error( "createXSLTemplate() --> Context operation failed", e );
+            logger.debug( "file last modified: " + new Date( lastModified ).toLocaleString() );
+            logger.debug( "the time we know: " + new Date( timeStamp.longValue() ).toLocaleString() );
+        }
+
+        //check if this is the first time we use the xsl template or the template
+        //got modified since last usage
+        if (timeStamp == null || IQuiver.getContext().get( "xslFile" ) == null
+                || !(timeStamp.longValue() == lastModified))
+        {
+            logger.debug( "XSL File has changed: reparsing...!" );
+            StreamSource ss = new StreamSource( new FileInputStream( xslPath ) );
+
+            xslTemplate = tFactory.newTemplates( ss );
+            IQuiver.getContext().put( xslFile, xslTemplate );
+            IQuiver.getContext().put( xslFile + ".time", new Long( lastModified ) );
+        }
+        //otherwise we just use the cached xsl template
+        else
+        {
+            logger.debug( "RECYCLE existing XSL File!" );
+            xslTemplate = (Templates) IQuiver.getContext().get( xslFile );
         }
 
         return xslTemplate;

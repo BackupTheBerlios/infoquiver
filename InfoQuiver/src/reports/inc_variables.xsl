@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-	<xsl:variable name="copyright">&#169;</xsl:variable>
+	<xsl:variable name="path"><xsl:value-of select="/root/path"/></xsl:variable>
+    <xsl:variable name="copyright">&#169;</xsl:variable>
 	<xsl:variable name="br">&#xA;</xsl:variable>
 	<xsl:variable name="spacer">&#xa0;</xsl:variable>
 	<xsl:variable name="euro">&#8364;</xsl:variable>
@@ -17,8 +18,8 @@
     <xsl:variable name="star">*</xsl:variable>
     <xsl:variable name="apos">&apos;</xsl:variable>
 	
-	<xsl:variable name="img.images">images/</xsl:variable>
-	<xsl:variable name="img.spacer"><xsl-value-of select="$img.images"/>/spacer.gif</xsl:variable>
-	<xsl:variable name="img.logo"><xsl-value-of select="$img.images"/>/iquiver.gif</xsl:variable>
+	<xsl:variable name="img.images">{$path}/images/</xsl:variable>
+	<xsl:variable name="img.spacer">{$img.images}spacer.gif</xsl:variable>
+	<xsl:variable name="img.logo">{$img.images}iquiver.gif</xsl:variable>
     
 </xsl:stylesheet>

@@ -35,12 +35,12 @@ public class QueryTask
      * Commons Logger for this class
      */
     private static final Log logger = LogFactory.getLog( QueryTask.class );
-    
+
     /**
      * List of used search fields
      */
-    public static final String[] SEARCH_FIELDS = { "author", "name", "title",
-            "keywords", "description", "url", "created", "modified", "contents", "filename" };
+    public static final String[] SEARCH_FIELDS = { "author", "name", "title", "keywords", "descr", "infourl",
+            "created", "modified", "contents", "filename" };
 
     /**
      * Searches all hits for the given search criteria on an existing lucene index
@@ -63,8 +63,8 @@ public class QueryTask
         Analyzer analyzer = new StandardAnalyzer();
         try
         {
-	        Query query = MultiFieldQueryParser.parse( searchCriteria, SEARCH_FIELDS, analyzer );
-	        contents = hits2Documents( is.search( query ) );		
+            Query query = MultiFieldQueryParser.parse( searchCriteria, SEARCH_FIELDS, analyzer );
+            contents = hits2Documents( is.search( query ) );
         }
         finally
         {
@@ -78,8 +78,8 @@ public class QueryTask
         }
 
         return contents;
-    }    
-    
+    }
+
     /**
      * Searches all hits for the given search criteria on multiple existing lucene indeces 
      * @param indeces
@@ -94,21 +94,21 @@ public class QueryTask
         {
             logger.debug( "Starting search for \"" + searchCriteria + "\" on indeces \"" + indeces + "\"..." );
         }
-        
+
         List contents = null;
         Searchable[] searchers = new Searchable[indeces.length];
-        
-        for( int i = 0; i < indeces.length; i++ )
+
+        for (int i = 0; i < indeces.length; i++)
         {
-            searchers[i] = new IndexSearcher( indeces[i]);
+            searchers[i] = new IndexSearcher( indeces[i] );
         }
-        
-        MultiSearcher is = new MultiSearcher ( searchers );
+
+        MultiSearcher is = new MultiSearcher( searchers );
         Analyzer analyzer = new StandardAnalyzer();
         try
         {
-	        Query query = MultiFieldQueryParser.parse( searchCriteria, SEARCH_FIELDS, analyzer );
-	        contents = hits2Documents( is.search( query ) );	
+            Query query = MultiFieldQueryParser.parse( searchCriteria, SEARCH_FIELDS, analyzer );
+            contents = hits2Documents( is.search( query ) );
         }
         finally
         {
@@ -121,9 +121,9 @@ public class QueryTask
                     + contents.size() + " documents." );
         }
 
-        return contents;        
+        return contents;
     }
-    
+
     /**
      * @param hits
      * @return
@@ -132,36 +132,36 @@ public class QueryTask
     private static List hits2Documents( Hits hits ) throws IOException
     {
         List contents = new ArrayList();
-        
+
         for (int i = 0; i < hits.length(); i++)
         {
-            Document doc = hits.doc( i );            
+            Document doc = hits.doc( i );
             String uid = doc.get( "uid" );
             try
             {
                 Criteria crit = new Criteria();
                 crit.add( ContentPeer.CONTENT_UID, uid );
                 crit.add( ContentPeer.CONTENT_TO_DELETE, false );
-                
-                 List tmp = ContentPeer.doSelect( crit );
-                
-                 if( contents != null && !contents.isEmpty() )
-                 {
-                     Content content = ( Content )contents.get(0);
-                     content.setScore( hits.score( i ));
-                     contents.add( content );
-                 }
-                 else
-                 {
-                     logger.warn( "No current content found for uid " + uid );
-                 }                                      
+                logger.debug( crit );
+                List tmp = ContentPeer.doSelect( crit );
+
+                if (tmp != null && !tmp.isEmpty())
+                {
+                    Content content = (Content) tmp.get( 0 );
+                    content.setScore( hits.score( i ) );
+                    contents.add( content );
+                }
+                else
+                {
+                    logger.warn( "No current content found for uid " + uid );
+                }
             }
             catch ( TorqueException e )
             {
                 logger.error( "Fetching document with uid=" + uid + " failed!", e );
             }
         }
-        
+
         return contents;
     }
 }
