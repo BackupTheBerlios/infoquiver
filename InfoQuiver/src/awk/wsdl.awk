@@ -18,7 +18,7 @@ BEGIN {
 #-------------
 
 /^[ \t]*<wsdl:types>/{
-	gsub(/<wsdl:types>/, "<import namespace=\"urn:datatypes:sequencer\" location=\"specialTypes.xsd\"/><wsdl:types>");
+	gsub(/<wsdl:types>/, "<import namespace=\"urn:datatypes:sequencer\" location=\"SpecialTypes.xsd\"/><wsdl:types>");
 }
 
 #----------------
