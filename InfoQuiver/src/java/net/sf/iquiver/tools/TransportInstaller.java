@@ -76,12 +76,36 @@ public class TransportInstaller
                     Node node = doc.selectSingleNode( "//name" );
                     if (node == null)
                     {
-                        System.out.println( "Mandatory element \"name\" could not be found, install failed." );
+                        System.out
+                                .println( "!!!Error!!! Mandatory element \"name\" could not be found, install failed." );
                         System.exit( 1 );
-                    }                 
-                    
+                    }
                     String descr = node.getStringValue();
                     transport.setTransportName( descr );
+
+                    node = doc.selectSingleNode( "//type" );
+                    if (node == null)
+                    {
+                        System.out
+                                .println( "!!!Error!!!  Mandatory element \"type\" could not be found, install failed." );
+                        System.out
+                                .println( "The transport type MUST be set to one of the following numeric values: 0=FETCHER,1=DISPATCHER,2=BOTH" );
+                        System.exit( 1 );
+                    }
+
+                    descr = node.getStringValue();
+                    try
+                    {
+                        byte type = Byte.parseByte( descr );
+                        transport.setTransportType( type );
+                    }
+                    catch ( Exception e )
+                    {
+                        System.out.println( "!!!Error!!! The element \"type\" contains an invalid value." );
+                        System.out
+                                .println( "The transport type MUST be set to one of the following numeric values: 0=FETCHER,1=DISPATCHER,2=BOTH" );
+                        System.exit( 1 );
+                    }
 
                     Element root = doc.getRootElement();
                     for (Iterator i = root.elementIterator( "attribute" ); i.hasNext();)
@@ -91,7 +115,8 @@ public class TransportInstaller
                         String attName = element.attributeValue( "name" );
                         if (attName == null)
                         {
-                            System.out.println( "Mandatory attribute \"name\" could not be found, install failed." );
+                            System.out
+                                    .println( "!!!Error!!! Mandatory attribute \"name\" could not be found, install failed." );
                             System.out.println( element.toString() );
                             System.exit( 1 );
                         }
@@ -99,7 +124,8 @@ public class TransportInstaller
                         String attType = element.attributeValue( "type" );
                         if (attType == null)
                         {
-                            System.out.println( "Mandatory attribute \"name\" could not be found, install failed." );
+                            System.out
+                                    .println( "!!!Error!!! Mandatory attribute \"name\" could not be found, install failed." );
                             System.out.println( element.toString() );
                             System.exit( 1 );
                         }
@@ -118,7 +144,7 @@ public class TransportInstaller
                         {
                             att.setIsPartOfAuthentification( Boolean.valueOf( attRequired ).booleanValue() );
                         }
-                                                
+
                         transport.addTransportAttribute( att );
                     }
 
@@ -128,7 +154,7 @@ public class TransportInstaller
                 }
                 catch ( Exception e )
                 {
-                    System.out.println( "Install failed, see exception trace for more details" );
+                    System.out.println( "!!!Error!!! Install failed, see exception trace for more details" );
                     e.printStackTrace();
                 }
             }
