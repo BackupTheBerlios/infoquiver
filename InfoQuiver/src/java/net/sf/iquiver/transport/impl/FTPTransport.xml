@@ -1,0 +1,10 @@
+<transport>
+    <name>Basic FTP Transport</name>
+    <type>2</type>
+    <attribute name="Server" mandatory="true" type="java.lang.String"/>
+    <attribute name="Port" type="java.lang.Integer"/>
+    <attribute name="Login" mandatory="true" type="java.lang.String"/>
+    <attribute name="Password" mandatory="true" type="java.lang.String"/>
+    <attribute name="FetchRemoteFilePath" type="java.lang.String"/>
+    <attribute name="RemoteDirectory" type="java.lang.String"/>
+</transport>
