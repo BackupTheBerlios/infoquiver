@@ -37,7 +37,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
      * The one and only version information
      */
     public static final String VERSION = "0.0.1";
-    
+
     /**
      * temporarily storage for all kinds of application wide variables and
      * objects
@@ -89,7 +89,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
      */
     public IQuiver()
     {
-        setDaemon(true);
+        //setDaemon( true);
         initialize();
     }
 
@@ -103,6 +103,15 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
         //Server loop
         while ( true )
         {
+            try
+            {
+                sleep( 100);
+            }
+            catch ( InterruptedException e )
+            {
+                throw new RuntimeException( e );
+            }
+
             if ( isInterrupted() )
             {
                 break;
@@ -202,7 +211,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
     {
         Configuration logConfig = null;
         boolean configured = false;
-        
+
         //check if we should especially use a custom logger configuration file
         if ( conf.containsKey( ConfigurationConstants.OVERWRITE_KEY_CONFIG_LOGGER) )
         {
@@ -226,20 +235,20 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
                         + "\"does not exist. Will use default location instead", e);
             }
         }
-        
-        if(!configured)
+
+        if ( !configured )
         {
             try
             {
                 logConfig = new DefaultProperiesConfiguration( this.configDir + "/"
                         + ConfigurationConstants.CONFIG_FILE_LOGGER );
-                this.logConfigurator.configure( logConfig );
+                this.logConfigurator.configure( logConfig);
             }
             catch ( IOException e )
             {
                 log.error( "Cache Configuration with default configuration file failed!", e);
                 throw new ConfigurationException( e.getMessage() );
-            }           
+            }
         }
     }
 
