@@ -207,11 +207,12 @@
     ContentLocale CDATA #IMPLIED
     ContentDateOfCreation CDATA #IMPLIED
     ContentDateOfLastModification CDATA #IMPLIED
+    ContentInfoUrl CDATA #IMPLIED
+    ContentAuthor CDATA #IMPLIED
     ContentName CDATA #IMPLIED
     ContentTitle CDATA #IMPLIED
     ContentShortDescription CDATA #IMPLIED
-    ContentInfoUrl CDATA #IMPLIED
-    ContentAuthor CDATA #IMPLIED
+    ContentKeywords CDATA #IMPLIED
     ContentContent CDATA #IMPLIED
     ContentToDelete CDATA #IMPLIED
 >
