@@ -26,6 +26,11 @@
         <class>org.apache.velocity.tools.view.tools.ParameterParser</class>
     </tool>
     <tool>
+        <key>i18n</key>
+        <scope>request</scope>
+        <class>net.sf.iquiver.web.I18nManager</class>
+    </tool>
+    <tool>
         <key>iquiver</key>
         <scope>session</scope>
         <class>net.sf.iquiver.web.IQuiverDelegate</class>

@@ -2,8 +2,8 @@
  * IQuiverDelegate.java
  * created on 28.11.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/infoquiver-web/WEB-INF/src/net/sf/iquiver/web/IQuiverDelegate.java,v $
- * $Date: 2004/11/29 18:59:40 $
- * $Revision: 1.1 $
+ * $Date: 2004/11/29 23:44:41 $
+ * $Revision: 1.2 $
 *********************************************************************/
 
 package net.sf.iquiver.web;
@@ -45,7 +45,7 @@ public class IQuiverDelegate implements ViewTool
 
             try
             {
-                Configuration config = new DefaultProperiesConfiguration("/WEB-INF/iquiver-web.properties");
+                Configuration config = new DefaultProperiesConfiguration(path + "/WEB-INF/iquiver-web.properties");
                 rpcClient = new XmlRpcClient(config.getString("host"), config.getInt("port") );
             }
             catch ( IOException e )
