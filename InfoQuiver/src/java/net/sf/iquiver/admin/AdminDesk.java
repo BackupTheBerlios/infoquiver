@@ -33,7 +33,7 @@ public class AdminDesk extends JFrame
 
     
     public static void main( String[] args )
-    {
+    {        
         try
         {
             UIManager.setLookAndFeel( "com.jgoodies.plaf.plastic.PlasticXPLookAndFeel");

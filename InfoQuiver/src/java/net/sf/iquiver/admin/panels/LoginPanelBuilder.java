@@ -17,8 +17,8 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import net.sf.iquiver.admin.delegate.UserDelegate;
 import net.sf.iquiver.om.User;
+import net.sf.iquiver.om.UserPeer;
 import net.sf.iquiver.util.StringUtil;
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -117,7 +117,7 @@ public class LoginPanelBuilder extends AdminPanelBuilder
          */
         public void actionPerformed(ActionEvent evt)
         {
-            User user = UserDelegate.doLogin( inp_login.getText(), inp_pwd.getText());
+            User user = UserPeer.doLogin( inp_login.getText(), inp_pwd.getText());
             if ( user != null )
             {
                 displayErrorMessage( "Here we go...");
