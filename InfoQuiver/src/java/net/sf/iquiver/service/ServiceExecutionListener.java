@@ -4,10 +4,12 @@
  */
 package net.sf.iquiver.service;
 
+import java.util.EventListener;
+
 /**
  * @author netseeker aka Michael Manske
  */
-public interface ServiceExecutionListener
+public interface ServiceExecutionListener extends EventListener
 {
     public void executed(ServiceExecutionEvent evt);
 }

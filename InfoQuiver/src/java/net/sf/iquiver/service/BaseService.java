@@ -4,10 +4,7 @@
  */
 package net.sf.iquiver.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import javax.swing.event.EventListenerList;
 
 /**
  * The base class of all service tasks.
@@ -18,12 +15,12 @@ public abstract class BaseService implements Service
     /**
      * Comment for <code>serviceStateListeners</code>
      */
-    List serviceStateListeners = Collections.synchronizedList( new ArrayList() );
+    EventListenerList serviceStateListeners = new EventListenerList();
 
     /**
      * Comment for <code>serviceExecutionListeners</code>
      */
-    List serviceExecutionListeners = Collections.synchronizedList( new ArrayList() );
+    EventListenerList serviceExecutionListeners = new EventListenerList();
 
     private int _state = ServiceStateListener.ST_STOPPED;
 
@@ -35,10 +32,7 @@ public abstract class BaseService implements Service
      */
     public final void addServiceStateListener( ServiceStateListener listener )
     {
-        if (!serviceStateListeners.contains( listener ))
-        {
-            serviceStateListeners.add( listener );
-        }
+        serviceStateListeners.add(ServiceStateListener.class, listener );
     }
 
     /* (non-Javadoc)
@@ -46,7 +40,7 @@ public abstract class BaseService implements Service
      */
     public final void removeServiceStateListener( ServiceStateListener listener )
     {
-        serviceStateListeners.remove( listener );
+        serviceStateListeners.remove(ServiceStateListener.class, listener );
     }
 
     /* (non-Javadoc)
@@ -54,10 +48,7 @@ public abstract class BaseService implements Service
      */
     public final void addServiceExecutionListener( ServiceExecutionListener listener )
     {
-        if (!serviceExecutionListeners.contains( listener ))
-        {
-            serviceExecutionListeners.add( listener );
-        }
+            serviceExecutionListeners.add(ServiceExecutionListener.class, listener );
     }
 
     /* (non-Javadoc)
@@ -65,7 +56,7 @@ public abstract class BaseService implements Service
      */
     public final void removeServiceExecutionListener( ServiceExecutionListener listener )
     {
-        serviceExecutionListeners.remove( listener );
+        serviceExecutionListeners.remove(ServiceExecutionListener.class, listener );
     }
 
     /**
@@ -73,18 +64,14 @@ public abstract class BaseService implements Service
      * of a ServiceStateChangedEvent.
      * @param evt
      */
-    protected final void notifyServiceStateListeners( final ServiceStateChangedEvent evt )
+    protected final void notifyServiceStateListeners( ServiceStateChangedEvent evt )
     {
-        new Thread()
+        Object[] listeners = serviceStateListeners.getListenerList();
+        
+        for ( int i = 0; i < listeners.length; i+=2 )
         {
-            public void run()
-            {
-                for (Iterator it = serviceStateListeners.iterator(); it.hasNext();)
-                {
-                    ((ServiceStateListener) it.next()).serviceStateChanged( evt );
-                }
-            }
-        }.start();
+            ((ServiceStateListener)listeners[i+1]).serviceStateChanged( evt );
+        }
     }
 
     /**
@@ -92,18 +79,14 @@ public abstract class BaseService implements Service
      * of a ServiceExecutionEvent.
      * @param evt
      */
-    protected final void notifyServiceExecutionListeners( final ServiceExecutionEvent evt )
+    protected final void notifyServiceExecutionListeners( ServiceExecutionEvent evt )
     {
-        new Thread()
+        Object[] listeners = serviceExecutionListeners.getListenerList();
+        
+        for ( int i = 0; i < listeners.length; i+=2 )
         {
-            public void run()
-            {
-                for (Iterator it = serviceExecutionListeners.iterator(); it.hasNext();)
-                {
-                    ((ServiceExecutionListener) it.next()).executed( evt );
-                }
-            }
-        }.start();
+            ((ServiceExecutionListener)listeners[i+1]).executed( evt );
+        }        
     }
 
     /**
@@ -163,7 +146,7 @@ public abstract class BaseService implements Service
      */
     public int getRestartCount()
     {
-        return _restartCount;
+        return _restartCount == 0 ? 0 : _restartCount- 1;
     }
 
     protected abstract void doStart();

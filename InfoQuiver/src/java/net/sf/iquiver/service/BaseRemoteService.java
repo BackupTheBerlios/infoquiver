@@ -244,6 +244,7 @@ public abstract class BaseRemoteService extends BaseService implements Reconfigu
         catch ( Exception e )
         {
             logger.error( e );
+            throw new RemoteException( e );
         }
         
         return results;
