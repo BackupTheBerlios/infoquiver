@@ -2,8 +2,8 @@
  * ReportCompileService.java
  * created on 18.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/ReportCompileService.java,v $
- * $Date: 2004/07/17 22:47:35 $
- * $Revision: 1.1 $
+ * $Date: 2004/07/18 23:29:57 $
+ * $Revision: 1.2 $
 *********************************************************************/
 
 package net.sf.iquiver.service.impl;
@@ -48,7 +48,10 @@ public class ReportCompileService extends BaseService
             String path = (String)it.next();
             try
             {
-                JasperCompileManager.compileReportToFile( path );
+                if( path.endsWith("jrxml") )
+                {
+                    JasperCompileManager.compileReportToFile( path );
+                }
             }
             catch ( JRException e )
             {

@@ -2,8 +2,8 @@
  * ReportGenerator.java
  * created on 16.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/Attic/ReportGenerator.java,v $
- * $Date: 2004/07/18 17:45:40 $
- * $Revision: 1.2 $
+ * $Date: 2004/07/18 23:29:56 $
+ * $Revision: 1.3 $
  *********************************************************************/
 
 package net.sf.iquiver.service.impl;
@@ -35,13 +35,13 @@ public class ReportGenerator extends Thread
     /**
      * Commons Logger for this class
      */
-    private static final Log logger = LogFactory.getLog(ReportGenerator.class);
+    private static final Log logger = LogFactory.getLog( ReportGenerator.class );
 
     /**
      * directory where the generated report will be saved, default: reports/tmp
      */
     private static String _targetDir = IQuiver.getConfiguration().getString( "reports.directory", "reports/tmp" );
-    private static String _template = IQuiver.getConfiguration().getString( "reports.templates.searchresults" );
+    private static String _template = IQuiver.getConfiguration().getString( "reports.templates.searchresults" ) + ".jasper";
     private IReportSource _searcher;
     private ListMap _queryresults;
 
@@ -82,7 +82,7 @@ public class ReportGenerator extends Thread
         }
         catch ( JRException e )
         {
-           logger.error( e );
+            logger.error( e );
         }
     }
 }

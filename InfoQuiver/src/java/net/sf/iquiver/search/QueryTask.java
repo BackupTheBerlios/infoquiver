@@ -139,7 +139,14 @@ public class QueryTask
             try
             {
                 Content content = ContentPeer.retrieveByUID( uid );
-                contents.add( uid );
+                if( content != null )
+                {
+                    contents.add( content );
+                }
+                else
+                {
+                    logger.warn( "No content found for uid " + uid );
+                }
             }
             catch ( TorqueException e )
             {

@@ -2,8 +2,8 @@
  * ContentSearchService.java
  * created on 15.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/ContentSearchService.java,v $
- * $Date: 2004/07/17 21:54:21 $
- * $Revision: 1.5 $
+ * $Date: 2004/07/18 23:29:57 $
+ * $Revision: 1.6 $
  *********************************************************************/
 
 package net.sf.iquiver.service.impl;
@@ -108,15 +108,25 @@ public class ContentSearchService extends BaseService
         List documents = null;
         ReportGenerator generator = null;
         ListMap queryResults = new ArrayMap();
-        String[] indeces;
+        String[] tmp, indeces;
 
         // determine all indeces to use for searching, one index per content source
-        indeces = new String[contentSources.size()];
+        tmp = new String[contentSources.size()];
+        int count = 0;
         for (int i = 0; i < contentSources.size(); i++)
         {
             ContentSource source = (ContentSource) contentSources.get( i );
-            indeces[i] = _indexDirectory + File.separator + String.valueOf( source.getContentSourceId() );
+            String index = _indexDirectory + File.separator + String.valueOf( source.getContentSourceId() );
+            File testFile = new File( index );
+            if( testFile.exists() )
+            {
+                tmp[i] = index;
+                count++;
+            }
         }
+        
+        indeces = new String[ count ];
+        System.arraycopy( tmp, 0, indeces, 0, count);
 
         for (Iterator it = queries.iterator(); it.hasNext();)
         {
