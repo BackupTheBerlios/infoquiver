@@ -19,13 +19,12 @@ public abstract class AdminPanelBuilder
     public AdminPanel build()
     {
         long buildStart = System.currentTimeMillis();
-        AdminPanel panel = new AdminPanel();
-        buildPanel(panel);
+        AdminPanel panel = buildPanel();        
         panel.setBuidlEnd(System.currentTimeMillis());
         panel.setBuildStart(buildStart);
         
         return panel;
     }
     
-    public abstract void buildPanel(AdminPanel panel);
+    public abstract AdminPanel buildPanel();
 }

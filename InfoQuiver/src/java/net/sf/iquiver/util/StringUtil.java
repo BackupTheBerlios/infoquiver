@@ -19,4 +19,14 @@ public abstract class StringUtil
         
         return value;
     }
+    
+    public static String defaultIfNull(String value, String def)
+    {
+        if(value == null)
+        {
+            return def;
+        }
+        
+        return value;
+    }    
 }
