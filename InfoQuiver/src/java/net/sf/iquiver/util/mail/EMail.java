@@ -2,8 +2,8 @@
  * EMail.java
  * created on 16.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/util/mail/EMail.java,v $
- * $Date: 2004/10/17 16:46:45 $
- * $Revision: 1.2 $
+ * $Date: 2004/11/26 22:50:10 $
+ * $Revision: 1.3 $
  *********************************************************************/
 
 package net.sf.iquiver.util.mail;
@@ -88,41 +88,27 @@ public class EMail
      * @param in
      * @param fileName
      */
-    public void addAttachment( InputStream in, String fileName )
+    public void addAttachment( InputStream in, String fileName ) throws MessagingException
     {
         MimeBodyPart mbp = new MimeBodyPart();
         ContentTypeFileTypeMap ctfm = ContentTypeFileTypeMap.getInstance();
 
-        try
-        {
-            String contentType = ctfm.getContentTypeFor( fileName );
-            mbp.setDataHandler( new DataHandler( new InputStreamDataSource( in, contentType ) ) );
-            mbp.setFileName( fileName );
-            mp.addBodyPart( mbp );
-        }
-        catch ( MessagingException e )
-        {
-            e.printStackTrace();
-        }
+        String contentType = ctfm.getContentTypeFor( fileName );
+        mbp.setDataHandler( new DataHandler( new InputStreamDataSource( in, contentType ) ) );
+        mbp.setFileName( fileName );
+        mp.addBodyPart( mbp );
     }
 
     /**
      * @param filePath
      */
-    public void addAttachment( String filePath )
+    public void addAttachment( String filePath ) throws MessagingException
     {
         MimeBodyPart mbp = new MimeBodyPart();
-        try
-        {
-            FileDataSource fds = new FileDataSource( filePath );
-            mbp.setDataHandler( new DataHandler( fds ) );
-            mbp.setFileName( fds.getFile().getName() );
-            mp.addBodyPart( mbp );
-        }
-        catch ( MessagingException e )
-        {
-            e.printStackTrace();
-        }
+        FileDataSource fds = new FileDataSource( filePath );
+        mbp.setDataHandler( new DataHandler( fds ) );
+        mbp.setFileName( fds.getFile().getName() );
+        mp.addBodyPart( mbp );
     }
 
     /**

@@ -2,8 +2,8 @@
  * SmtpClient.java
  * created on 15.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/util/mail/SmtpClient.java,v $
- * $Date: 2004/10/17 16:46:45 $
- * $Revision: 1.3 $
+ * $Date: 2004/11/26 22:50:10 $
+ * $Revision: 1.4 $
 *********************************************************************/
 
 package net.sf.iquiver.util.mail;
@@ -105,7 +105,8 @@ public class SmtpClient
                 {
                     msg.setRecipients(Message.RecipientType.CC, stringsToAddress(mail.getCc()) );
                 }
-                msg.setSubject( mail.getSubject() );
+                msg.setSubject( mail.getSubject() );                
+                msg.setContent( mail.getParts() );                
                 msg.setSentDate( new Date() );
                 msg.saveChanges();
                 bus.send( msg );
@@ -114,8 +115,8 @@ public class SmtpClient
         }
         catch ( NoSuchProviderException e )
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("No provider found!!!", e );
+            throw new MessagingException( e.getMessage() );
         }
         finally
         {
