@@ -48,10 +48,21 @@ public class DocumentIndexer
     public DocumentIndexer(String indexDirectory)
     {
         _directory = indexDirectory;
-        File file = new File( _directory );
+        
+        File file = new File( _directory + "/segments" );
+
         if (!file.exists())
         {
-            file.mkdir();
+            IndexWriter writer;
+            try
+            {
+                writer = new IndexWriter( _directory, new StandardAnalyzer(), true );
+                writer.close();
+            }
+            catch ( IOException e )
+            {
+                logger.error( "Error occured while creating a new lucene index at: " + _directory );
+            }
         }
     }
 
@@ -66,26 +77,51 @@ public class DocumentIndexer
         org.apache.lucene.document.Document lDoc = new org.apache.lucene.document.Document();
 
         lDoc.add( Field.Keyword( "uid", doc.getUID() ) );
-        lDoc.add( Field.Text( "author", doc.getAuthor() ) );
-        lDoc.add( Field.Text( "title", doc.getTitle() ) );
-        lDoc.add( Field.Text( "keywords", doc.getKeywords() ) );
-        lDoc.add( Field.Text( "description", doc.getShortDescription() ) );
-        lDoc.add( Field.Keyword( "url", doc.getInfoURL().toString() ) );
-        lDoc.add( Field.Keyword( "created", doc.getDateOfCreation() ) );
-        lDoc.add( Field.Keyword( "modified", doc.getDateOfLastModification() ) );
 
-        try
+        if (doc.getAuthor() != null)
         {
-            Parser parser = ParserFactory.getParserForContentType( doc.getContentTypeStr() );
-            lDoc.add( Field.UnStored( "contents", parser.getStripped( doc.getRawContent() ) ) );
+            lDoc.add( Field.Text( "author", doc.getAuthor() ) );
         }
-        catch ( UnsupportedContentTypeException e )
+        if (doc.getTitle() != null)
         {
-            logger.warn( "Can't add raw content to lucene index!", e );
+            lDoc.add( Field.Text( "title", doc.getTitle() ) );
         }
-        catch ( ParsingException e )
+        if (doc.getKeywords() != null)
         {
-            logger.warn( "Can't add raw content to lucene index!", e );
+            lDoc.add( Field.Text( "keywords", doc.getKeywords() ) );
+        }
+        if (doc.getShortDescription() != null)
+        {
+            lDoc.add( Field.Text( "description", doc.getShortDescription() ) );
+        }
+        if (doc.getInfoURL() != null)
+        {
+            lDoc.add( Field.Keyword( "url", doc.getInfoURL().toString() ) );
+        }
+        if (doc.getDateOfCreation() != null)
+        {
+            lDoc.add( Field.Keyword( "created", doc.getDateOfCreation() ) );
+        }
+        if (doc.getDateOfLastModification() != null)
+        {
+            lDoc.add( Field.Keyword( "modified", doc.getDateOfLastModification() ) );
+        }
+
+        if (doc.getRawContent() != null)
+        {
+            try
+            {
+                Parser parser = ParserFactory.getParserForContentType( doc.getContentTypeStr() );
+                lDoc.add( Field.UnStored( "contents", parser.getStripped( doc.getRawContent() ) ) );
+            }
+            catch ( UnsupportedContentTypeException e )
+            {
+                logger.warn( "Can't add raw content to lucene index!", e );
+            }
+            catch ( ParsingException e )
+            {
+                logger.warn( "Can't add raw content to lucene index!", e );
+            }
         }
 
         return lDoc;

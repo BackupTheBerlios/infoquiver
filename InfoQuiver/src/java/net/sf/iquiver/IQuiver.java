@@ -46,7 +46,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
     /**
      * holds the currently active configuration
      */
-    private Configuration _configuration;
+    private static Configuration _configuration;
 
     /**
      * the configurable default logger
@@ -190,6 +190,9 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
                 log.info( "Custom configuration directory \"" + this._configDir + "\" specified." );
             }
 
+            //store the current configuration, some services may need to read additional properties
+            _configuration = conf;
+            
             configureLogger( conf );
 
             //LogFactory should be configured now, so instanciate our default logger
@@ -198,7 +201,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
             configurePersistence( conf );
             configureCache( conf );
             _serviceConfigurator.configure( conf.getSubset("service") );
-            context.put( "net.sf.iquiver.IQuiver:CONFIGURATION", conf );
+                        
             this._isConfigured = true;
         }
         else
@@ -208,11 +211,21 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
     }
 
     /**
+     * Returns the application wide dynamic context
      * @return
      */
     public static DefaultContext getContext()
     {
         return context;
+    }
+    
+    /**
+     * Returns the last used configuration
+     * @return
+     */
+    public static Configuration getConfiguration()
+    {
+        return _configuration;
     }
 
     private void configureLogger( Configuration conf ) throws ConfigurationException

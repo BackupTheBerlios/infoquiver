@@ -5,6 +5,7 @@
 package net.sf.iquiver.parser.impl;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 import net.sf.iquiver.metaformat.Document;
@@ -14,6 +15,7 @@ import net.sf.iquiver.parser.ParsingException;
 
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateParser;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -82,7 +84,19 @@ public class HtmlParser extends Parser
      */
     public String getStripped( byte[] rawContent ) throws ParsingException
     {
-        // TODO Auto-generated method stub
-        return null;
+        org.apache.lucene.demo.html.HTMLParser parser = new org.apache.lucene.demo.html.HTMLParser(
+                new ByteArrayInputStream( rawContent ) );        
+        
+        String content = null;
+        try
+        {
+            content = IOUtils.toString( parser.getReader() );
+        }
+        catch ( IOException e )
+        {
+            throw new ParsingException( e.getMessage(), -1);
+        }
+        
+        return content;
     }
 }

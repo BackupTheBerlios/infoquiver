@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import net.sf.iquiver.IQuiver;
 import net.sf.iquiver.metaformat.Document;
 import net.sf.iquiver.om.Content;
 import net.sf.iquiver.om.ContentPeer;
@@ -46,6 +47,9 @@ public class ContentFetchService extends BaseService
      */
     private static final Log logger = LogFactory.getLog( ContentFetchService.class );
 
+    /**
+     * List of active timers, which are responsible for starting content fetching per content source
+     */
     private List _timers;
 
     /*
@@ -56,6 +60,7 @@ public class ContentFetchService extends BaseService
     protected void doStart()
     {
         this._timers = new ArrayList();
+        String indexDirectory = IQuiver.getConfiguration().getString("lucene.index.path");
 
         List transports = _getTransports();
         for (Iterator it = transports.iterator(); it.hasNext();)
@@ -67,7 +72,7 @@ public class ContentFetchService extends BaseService
                 interval = DEFAULT_FETCH_UPDATE_INTERVAL;
             }
 
-            ContentFetchThread thread = new ContentFetchThread( fetcher );
+            ContentFetchThread thread = new ContentFetchThread( fetcher, indexDirectory );
             Timer timer = new Timer();
             timer.scheduleAtFixedRate( thread, 5000, interval );
             _timers.add( timer );
@@ -213,6 +218,8 @@ public class ContentFetchService extends BaseService
          * The transport used to fetch content from a content source
          */
         private Fetcher fetcher;
+        
+        private String indexDir;
 
         private boolean isRunning = false;
 
@@ -221,9 +228,10 @@ public class ContentFetchService extends BaseService
          * 
          * @param fetcher transport used to fetch content from a content source
          */
-        public ContentFetchThread(Fetcher fetcher)
+        public ContentFetchThread(Fetcher fetcher, String indexDir)
         {
             this.fetcher = fetcher;
+            this.indexDir = indexDir;
         }
 
         /*
@@ -271,7 +279,7 @@ public class ContentFetchService extends BaseService
                 }
                 
                 // Add the documents to the search index
-                DocumentIndexer indexer = new DocumentIndexer("");
+                DocumentIndexer indexer = new DocumentIndexer( indexDir );
                 try
                 {
                     indexer.indexDocuments( documents );
