@@ -1,6 +1,12 @@
+/*********************************************************************
+ * User.java
+ * created on 12.06.2004 by netseeker
+ * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/om/User.java,v $
+ * $Date: 2004/07/17 15:17:11 $
+ * $Revision: 1.4 $
+ *********************************************************************/
 
 package net.sf.iquiver.om;
-
 
 import org.apache.torque.om.Persistent;
 
@@ -13,8 +19,6 @@ import org.apache.torque.om.Persistent;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-public  class User
-    extends net.sf.iquiver.om.BaseUser
-    implements Persistent
+public class User extends net.sf.iquiver.om.BaseUser implements Persistent
 {
 }

@@ -55,12 +55,10 @@ public class BaseIQuiverTestCase extends TestCase
         }
         catch ( IOException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         catch ( ConfigurationException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -79,7 +77,6 @@ public class BaseIQuiverTestCase extends TestCase
     public BaseIQuiverTestCase(String arg0)
     {
         super( arg0 );
-        // TODO Auto-generated constructor stub
     }
 
     public URLConnection openConnection( URL url ) throws IOException
