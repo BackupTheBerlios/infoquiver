@@ -2,8 +2,8 @@
  * SmtpClient.java
  * created on 15.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/util/mail/SmtpClient.java,v $
- * $Date: 2004/10/17 15:29:04 $
- * $Revision: 1.2 $
+ * $Date: 2004/10/17 16:46:45 $
+ * $Revision: 1.3 $
 *********************************************************************/
 
 package net.sf.iquiver.util.mail;
@@ -24,7 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * 
+ * A simple SMTP client providing functionality to send multipart emails via the javax.mail package.
  * @author netseeker aka Michael Manske
  */
 public class SmtpClient

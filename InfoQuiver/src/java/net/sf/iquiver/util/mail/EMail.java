@@ -2,8 +2,8 @@
  * EMail.java
  * created on 16.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/util/mail/EMail.java,v $
- * $Date: 2004/10/16 19:26:42 $
- * $Revision: 1.1 $
+ * $Date: 2004/10/17 16:46:45 $
+ * $Revision: 1.2 $
  *********************************************************************/
 
 package net.sf.iquiver.util.mail;
@@ -20,6 +20,7 @@ import javax.mail.internet.MimeMultipart;
 import de.netseeker.util.mime.ContentTypeFileTypeMap;
 
 /**
+ * A simple wrapper around a javax.mail.Multipart object extended with fields for from, to, cc and subject
  * @author netseeker aka Michael Manske
  */
 public class EMail
