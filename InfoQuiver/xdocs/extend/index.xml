@@ -7,7 +7,29 @@
   <body>
     <section name="Extending InfoQuiver">
         <p>
-            To be done.
+            InfoQuiver is build around three types of core modules:
+            <ol>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="transports.html">Transports</a></li>
+                <li><a href="parsers.html">Parsers</a></li>
+            </ol>
+            So if you want extend InfoQuiver it depends on your requirements
+            which modules you will have to implement.
+            <table>
+                <tr><th>Goal</th><th>Type of modules to implement</th></tr>
+                <tr>
+                    <td>Add a completely new kind of functionality</td>
+                    <td><a href="services.html">Service</a></td>
+                </tr>
+                <tr>
+                    <td>Add support of a way to retrieve or send data</td>
+                    <td><a href="transports.html">Transport</a></td>
+                </tr>
+                <tr>
+                    <td>Add support for a new content type</td>
+                    <td><a href="parsers.html">Parser</a></td>
+                </tr>            
+            </table>
         </p>
     </section>
   </body>

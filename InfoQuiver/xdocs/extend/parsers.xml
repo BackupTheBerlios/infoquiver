@@ -54,7 +54,7 @@ public MyParser()
 </source>
                     </li>
                     <li>create a new instance of <a href="../apidocs/net/sf/iquiver/metaformat/Document.html">Document</a> by using
-                         <a href="../apidocs/net/sf/iquiver/metaformat/impl/MetaFormatFactory.html#createDocumentForContentType(String)">MetaFormatFactory.createDocumentForContentType(String contentType)</a></li>
+                         <a href="../apidocs/net/sf/iquiver/metaformat/impl/MetaFormatFactory.html#createDocumentForContentType(java.lang.String)">MetaFormatFactory.createDocumentForContentType(String contentType)</a></li>
                     <li>fill as many fields in the new document instance as you are able to, you should at least copy the raw content
                         into your new document instance and set the creation date.</li>
                 </ol>
