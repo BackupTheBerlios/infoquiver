@@ -42,7 +42,6 @@ public class HTTPTransportTest extends BaseIQuiverTestCase
         }
         catch ( TorqueException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         
@@ -55,7 +54,6 @@ public class HTTPTransportTest extends BaseIQuiverTestCase
         }
         catch ( TransportConfigurationException e1 )
         {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
     }
