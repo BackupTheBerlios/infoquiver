@@ -258,7 +258,7 @@
         <column name="CONTENT_TITLE" type="VARCHAR" size="32"/>
         <column name="CONTENT_SHORT_DESCRIPTION" type="VARCHAR" size="200"/>
         <column name="CONTENT_KEYWORDS" type="LONGVARCHAR" size="1000"/>
-        <column name="CONTENT_CONTENT" type="LONGVARCHAR" size="32768"/>
+        <column name="CONTENT_CONTENT" type="BLOB" size="65536"/>
         <column name="CONTENT_TO_DELETE" type="BOOLEANINT"/>
         <foreign-key foreignTable="iq_content_source">
             <reference local="CONTENT_SOURCE_ID" foreign="CONTENT_SOURCE_ID" />

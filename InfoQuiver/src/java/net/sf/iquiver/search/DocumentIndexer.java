@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -95,6 +96,10 @@ public class DocumentIndexer
         {
             lDoc.add( Field.Text( "author", doc.getAuthor() ) );
         }
+        if (doc.getName() != null)
+        {
+            lDoc.add( Field.Text( "name", doc.getName() ) );
+        }
         if (doc.getTitle() != null)
         {
             lDoc.add( Field.Text( "title", doc.getTitle() ) );
@@ -163,6 +168,13 @@ public class DocumentIndexer
         IndexWriter writer = new IndexWriter( _directory, analyzer, false );
         try
         {
+            if (logger.isDebugEnabled())
+            {
+                logger.debug( "Indexing document UID=" + doc.getUID() + " --> " 
+                        + ObjectUtils.defaultIfNull( doc.getName(), ObjectUtils.defaultIfNull( doc.getTitle(), doc
+                                .getShortDescription() ) ) );
+            }
+            
             writer.addDocument( lDoc );
             writer.optimize();
         }
@@ -208,6 +220,14 @@ public class DocumentIndexer
             {
                 Document doc = (Document) it.next();
                 org.apache.lucene.document.Document lDoc = convertDocument( doc );
+
+                if (logger.isDebugEnabled())
+                {
+                    logger.debug( "Indexing document UID=" + doc.getUID() + " --> " 
+                            + ObjectUtils.defaultIfNull( doc.getName(), ObjectUtils.defaultIfNull( doc.getTitle(), doc
+                                    .getShortDescription() ) ) );
+                }
+
                 writer.addDocument( lDoc );
                 // according to http://www.javaranch.com/newsletter/200404/Lucene.html
                 // we should optimize the index after EACH document
