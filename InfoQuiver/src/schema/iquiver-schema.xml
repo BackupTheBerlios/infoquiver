@@ -16,7 +16,8 @@
         <column name="USER_PREFERED_REPORT_FORMAT" primaryKey="false" type="VARCHAR" size="3"/>
         <column name="USER_REPORT_VIA_MAIL" type="BOOLEANINT"/>
         <column name="USER_REPORT_DISPATCH_INTERVAL" type="BIGINT"/>
-        <column name="ADDRESS_ID" primaryKey="false" required="true" type="BIGINT"/>
+        <column name="USER_LANGUAGE" type="VARCHAR" size="2"/>
+        <column name="ADDRESS_ID" primaryKey="false" type="BIGINT" javaType="object"/>
         <column name="CLIENT_ID" primaryKey="false" required="true" type="INTEGER"/>
         <column name="CREATED" type="TIMESTAMP"/>            
         <column name="CREATED_BY" type="BIGINT"/>                   
@@ -37,7 +38,8 @@
     <table name="iq_client" javaName="Client" idMethod="none">
         <column name="CLIENT_ID" primaryKey="true" required="true" type="INTEGER"/>
         <column name="CLIENT_NAME" primaryKey="false" type="VARCHAR" size="32"/>
-        <column name="ADDRESS_ID" primaryKey="false" required="true" type="BIGINT"/>
+        <column name="CLIENT_PREFERED_LANGUAGE" type="VARCHAR" size="2"/>
+        <column name="ADDRESS_ID" primaryKey="false" required="true" type="BIGINT" javaType="object"/>
         <column name="CREATED" type="TIMESTAMP"/>            
         <column name="CREATED_BY" type="BIGINT"/>                   
         <foreign-key foreignTable="iq_address">
@@ -62,7 +64,7 @@
         </unique>                
     </table>
     <table name="iq_address" javaName="Address">
-        <column name="ADDRESS_ID" primaryKey="true" required="true" type="BIGINT"/>
+        <column name="ADDRESS_ID" primaryKey="true" required="true" type="BIGINT" javaType="object"/>
         <column name="ADDRESS_NAME" primaryKey="false" type="VARCHAR" size="64"/>
         <column name="ADDRESS_STREET" primaryKey="false" type="VARCHAR" size="32"/>
         <column name="ADDRESS_ZIP" primaryKey="false" type="VARCHAR" size="10"/>
@@ -212,9 +214,9 @@
     </table>
     <table name="iq_publisher" javaName="Publisher">
         <column name="PUBLISHER_ID" primaryKey="true" required="true" type="INTEGER"/>
-        <column name="ADDRESS_ID" primaryKey="false" required="true" type="BIGINT"/>
+        <column name="ADDRESS_ID" primaryKey="false" required="true" type="BIGINT" javaType="object"/>
         <column name="PUBLISHER_NAME" type="VARCHAR" size="32"/>
-        <column name="PUBLISHER_LOGO" type="LONGVARBINARY" size="4096"/>
+        <column name="PUBLISHER_LOGO" type="BLOB" size="131072"/>
         <foreign-key foreignTable="iq_address">
             <reference local="ADDRESS_ID" foreign="ADDRESS_ID" />
         </foreign-key>        
@@ -303,9 +305,9 @@
         <column name="CONTENT_DATE_OF_LAST_MODIFICATION" type="TIMESTAMP"/>                
         <column name="CONTENT_INFO_URL" type="VARCHAR" size="255"/>
         <column name="CONTENT_AUTHOR" type="VARCHAR" size="32"/>
-        <column name="CONTENT_NAME" type="VARCHAR" size="32"/>
-        <column name="CONTENT_TITLE" type="VARCHAR" size="64"/>
-        <column name="CONTENT_SHORT_DESCRIPTION" type="VARCHAR" size="255"/>
+        <column name="CONTENT_NAME" type="VARCHAR" size="64"/>
+        <column name="CONTENT_TITLE" type="VARCHAR" size="128"/>
+        <column name="CONTENT_SHORT_DESCRIPTION" type="LONGVARCHAR" size="2500"/>
         <column name="CONTENT_KEYWORDS" type="LONGVARCHAR" size="1000"/>
         <!-- <column name="CONTENT_CONTENT" type="BLOB" size="65536"/> -->
         <column name="CONTENT_FILE_NAME" type="VARCHAR" size="128"/>
