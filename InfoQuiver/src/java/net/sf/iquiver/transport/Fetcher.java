@@ -28,4 +28,9 @@ public interface Fetcher
      * @return
      */
     public List fetch();
+    
+    /**
+     * @return
+     */
+    public boolean isParsingRequired();
 }

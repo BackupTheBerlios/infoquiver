@@ -189,4 +189,12 @@ public class HTTPTransport implements Fetcher
 
         return method;
     }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.transport.Fetcher#isParsingRequired()
+     */
+    public boolean isParsingRequired()
+    {
+        return true;
+    }
 }

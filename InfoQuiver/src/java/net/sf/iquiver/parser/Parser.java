@@ -70,8 +70,8 @@ public abstract class Parser
     public Document parse( File source ) throws ParsingException, IOException
     {
         return parse( new FileInputStream(source) );
-    }
-       
+    }          
+    
     /**
      * @param source
      * @return
@@ -82,7 +82,6 @@ public abstract class Parser
     {
         return parse(source.getRawContent());
     }
-    
     
     /**
      * @return
