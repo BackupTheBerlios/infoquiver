@@ -1,0 +1,8 @@
+<transport>
+    <name>Basis HTTP tranport</name>
+    <attribute name="Server" mandatory="true"/>
+    <attribute name="Port"/>
+    <attribute name="Timeout"/>
+    <attribute name="Login" partOfAuthentification="yes"/>
+    <attribute name="Password" partOfAuthentification="yes"/>
+</transport>
