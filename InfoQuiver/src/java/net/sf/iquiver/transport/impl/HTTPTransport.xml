@@ -1,8 +1,8 @@
 <transport>
     <name>Basis HTTP tranport</name>
-    <attribute name="Server" mandatory="true"/>
-    <attribute name="Port"/>
-    <attribute name="Timeout"/>
+    <attribute name="Server" mandatory="true" type="java.net.URL"/>
+    <attribute name="Port" type="java.lang.Integer"/>
+    <attribute name="Timeout" type="java.lang.Integer"/>
     <attribute name="Login" partOfAuthentification="yes"/>
     <attribute name="Password" partOfAuthentification="yes"/>
 </transport>
