@@ -5,6 +5,7 @@
     <links>
         <item name="netseeker" href="http://www.manskes.de"/>
         <item name="@BerliOS" href="http://developer.berlios.de/projects/infoquiver/"/>
+        <item name="back" href="javascript:history.back()"/>
     </links>
     <menu name="Overview">
         <item name="Front Page" href="/index.html"/>
