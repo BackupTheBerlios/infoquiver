@@ -1,0 +1,17 @@
+#set( $subject = "InfoQuiver SearchResults" )
+#set( $firstName = $user.getUserFirstName() )
+#set( $lastName = $user.getUserLastName() )
+Dear#if( $firstName ) $firstName#end#if( $lastName ) $lastName#end,
+		
+you received this message because your search criterias
+matched one or more documents in InfoQuivers current index.
+
+Your personal search results: $user_report
+Clientwide Search Results: $client_report
+Search results for the following usergroups you are member of:
+#foreach( $report in $usergroup_reports  ) 
+	$velocityCount $report.group: $report.usergroup_report
+#end
+ 
+regards,
+InfoQuiver Development Team
