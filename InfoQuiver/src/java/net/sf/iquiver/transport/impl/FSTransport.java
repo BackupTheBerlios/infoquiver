@@ -7,6 +7,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -244,7 +245,12 @@ public class FSTransport implements Fetcher, Dispatcher
         {
             if (fName == null || fName.length() == 0)
             {
-                fName = File.createTempFile( "iqv", ContentTypeFactory.getFirstFileType( doc.getContentTypeStr() ), fDir ).getName();
+                fName = new UID().toString();
+                String ext = ContentTypeFactory.getFirstFileType( doc.getContentTypeStr() );                
+                if( ext != null && ext.length() > 0)
+                {
+                    fName += "." + ext;
+                }
             }
 
             cout = new CountingOutputStream( new BufferedOutputStream( new FileOutputStream( fDir.getAbsolutePath()
