@@ -1,12 +1,12 @@
 /*********************************************************************
  * ReportGenerator.java
  * created on 16.07.2004 by netseeker
- * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/Attic/ReportGenerator.java,v $
- * $Date: 2004/07/21 22:34:10 $
- * $Revision: 1.5 $
+ * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/report/ReportGenerator.java,v $
+ * $Date: 2004/07/22 20:44:12 $
+ * $Revision: 1.1 $
  *********************************************************************/
 
-package net.sf.iquiver.service.impl;
+package net.sf.iquiver.report;
 
 import java.io.File;
 import java.util.HashMap;
@@ -15,8 +15,6 @@ import java.util.Map;
 import net.sf.iquiver.IQuiver;
 import net.sf.iquiver.om.Client;
 import net.sf.iquiver.om.UserGroup;
-import net.sf.iquiver.report.IReportSource;
-import net.sf.iquiver.report.QueryResultMapDataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

@@ -2,8 +2,8 @@
  * ContentSearchService.java
  * created on 15.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/ContentSearchService.java,v $
- * $Date: 2004/07/21 22:34:10 $
- * $Revision: 1.8 $
+ * $Date: 2004/07/22 20:44:15 $
+ * $Revision: 1.9 $
  *********************************************************************/
 
 package net.sf.iquiver.service.impl;
@@ -23,6 +23,7 @@ import net.sf.iquiver.om.UserGroup;
 import net.sf.iquiver.om.UserGroupLnkPeer;
 import net.sf.iquiver.om.UserPeer;
 import net.sf.iquiver.report.IReportSource;
+import net.sf.iquiver.report.ReportGenerator;
 import net.sf.iquiver.search.QueryTask;
 import net.sf.iquiver.service.BaseService;
 
