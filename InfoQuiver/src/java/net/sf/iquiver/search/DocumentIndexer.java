@@ -268,8 +268,12 @@ public class DocumentIndexer
         try
         {
             for (Iterator it = docs.iterator(); it.hasNext();)
-            {
-                addDocument( (Document) it.next(), writer );
+            {                
+                Document doc = (Document) it.next();
+                if( !doc.isRemoved() )
+                {
+                    addDocument( (Document) it.next(), writer );
+                }
             }
         }
         finally

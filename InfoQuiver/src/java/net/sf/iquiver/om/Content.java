@@ -528,4 +528,20 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
             }
         }
     }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#isRemoved()
+     */
+    public boolean isRemoved()
+    {
+        return getContentToDelete();
+    }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#setRemoved(boolean)
+     */
+    public void setRemoved( boolean removed )
+    {
+        setContentToDelete( removed );
+    }
 }

@@ -56,5 +56,7 @@ public interface Document extends Serializable
     public float getScore();
     public void setScore( float score );
     public void clear();
+    public boolean isRemoved();
+    public void setRemoved( boolean removed );
     
 }

@@ -31,6 +31,7 @@ public abstract class AbstractDocument implements Document
     private List _children;
     private String _fileName;
     private float _score;
+    private boolean _isRemoved;
 
     /*
      * (non-Javadoc)
@@ -333,7 +334,23 @@ public abstract class AbstractDocument implements Document
     {
         this._score = score;
     }
+    
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#isRemoved()
+     */    
+    public boolean isRemoved()
+    {
+        return _isRemoved;
+    }
 
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.metaformat.Document#setRemoved(boolean)
+     */        
+    public void setRemoved( boolean removed )
+    {
+        this._isRemoved = removed;
+    }
+    
     /**
      * 
      */
@@ -352,6 +369,7 @@ public abstract class AbstractDocument implements Document
         _uid = null;
         _children = null;
         _score = 0;
+        _isRemoved = false;
     }
 
     /*
