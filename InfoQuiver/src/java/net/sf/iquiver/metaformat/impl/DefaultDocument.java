@@ -13,6 +13,15 @@ public class DefaultDocument extends AbstractDocument
 {    
     byte[] rawContent;    
     
+    public DefaultDocument()
+    {        
+    }
+    
+    public DefaultDocument(byte[] rawContent)
+    {
+        this.rawContent = rawContent;
+    }
+    
     /* (non-Javadoc)
      * @see net.sf.iquiver.metaformat.Document#getRawContent()
      */
