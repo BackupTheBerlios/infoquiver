@@ -150,6 +150,7 @@ public class HTTPTransport implements Fetcher
         {
             //always release the connection after we're done
             _method.releaseConnection();
+            _method.recycle();
         }
 
         return documents;
