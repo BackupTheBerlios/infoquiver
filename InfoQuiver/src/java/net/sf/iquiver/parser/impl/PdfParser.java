@@ -5,6 +5,7 @@ package net.sf.iquiver.parser.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.GregorianCalendar;
 
 import net.sf.iquiver.metaformat.Document;
 import net.sf.iquiver.metaformat.impl.ContentTypeFactory;
@@ -60,8 +61,22 @@ public class PdfParser extends Parser
             pdfDoc = parser.getPDDocument();
             PDDocumentInformation docInfo = getDocumentInfo( pdfDoc );
             doc.setAuthor( docInfo.getAuthor() );
-            doc.setDateOfCreation( docInfo.getCreationDate().getTime() );
-            doc.setDateOfLastModification( docInfo.getModificationDate().getTime() );
+            if( docInfo.getCreationDate() != null )
+            {
+                doc.setDateOfCreation( docInfo.getCreationDate().getTime() );
+            }
+            else
+            {
+                doc.setDateOfCreation( new GregorianCalendar().getTime() );
+            }
+            if( docInfo.getModificationDate() != null )
+            {
+                doc.setDateOfLastModification( docInfo.getModificationDate().getTime() );
+            }
+            else
+            {
+                doc.setDateOfLastModification( new GregorianCalendar().getTime() );
+            }
             doc.setTitle( docInfo.getTitle() );
             doc.setShortDescription( docInfo.getSubject() );
             doc.setKeywords( docInfo.getKeywords() );
