@@ -6,6 +6,7 @@
  */
 package net.sf.iquiver.admin.panels;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -49,21 +50,22 @@ public class LoginPanelBuilder extends AdminPanelBuilder
         inp_pwd = new JPasswordField();
         inp_pwd.getDocument().addDocumentListener(listener);
         lbl_msg = new JLabel();
+        lbl_msg.setForeground(Color.RED);
         btn_go = new JButton( "login" );
         btn_go.setEnabled( false);
         btn_go.addActionListener( listener );
 
-        FormLayout layout = new FormLayout( "pref, 4dlu, 75dlu, 4dlu, pref", "pref, 2dlu, pref, 2dlu, pref, 2dlu, pref" );
+        FormLayout layout = new FormLayout( "pref, 4dlu, 75dlu, 4dlu, pref", "pref, 2dlu, pref, 2dlu, pref, 2dlu, pref, 2dlu, pref" );
         PanelBuilder builder = new PanelBuilder( panel, layout );
         CellConstraints cc = new CellConstraints();
         
-        builder.add(lbl_msg, cc.xywh( 1, 3, 3, 1));
-        builder.addSeparator( "Login");
-        builder.addLabel( "Username", cc.xy( 1, 3));
-        builder.add( inp_login, cc.xy( 3, 3));
-        builder.addLabel( "Password", cc.xy( 1, 5));
-        builder.add( inp_pwd, cc.xy( 3, 5));
-        builder.add( btn_go, cc.xy( 5, 5));
+        builder.add(lbl_msg, cc.xywh( 1, 1, 5, 1));
+        builder.addSeparator( "Login", cc.xywh( 1, 3, 5, 1));
+        builder.addLabel( "Username", cc.xy( 1, 5));
+        builder.add( inp_login, cc.xy( 3, 5));
+        builder.addLabel( "Password", cc.xy( 1, 7));
+        builder.add( inp_pwd, cc.xy( 3, 7));
+        builder.add( btn_go, cc.xy( 5, 7));
         
         return panel;               
     }       
