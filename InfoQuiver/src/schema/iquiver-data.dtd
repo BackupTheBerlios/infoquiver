@@ -12,6 +12,7 @@
     ClientPermissionLnk|
     UserGroupPermissionLnk|
     ContentSourceType|
+    Publisher|
     ContentSource|
     ContentSourceTransportConfig|
     ContentParser|
@@ -30,6 +31,9 @@
     UserFirstName CDATA #IMPLIED
     UserMidName CDATA #IMPLIED
     UserLastName CDATA #IMPLIED
+    UserGender CDATA #IMPLIED
+    UserDateOfBirth CDATA #IMPLIED
+    UserPicture CDATA #IMPLIED
     AddressId CDATA #REQUIRED
     ClientId CDATA #REQUIRED
 >
@@ -52,6 +56,7 @@
     AddressPhone CDATA #IMPLIED
     AddressMobile CDATA #IMPLIED
     AddressEmail CDATA #IMPLIED
+    AddressUrl CDATA #IMPLIED
     AddressNumber CDATA #IMPLIED
     AddressCountry CDATA #IMPLIED
 >
@@ -130,13 +135,23 @@
     ContentSourceTypeDesc CDATA #IMPLIED
 >
 
+<!ELEMENT Publisher EMPTY>
+<!ATTLIST Publisher
+    PublisherId CDATA #REQUIRED
+    AddressId CDATA #REQUIRED
+    PublisherName CDATA #IMPLIED
+    PublisherLogo CDATA #IMPLIED
+>
+
 <!ELEMENT ContentSource EMPTY>
 <!ATTLIST ContentSource
     ContentSourceId CDATA #REQUIRED
     ContentSourceTypeId CDATA #REQUIRED
     TransportId CDATA #REQUIRED
+    PublisherId CDATA #IMPLIED
     ContentSourceName CDATA #IMPLIED
     ContentSourceDesc CDATA #IMPLIED
+    ContentSourceUpdateTimespan CDATA #IMPLIED
     IsAuthentificationRequired CDATA #IMPLIED
 >
 
@@ -167,8 +182,15 @@
     ContentId CDATA #REQUIRED
     ContentTypeId CDATA #REQUIRED
     ContentSourceId CDATA #REQUIRED
-    Locale CDATA #IMPLIED
-    ReceiveDatetime CDATA #IMPLIED
+    ContentReceiveDatetime CDATA #IMPLIED
+    ContentLocale CDATA #IMPLIED
+    ContentDateOfCreation CDATA #IMPLIED
+    ContentDateOfLastModification CDATA #IMPLIED
+    ContentName CDATA #IMPLIED
+    ContentTitle CDATA #IMPLIED
+    ContentShortDescription CDATA #IMPLIED
+    ContentInfoUrl CDATA #IMPLIED
+    ContentAuthor CDATA #IMPLIED
     ContentContent CDATA #IMPLIED
 >
 

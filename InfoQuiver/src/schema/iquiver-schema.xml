@@ -156,6 +156,7 @@
         <column name="PUBLISHER_ID" type="INTEGER"/>        
         <column name="CONTENT_SOURCE_NAME" type="VARCHAR" size="32"/>
         <column name="CONTENT_SOURCE_DESC" type="VARCHAR" size="255"/>
+        <column name="CONTENT_SOURCE_UPDATE_TIMESPAN" type="BIGINT" description="timespan between updates of this content source contents"/>
         <column name="IS_AUTHENTIFICATION_REQUIRED" type="BOOLEANCHAR"/>
         <foreign-key foreignTable="iq_content_source_type">
             <reference local="CONTENT_SOURCE_TYPE_ID" foreign="CONTENT_SOURCE_TYPE_ID" />
