@@ -138,6 +138,8 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
         {
             throw new IllegalStateException( "IQuiver already running" );
         }
+        
+        IQuiver iq = this;
     }
 
     private void initialize()
