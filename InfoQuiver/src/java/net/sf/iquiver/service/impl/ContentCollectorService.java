@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.iquiver.IQuiver;
+import net.sf.iquiver.om.Content;
 import net.sf.iquiver.om.ContentPeer;
 import net.sf.iquiver.om.ContentSource;
 import net.sf.iquiver.om.ContentSourcePeer;
@@ -54,6 +55,12 @@ public class ContentCollectorService extends BaseService
 
                 if (docs != null)
                 {
+                    for( Iterator it = docs.iterator(); it.hasNext(); )
+                    {
+                        Content content = (Content)it.next();
+                        content.setRemoved( true );                        
+                    }
+                    
                     IndexScheduler scheduler = IndexScheduler.getInstance( indexDirectory + File.separator
                             + String.valueOf( source.getContentSourceId() ) );
                     scheduler.scheduleForIndexing( docs );
