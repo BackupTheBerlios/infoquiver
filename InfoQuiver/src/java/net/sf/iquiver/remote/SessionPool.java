@@ -3,6 +3,7 @@
  */
 package net.sf.iquiver.remote;
 
+import org.apache.avalon.framework.activity.Disposable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -17,7 +18,7 @@ import org.apache.commons.pool.KeyedPoolableObjectFactory;
 /**
  * @author netseeker aka Michael Manske
  */
-public class SessionPool
+public class SessionPool implements Disposable
 {
     /**
      * Commons Logger for this class
@@ -36,10 +37,12 @@ public class SessionPool
      */
     public static final long DEFAULT_TIME_BETWEEN_SESSION_COLLECTOR_RUNS = 5000;
 
-    private LinkedHashMap pool;
-    private KeyedPoolableObjectFactory factory;
     private int maxActive = DEFAULT_MAX_ACTIVE;
     private long collectorTimeSpan = DEFAULT_TIME_BETWEEN_SESSION_COLLECTOR_RUNS;
+
+    private LinkedHashMap pool;
+    private KeyedPoolableObjectFactory factory;
+    private Timer collectorTimer = new Timer();
 
     /**
      * Creates a new SessionPool instance with default values for the supported max. amount of concurrent sessions as
@@ -51,7 +54,7 @@ public class SessionPool
     {
         this.factory = factory;
         pool = new LinkedHashMap( DEFAULT_MAX_ACTIVE );
-        new Timer().scheduleAtFixedRate(new SessionCollector(), DEFAULT_TIME_BETWEEN_SESSION_COLLECTOR_RUNS, DEFAULT_TIME_BETWEEN_SESSION_COLLECTOR_RUNS);
+        collectorTimer.scheduleAtFixedRate(new SessionCollector(), DEFAULT_TIME_BETWEEN_SESSION_COLLECTOR_RUNS, DEFAULT_TIME_BETWEEN_SESSION_COLLECTOR_RUNS);
     }
 
     /**
@@ -65,7 +68,7 @@ public class SessionPool
         this.factory = factory;
         this.maxActive = maxActive;
         pool = new LinkedHashMap( maxActive );
-        new Timer().scheduleAtFixedRate(new SessionCollector(), DEFAULT_TIME_BETWEEN_SESSION_COLLECTOR_RUNS, DEFAULT_TIME_BETWEEN_SESSION_COLLECTOR_RUNS);
+        collectorTimer.scheduleAtFixedRate(new SessionCollector(), DEFAULT_TIME_BETWEEN_SESSION_COLLECTOR_RUNS, DEFAULT_TIME_BETWEEN_SESSION_COLLECTOR_RUNS);
     }
 
     /**
@@ -79,7 +82,7 @@ public class SessionPool
     {
         this( factory, maxActive );
         this.collectorTimeSpan = collectorTimeSpan;
-        new Timer().scheduleAtFixedRate(new SessionCollector(), collectorTimeSpan, collectorTimeSpan);
+        collectorTimer.scheduleAtFixedRate(new SessionCollector(), collectorTimeSpan, collectorTimeSpan);
     }
 
     /**
@@ -228,5 +231,14 @@ public class SessionPool
             
             notifyAll();
         }
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.activity.Disposable#dispose()
+     */
+    public void dispose()
+    {
+        collectorTimer.cancel();        
+        clear();
     }
 }

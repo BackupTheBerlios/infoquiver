@@ -90,7 +90,7 @@ public class SessionManager extends BaseService
     public void stop() throws Exception
     {
         logger.info("Stopping SessionManager");
-        sessions = null;
+        sessions.dispose();
         idCounter = 0;
         isRunning = false;
     }
@@ -120,8 +120,9 @@ public class SessionManager extends BaseService
     }
     
     /**
-     * @param id
-     * @return
+     * Retrieves a session from the session pool
+     * @param id unique session identifier, MUST be an id returned by addSession()
+     * @return the session for the given <code>id</code> or null if no such session exists 
      */
     public synchronized Session getSession(String id)
     {
