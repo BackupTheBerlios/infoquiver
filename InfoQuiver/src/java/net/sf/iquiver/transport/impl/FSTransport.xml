@@ -1,0 +1,6 @@
+<transport>
+    <name>Basic FileSystem Transport</name>
+    <attribute name="Directory" mandatory="true" type="java.lang.String"/>
+    <attribute name="Timeout" type="java.lang.Integer"/>
+    <attribute name="CleanDirectory" type="java.lang.Boolean"/>
+</transport>
