@@ -14,6 +14,7 @@ import net.sf.iquiver.om.ContentSource;
 import net.sf.iquiver.transport.Fetcher;
 import net.sf.iquiver.transport.TransportConfigurationException;
 
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpRecoverableException;
@@ -30,7 +31,6 @@ public class HTTPTransport implements Fetcher
 {
     public static final String ATTRIBUTE_HTTP_SERVER    = "Server";
     public static final String ATTRIBUTE_HTTP_PORT      = "Port";
-    public static final String ATTRIBUTE_HTTP_TIMEOUT   = "Timeout";
     public static final String ATTRIBUTE_HTTP_USER_NAME = "Login";
     public static final String ATTRIBUTE_HTTP_PASSWORD  = "Password";
 
@@ -62,29 +62,37 @@ public class HTTPTransport implements Fetcher
 
     /*
      * (non-Javadoc)
+     * 
      * @see net.sf.iquiver.transport.Fetcher#fetch()
      */
     public List fetch()
     {
         List documents = new ArrayList();
-        
-        // We will retry up to 3 times.
-            try
-            {   
-                // execute the method.
-                client.executeMethod( method);
-                documents.add(method.getResponseBody());                
-            }
-            catch ( Exception e )
+
+        try
+        {
+            // execute the method.
+            client.executeMethod( method);
+            DefaultDocument doc = new DefaultDocument(method.getResponseBody());
+            doc.setEncoding(((GetMethod)method).getResponseCharSet());
+            documents.add(doc);
+            Header[] headers = method.getResponseHeaders();
+            for(int i = 0; i < headers.length; i++)
             {
-                logger.error( "Failed to download file.", e);
+                Header header = headers[i];
+                logger.debug(header.toExternalForm());
             }
-            finally
-            {
-                //always release the connection after we're done                 
-                method.releaseConnection();            
-            }
-                
+        }
+        catch ( Exception e )
+        {
+            logger.error( "Failed to download file.", e);
+        }
+        finally
+        {
+            //always release the connection after we're done
+            method.releaseConnection();
+        }
+
         return documents;
     }
 

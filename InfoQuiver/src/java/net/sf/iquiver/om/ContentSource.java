@@ -61,10 +61,7 @@ public  class ContentSource
         for(Iterator it = auth_attributes.iterator(); it.hasNext();)
         {
             ContentSourceTransportConfig config = (ContentSourceTransportConfig)it.next();
-            TransportAttribute attr = new TransportAttribute();
-            attr.setTransportId(config.getTransportAttributeId());            
-            attr = TransportAttributePeer.doSelectSingle(attr);
-            
+            TransportAttribute attr = TransportAttributePeer.retrieveByPK(config.getTransportAttributeId());            
             results.put(attr.getTransportAttributeName(), config.getTransportAttributeValue());
         }
         
@@ -83,10 +80,8 @@ public  class ContentSource
         for(Iterator it = auth_attributes.iterator(); it.hasNext();)
         {
             ContentSourceTransportConfig config = (ContentSourceTransportConfig)it.next();
-            TransportAttribute attr = new TransportAttribute();
-            attr.setTransportId(config.getTransportAttributeId());            
-            attr = TransportAttributePeer.doSelectSingle(attr);
-            
+            TransportAttribute attr = TransportAttributePeer.retrieveByPK(config.getTransportAttributeId());            
+            results.put(attr.getTransportAttributeName(), config.getTransportAttributeValue());            
             results.put(attr.getTransportAttributeName(), config.getTransportAttributeValue());
         }
         
