@@ -24,9 +24,9 @@ dbprops.idMethod = $dbprops.get("idMethod")
 
     #set ( $path = $strings.getPackageAsPath($pkpeer) )
     $files.mkdir("$outputDirectory/$path")
-    ## CACHEBACKED PEERS LOCATION
-    $files.mkdir("$outputDirectory/$path/cache")
-    ## CACHEBACKED PEERS LOCATION
+	## CACHEBACKED PEERS LOCATION
+	$files.mkdir("$outputDirectory/$path/cache")
+	## CACHEBACKED PEERS LOCATION    
 
     #set ( $path = $strings.getPackageAsPath($pkmap) )
     $files.mkdir("$outputDirectory/$path")
@@ -82,11 +82,11 @@ dbprops.idMethod = $dbprops.get("idMethod")
           $generator.parse("om/ExtensionObject.vm",$path,"table",$tbl)
         #end
 
-		## BEGIN CACHEBACKED PEER GENERATION
+    	## BEGIN CACHEBACKED PEER GENERATION
         #set ( $fname = "CacheBacked${firstcap}Peer.java" )
         #set ( $path = "${strings.getPackageAsPath($pkpeer)}cache/$fname" )
-          $generator.parse("cache/CacheBackedPeer.vm",$path,"table",$tbl)
-		## END CACHEBACKED PEER GENERATION
+    	  $generator.parse("cache/CacheBackedPeer.vm",$path,"table",$tbl)
+    	## END CACHEBACKED PEER GENERATION		
 		
         #set ( $fname = "${firstcap}Peer.java" )
         #set ( $path = "${strings.getPackageAsPath($pkpeer)}$fname" )
@@ -116,12 +116,6 @@ dbprops.idMethod = $dbprops.get("idMethod")
         #end
       #end
     #end
-
-	## BEGIN CACHEBACKED PEER INITIALIZER GENERATION
-    #set ( $fname = "CacheBackedPeerInitializer.java" )
-    #set ( $path = "${strings.getPackageAsPath($pkpeer)}cache/$fname" )
-      $generator.parse("cache/CacheBackedPeerInitializer.vm",$path);
-	## END CACHEBACKED PEER INITIALIZER GENERATION
 
 	## BEGIN IBASEWEBSERVICE GENERATION
     ##set ( $fname = "IBaseWebService.java" )
