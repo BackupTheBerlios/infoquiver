@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Locale;
 
+import net.sf.iquiver.util.CompatibleDate;
+
 /**
  * @author netseeker aka Michael Manske
  */
@@ -20,7 +22,7 @@ public abstract class AbstractDocument implements Document
     private Date dateOfLastModification;
     private String shortDescription;
     private URL infoURL;
-    private Locale locale;
+    private Locale locale;    
     
     /* (non-Javadoc)
      * @see net.sf.iquiver.metaformat.Document#getName()
@@ -150,6 +152,18 @@ public abstract class AbstractDocument implements Document
     public void setLocale( Locale locale )
     {
         this.locale = locale;
+    }
+    
+    protected void clearDocumentMembers()
+    {
+        name = null;
+        author = null;
+        title = null;
+        dateOfCreation = new CompatibleDate(System.currentTimeMillis()).getDate();
+        dateOfLastModification = dateOfCreation;
+        shortDescription = null;
+        infoURL = null;
+        locale = Locale.getDefault();            
     }
 
     /* (non-Javadoc)
