@@ -2,11 +2,14 @@
  * RawParser.java
  * created on 18.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/parser/impl/RawParser.java,v $
- * $Date: 2004/07/18 17:19:19 $
- * $Revision: 1.1 $
+ * $Date: 2004/10/23 18:24:47 $
+ * $Revision: 1.2 $
 *********************************************************************/
 
 package net.sf.iquiver.parser.impl;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -32,6 +35,11 @@ import net.sf.iquiver.parser.UnsupportedContentTypeException;
  */
 public class RawParser extends Parser
 {
+    /**
+     * Commons Logger for this class
+     */
+    private static final Log logger = LogFactory.getLog(RawParser.class);
+
     public static final Charset charset = Charset.forName("ISO-8859-1");
     private static CharsetDecoder decoder;
     
@@ -78,20 +86,18 @@ public class RawParser extends Parser
     public String getStripped( byte[] rawContent ) throws ParsingException
     {
         ByteBuffer buf = ByteBuffer.wrap( rawContent );
+        String result = null;
 
         try
         {
             CharBuffer cBuf = decoder.decode( buf );
-            if( cBuf != null )
-            {
-                return cBuf.toString();
-            }            
+            result = cBuf.toString();
         }
         catch ( CharacterCodingException e )
         {
             throw new ParsingException( e.getMessage(), -1 );
         }
-        
-        return null;
+
+        return result;
     }
 }

@@ -2,8 +2,8 @@
  * WordParser.java
  * created on 21.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/parser/impl/WordParser.java,v $
- * $Date: 2004/10/23 13:02:00 $
- * $Revision: 1.1 $
+ * $Date: 2004/10/23 18:24:47 $
+ * $Revision: 1.2 $
  *********************************************************************/
 
 package net.sf.iquiver.parser.impl;
@@ -63,6 +63,11 @@ public class WordParser extends Parser
         catch ( Exception e )
         {
             throw new ParsingException( e.getMessage(), -1 );
+        }
+        
+        if( logger.isDebugEnabled() )
+        {
+            logger.debug( "getStripped() --> " + s );
         }
 
         return s;

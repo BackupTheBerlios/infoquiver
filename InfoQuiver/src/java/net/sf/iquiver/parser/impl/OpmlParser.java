@@ -111,6 +111,11 @@ public class OpmlParser extends RawXmlParser
             throw new ParsingException( e.getMessage(), -1 );
         }
 
+        if( logger.isDebugEnabled() )
+        {
+            logger.debug( "getStripped() --> " + sb );
+        }
+        
         return sb.toString();
     }
 }

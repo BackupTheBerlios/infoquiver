@@ -101,6 +101,11 @@ public class HtmlParser extends Parser
             throw new ParsingException( e.getMessage(), -1 );
         }
 
+        if( logger.isDebugEnabled() )
+        {
+            logger.debug( "getStripped() --> " + content );
+        }
+
         return content;
     }
 }

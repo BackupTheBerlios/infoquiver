@@ -152,6 +152,11 @@ public class PdfParser extends Parser
             }
         }
         
+        if( logger.isDebugEnabled() )
+        {
+            logger.debug( "getStripped() --> " + content );
+        }        
+        
         return content;
     }
     
@@ -186,7 +191,7 @@ public class PdfParser extends Parser
                 throw new ParsingException(e.getMessage(), 0);
             }
         }            
-        
+                        
         return pdfDoc.getDocumentInformation();        
     }
 

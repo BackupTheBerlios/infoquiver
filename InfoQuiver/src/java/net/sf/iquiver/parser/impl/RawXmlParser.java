@@ -3,6 +3,9 @@
  */
 package net.sf.iquiver.parser.impl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
@@ -22,6 +25,10 @@ import org.dom4j.io.SAXReader;
  */
 public class RawXmlParser extends Parser
 {
+    /**
+     * Commons Logger for this class
+     */
+    private static final Log logger = LogFactory.getLog( RawXmlParser.class );
 
     /* (non-Javadoc)
      * @see net.sf.iquiver.parser.Parser#parse(byte[])
@@ -52,10 +59,12 @@ public class RawXmlParser extends Parser
      */
     public String getStripped( byte[] rawContent ) throws ParsingException
     {
+        String result = null;
         Parser parser = ParserFactory.getParserForKnownXmlDialect( rawContent );
+
         if (parser != null)
         {
-            return parser.getStripped( rawContent );
+            result = parser.getStripped( rawContent );
         }
         else
         {
@@ -68,12 +77,19 @@ public class RawXmlParser extends Parser
                         .read( new BufferedInputStream( new ByteArrayInputStream( rawContent ) ) );
                 writer.write( doc );
                 writer.flush();
-                return new HtmlParser().getStripped( sw.toString().getBytes() );
+                result = new HtmlParser().getStripped( sw.toString().getBytes() );
             }
             catch ( Exception e )
             {
                 throw new ParsingException( e.getMessage(), -1 );
             }
         }
+
+        if (logger.isDebugEnabled())
+        {
+            logger.debug( "getStripped() --> " + result );
+        }
+
+        return result;
     }
 }

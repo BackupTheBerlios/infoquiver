@@ -132,6 +132,11 @@ public class FeedParser extends RawXmlParser
             }
         }
 
+        if( logger.isDebugEnabled() )
+        {
+            logger.debug( "getStripped() --> " + sb );
+        }        
+        
         return sb.toString();
     }
 }
