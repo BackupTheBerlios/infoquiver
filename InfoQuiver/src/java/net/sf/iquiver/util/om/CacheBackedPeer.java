@@ -16,6 +16,10 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.torque.util.BasePeer;
 
 /**
+ * CacheBackedPeer is the base class of all torque peers used in iquiver.
+ * Basically CacheBackedPeer guarantees to configure SwarmCache for each
+ * generated torque object type. All subclasses use the net.sf.swarmcache.CacheFactory
+ * provided by this class.
  * @author netseeker aka Michael Manske 
  */
 public class CacheBackedPeer extends BasePeer implements Configurable
