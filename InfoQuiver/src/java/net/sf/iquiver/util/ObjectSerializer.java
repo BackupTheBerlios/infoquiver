@@ -45,7 +45,7 @@ public class ObjectSerializer
     
     /**
      * Method to convert an xml string into an object
-     * @param xml xml string, MUST be created via XStream
+     * @param xml xml string, MUST be formerly created via XStream
      * @return
      */
     public static Object xmlToObject( String xml )
