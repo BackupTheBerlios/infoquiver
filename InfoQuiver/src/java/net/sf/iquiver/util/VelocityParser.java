@@ -2,8 +2,8 @@
  * VelocityParser.java
  * created on 27.11.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/util/VelocityParser.java,v $
- * $Date: 2004/11/27 18:38:50 $
- * $Revision: 1.2 $
+ * $Date: 2004/11/28 13:25:36 $
+ * $Revision: 1.3 $
  *********************************************************************/
 
 package net.sf.iquiver.util;
@@ -127,6 +127,15 @@ public class VelocityParser
             }
         }
 
-        return out.toString();
+        //Strip preceding linebreaks
+        StringBuffer result = new StringBuffer( out.toString() );
+        String linebreak = result.substring(0, 1);
+        while( linebreak.lastIndexOf("\n") != -1 || linebreak.lastIndexOf("\r") != -1 )
+        {
+            result.replace(0, 1, "");
+            linebreak = result.substring(0, 1);
+        }
+        
+        return result.toString();
     }
 }
