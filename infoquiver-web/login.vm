@@ -1,5 +1,5 @@
 #if ( $params.exists("login") && $params.exists("password") )
-	$iquiver.doLogin($params.getString("login"), $params.getString("password"), $request )
+	#set ( $user = $iquiver.doLogin($params.getString("login"), $params.getString("password"), $request ) )
 #end
 
 #if( $iquiver.isLoggedIn($request) )
@@ -14,7 +14,7 @@
     </tr>
     <tr>
     	<td>Password</td>
-    	<td><input type="password" name="login" value="$params.getString("password", "")"></td>
+    	<td><input type="password" name="password" value="$params.getString("password", "")"></td>
     </tr>
     <tr>
     	<td colspan="2" align="right"><input type="submit" value="Go"></td>
