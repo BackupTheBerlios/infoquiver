@@ -2,12 +2,19 @@
  * User.java
  * created on 12.06.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/om/User.java,v $
- * $Date: 2004/07/17 15:17:11 $
- * $Revision: 1.4 $
+ * $Date: 2004/07/17 17:14:42 $
+ * $Revision: 1.5 $
  *********************************************************************/
 
 package net.sf.iquiver.om;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import net.sf.iquiver.report.IReportSource;
+
+import org.apache.torque.TorqueException;
 import org.apache.torque.om.Persistent;
 
 /**
@@ -19,6 +26,31 @@ import org.apache.torque.om.Persistent;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-public class User extends net.sf.iquiver.om.BaseUser implements Persistent
+public class User extends net.sf.iquiver.om.BaseUser implements Persistent, IReportSource
 {
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.report.IReportSource#getSearchQuerys()
+     */
+    public List getSearchQuerys() throws TorqueException
+    {        
+        return getSearchQuerysRelatedByUserId();
+    }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.report.IReportSource#getContentSources()
+     */
+    public List getContentSources() throws TorqueException
+    {
+        List sources = new ArrayList();
+        List userGroups = getUserGroups();
+
+        //add all content sources for all user group this user is member of
+        for (Iterator it = userGroups.iterator(); it.hasNext();)
+        {
+            sources.addAll( ((UserGroup) it.next()).getContentSources() );
+        }
+        
+        return sources;
+    }
 }

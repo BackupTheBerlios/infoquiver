@@ -2,13 +2,15 @@
  * UserGroup.java
  * created on 12.06.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/om/UserGroup.java,v $
- * $Date: 2004/07/17 15:17:11 $
- * $Revision: 1.5 $
+ * $Date: 2004/07/17 17:14:42 $
+ * $Revision: 1.6 $
  *********************************************************************/
 
 package net.sf.iquiver.om;
 
 import java.util.List;
+
+import net.sf.iquiver.report.IReportSource;
 
 import org.apache.torque.TorqueException;
 import org.apache.torque.om.Persistent;
@@ -23,7 +25,7 @@ import org.apache.torque.util.Criteria;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-public class UserGroup extends net.sf.iquiver.om.BaseUserGroup implements Persistent
+public class UserGroup extends net.sf.iquiver.om.BaseUserGroup implements Persistent, IReportSource
 {
     /** Fetches all ContentSources related to this UserGroup via UserGroupContentSourceLnk
      * @return a list of net.sf.iquiver.om.ContentSource objects
