@@ -11,6 +11,6 @@ import net.sf.iquiver.om.Content;
  */
 public interface Parser
 {
-    public Content parse(Object source) throws ParsingException;
+    public Content parse(Object source) throws ParsingException, IllegalArgumentException;
     public long getLastParsingTimeExposure();
 }
