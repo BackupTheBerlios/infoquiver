@@ -2,8 +2,8 @@
  * SmtpClient.java
  * created on 15.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/util/mail/SmtpClient.java,v $
- * $Date: 2004/10/16 19:26:42 $
- * $Revision: 1.1 $
+ * $Date: 2004/10/17 15:29:04 $
+ * $Revision: 1.2 $
 *********************************************************************/
 
 package net.sf.iquiver.util.mail;
@@ -65,9 +65,9 @@ public class SmtpClient
      * @param mail the mail to send
      * @throws MessagingException
      */
-    public void send(EMail mail) throws MessagingException
+    public long send(EMail mail) throws MessagingException
     {
-        send( new EMail[] { mail } );
+        return send( new EMail[] { mail } )[0];
     }
     
     /**
@@ -75,12 +75,14 @@ public class SmtpClient
      * @param mails the mails to send
      * @throws MessagingException
      */
-    public void send(EMail[] mails) throws MessagingException
+    public long[] send(EMail[] mails) throws MessagingException
     {
         Properties props = new Properties();
         props.put("mail.smtp.host", host);
         Transport bus = null;
         Session session = Session.getInstance(props);
+        long size[] = new long[mails.length];
+        
         try
         {
             bus = session.getTransport("smtp");
@@ -106,7 +108,8 @@ public class SmtpClient
                 msg.setSubject( mail.getSubject() );
                 msg.setSentDate( new Date() );
                 msg.saveChanges();
-                bus.send( msg );                
+                bus.send( msg );
+                size[i] = msg.getSize();
             }            
         }
         catch ( NoSuchProviderException e )
@@ -122,6 +125,7 @@ public class SmtpClient
             }
         }
         
+        return size;
     }    
     
     private InternetAddress[] stringsToAddress(String[] adrs ) throws AddressException
