@@ -249,4 +249,13 @@ public abstract class BaseRemoteService extends BaseService implements Reconfigu
         
         return results;
     }
+    
+    /**
+     * @param sessionId
+     * @return
+     */
+    public String getServerStatistics( String sessionId )
+    {
+        return IQuiver.getServerStats().toXml();
+    }
 }
