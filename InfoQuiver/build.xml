@@ -152,7 +152,6 @@
             <mapping namespace="http://iquiver.util.om" package="net.sf.iquiver.util.om" />
             <mapping namespace="http://iquiver.torque.om" package="org.apache.torque.om" />
             <mapping namespace="http://iquiver.torque.util" package="org.apache.torque.util" />            
-            <mapping namespace="http://iquiver.xml_soap" package="org.apache.xml.xml_soap" />            
 		</java2wsdl>
         
 		<ant target="awk" inheritAll="false">
@@ -170,6 +169,8 @@
             noimports="false" 
             output="${java.dir}" 
             url="${torque.schema.dir}/iquiver.wsdl" 
+            skeletondeploy="true"
+            serverside="true"
             verbose="true">
 	            <mapping namespace="http://iquiver-impl" package="${remote.soap.pkg}.impl"/>
 	            <mapping namespace="http://iquiver-intf" package="${remote.soap.pkg}.impl"/>
@@ -179,7 +180,7 @@
                 <mapping namespace="http://iquiver.util.om" package="${remote.soap.pkg}.impl.util.om" />
                 <mapping namespace="http://iquiver.torque.om" package="${remote.soap.pkg}.impl.torque.om" />
                 <mapping namespace="http://iquiver.torque.util" package="${remote.soap.pkg}.impl.torque.util" />            
-                <mapping namespace="http://iquiver.xml_soap" package="${remote.soap.pkg}.impl.xml_soap" />                                            
+                <mapping namespace="http://xml.apache.org/xml-soap" package="${remote.soap.pkg}.impl.xml_soap" />                                            
             </wsdl2java>
 
 	</target>
