@@ -2,8 +2,8 @@
  * ContentSearchService.java
  * created on 15.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/ContentSearchService.java,v $
- * $Date: 2004/07/22 20:44:15 $
- * $Revision: 1.9 $
+ * $Date: 2004/10/17 16:28:34 $
+ * $Revision: 1.10 $
  *********************************************************************/
 
 package net.sf.iquiver.service.impl;
@@ -37,6 +37,8 @@ import de.netseeker.util.ArrayMap;
 import de.netseeker.util.ListMap;
 
 /**
+ * This is one of InfoQuivers main services. It starts searches for all clients, usergroups and users
+ * according to their search parameters. This service invokes report generation for all search results. 
  * @author netseeker aka Michael Manske
  */
 public class ContentSearchService extends BaseService

@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * The base class of all service tasks.
  * @author netseeker aka Michael Manske
  */
 public abstract class BaseService implements Service

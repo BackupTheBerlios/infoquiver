@@ -16,6 +16,7 @@ import org.apache.torque.om.ComboKey;
 import org.apache.torque.util.Criteria;
 
 /**
+ * The base class of all server side remote interfaces and server implementations
  * @author netseeker aka Michael Manske
  */
 public abstract class BaseRemoteService extends BaseService

@@ -12,6 +12,8 @@ import net.sf.iquiver.om.ContentPeer;
 import net.sf.iquiver.service.BaseService;
 
 /**
+ * This is a very simple "garbage collector" which simply does
+ * delete all contents from the iq_content table which are marked as content_to_delete=true
  * @author netseeker aka Michael Manske
  */
 public class ContentCollectorService extends BaseService
