@@ -36,7 +36,9 @@ public class DefaultDocument extends AbstractDocument
      */
     public DefaultDocument( byte[] rawContent, String encoding ) throws UnsupportedEncodingException
     {
-        this( new String( rawContent, encoding ) );
+        //this( new String( rawContent, encoding ) );
+        this.rawContent = rawContent;
+        setEncoding( encoding );
     }
 
     /**

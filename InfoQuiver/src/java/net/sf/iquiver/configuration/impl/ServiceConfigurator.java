@@ -134,10 +134,12 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
                 if (schedulePeriod != -1)
                 {
                     timer.scheduleAtFixedRate( new ServiceTask( service ), startTime, schedulePeriod );
+                    logger.info("Scheduled service " + currentKey + ". First start: " + new Date(startTime).toLocaleString() + " Then every: " + (schedulePeriod * 1000 * 60) + "minutes" );
                 }
                 else
                 {
                     timer.schedule( new ServiceTask( service ), new Date( startTime ) );
+                    logger.info("Scheduled service for single start" + currentKey + ". Start: " + new Date(startTime).toLocaleString());                    
                 }
 
                 _timers.add( timer );
@@ -149,6 +151,7 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
                 {
                     service.start();
                     _services.add( service );
+                    logger.info("Started service without scheduling: " + currentKey);
                 }
                 catch ( Exception e )
                 {

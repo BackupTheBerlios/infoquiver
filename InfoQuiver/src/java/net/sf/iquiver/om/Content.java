@@ -1,5 +1,6 @@
 package net.sf.iquiver.om;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
@@ -29,7 +30,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
      * Creates a new instance of Content out of an already existent instance of Document
      * @param doc the source document
      */
-    public Content(Document doc)
+    public Content(Document doc) throws UnsupportedEncodingException
     {
         this.setName( doc.getName() );
         this.setAuthor( doc.getAuthor() );
@@ -39,6 +40,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
         this.setShortDescription( doc.getShortDescription() );
         this.setInfoURL( doc.getInfoURL() );
         this.setLocale( doc.getLocale() );
+        this.setContentContent( new String( doc.getRawContent(), doc.getEncoding() ) );
     }
 
     /*
@@ -138,7 +140,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
      */
     public void setDateOfLastModification( Date date )
     {
-        setDateOfLastModification( date );
+        setContentDateOfLastModification( date );
     }
 
     /*
@@ -191,7 +193,10 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
      */
     public void setInfoURL( URL url )
     {
-        setContentInfoUrl( url.toString() );
+        if( url != null )
+        {
+            setContentInfoUrl( url.toString() );
+        }
     }
 
     /*
@@ -217,7 +222,10 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
      */
     public void setLocale( Locale locale )
     {
-        setContentLocale( locale.toString() );
+        if( locale != null )
+        {
+            setContentLocale( locale.toString() );
+        }
     }
 
     /*

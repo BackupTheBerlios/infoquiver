@@ -13,6 +13,9 @@ import java.util.Locale;
  */
 public interface Document
 {
+    /**
+     * Default encoding used when creating text based document from byte arrays
+     */
     public static final String DEFAULT_ENCODING = "UTF8";
     
     public String getName();

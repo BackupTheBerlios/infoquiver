@@ -44,7 +44,7 @@ public abstract class AbstractDocument implements Document
      */
     public String getAuthor()
     {
-        return this.getAuthor();
+        return this.author;
     }
 
     /* (non-Javadoc)

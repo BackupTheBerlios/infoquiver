@@ -4,6 +4,7 @@
  */
 package net.sf.iquiver.service.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -60,7 +61,7 @@ public class ContentFetchService extends BaseService
 
             ContentFetchThread thread = new ContentFetchThread( fetcher );
             Timer timer = new Timer();
-            timer.scheduleAtFixedRate( thread, 1000, interval );
+            timer.scheduleAtFixedRate( thread, 5000, interval );
             _timers.add(timer);
         }                
     }
@@ -100,6 +101,7 @@ public class ContentFetchService extends BaseService
                     {
                         Fetcher impl = (Fetcher) Class.forName( className ).newInstance();
                         impl.setFetchLocation( source );
+                        transports.add( impl );
                     }
                     catch ( ClassNotFoundException e1 )
                     {
@@ -167,17 +169,23 @@ public class ContentFetchService extends BaseService
                 for (Iterator it = documents.iterator(); it.hasNext();)
                 {
                     Document doc = (Document) it.next();
-                    Content content = new Content( doc );
                     try
-                    {
+                    {                        
+                        Content content = new Content( doc );
                         content.setContentSourceId( contentSourceId );
                         content.save();
                     }
+                    catch (UnsupportedEncodingException e)
+                    {
+                        logger.error("Encoding of retrieved content is not supported!", e);
+                    }
                     catch ( Exception e )
                     {
-                        e.printStackTrace();
+                        logger.error("Error while saving retrieved content!", e);
                     }
                 }
+                
+                isRunning = false;
             }
         }
     }
