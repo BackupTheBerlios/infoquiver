@@ -204,7 +204,7 @@ public class FSTransport implements Fetcher, Dispatcher
         for (int i = 0; i < docs.size(); i++)
         {
             Document doc = (Document) docs.get( i );
-            writeFile( doc, fDir );
+            written[i] = writeFile( doc, fDir );
 
         }
 
