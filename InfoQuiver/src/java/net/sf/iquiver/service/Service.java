@@ -5,12 +5,11 @@
 package net.sf.iquiver.service;
 
 import org.apache.avalon.framework.activity.Startable;
-import org.apache.avalon.framework.activity.Suspendable;
 
 /**
  * @author netseeker aka Michael Manske
  */
-public interface Service extends Startable, Suspendable
+public interface Service extends Startable
 {
     public long getStartTime();
     public int getRestartCount();

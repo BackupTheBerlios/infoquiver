@@ -99,29 +99,6 @@ public abstract class BaseService implements Service
         }.start();
     }
     
-    /* (non-Javadoc)
-     * @see org.apache.avalon.framework.activity.Startable#start()
-     */
-    public abstract void start() throws Exception;
-
-    /* (non-Javadoc)
-     * @see org.apache.avalon.framework.activity.Startable#stop()
-     */
-    public abstract void stop() throws Exception;
-
-    /* (non-Javadoc)
-     * @see org.apache.avalon.framework.activity.Suspendable#suspend()
-     */
-    public abstract void suspend();
-
-    /* (non-Javadoc)
-     * @see org.apache.avalon.framework.activity.Suspendable#resume()
-     */
-    public abstract void resume();
-    
-    /* (non-Javadoc)
-     * @see net.sf.iquiver.service.Service#getStartTime()
-     */
     public abstract long getStartTime();
 
     /* (non-Javadoc)

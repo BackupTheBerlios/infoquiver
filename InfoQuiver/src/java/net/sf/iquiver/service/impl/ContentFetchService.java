@@ -44,24 +44,6 @@ public class ContentFetchService extends BaseService
     }
 
     /* (non-Javadoc)
-     * @see net.sf.iquiver.service.BaseService#suspend()
-     */
-    public void suspend()
-    {
-        // TODO Auto-generated method stub
-        
-    }
-
-    /* (non-Javadoc)
-     * @see net.sf.iquiver.service.BaseService#resume()
-     */
-    public void resume()
-    {
-        // TODO Auto-generated method stub
-        
-    }
-
-    /* (non-Javadoc)
      * @see net.sf.iquiver.service.BaseService#getStartTime()
      */
     public long getStartTime()

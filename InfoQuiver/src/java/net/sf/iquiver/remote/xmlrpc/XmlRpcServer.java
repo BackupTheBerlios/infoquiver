@@ -5,7 +5,7 @@ package net.sf.iquiver.remote.xmlrpc;
 
 import net.sf.iquiver.configuration.Configuration;
 import net.sf.iquiver.remote.IServer;
-import net.sf.iquiver.service.impl.BaseRemoteService;
+import net.sf.iquiver.service.BaseRemoteService;
 
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.commons.logging.Log;
@@ -25,6 +25,9 @@ public class XmlRpcServer extends BaseRemoteService implements IServer
     private WebServer webServer;
     private int port = 80;
     private boolean isRunning = false;
+    private int restartCount = -1;
+    private long startTime;
+    
     
     /* (non-Javadoc)
      * @see net.sf.iquiver.configuration.Configurable#configure(net.sf.iquiver.configuration.Configuration)
@@ -58,9 +61,11 @@ public class XmlRpcServer extends BaseRemoteService implements IServer
     public void start( )
     {
         logger.info( "Starting XmlRpcServer at port " + port);
+        this.startTime = System.currentTimeMillis();
         webServer = new WebServer( port );
         webServer.addHandler("default", this);
         isRunning = true;
+        this.restartCount++;
         logger.info( "XmlRpcServer running at port " + port );
     }
 
@@ -88,5 +93,21 @@ public class XmlRpcServer extends BaseRemoteService implements IServer
         }
         
         isRunning = false;
+    }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.service.BaseService#getStartTime()
+     */
+    public long getStartTime()
+    {
+        return this.startTime;
+    }
+
+    /* (non-Javadoc)
+     * @see net.sf.iquiver.service.BaseService#getRestartCount()
+     */
+    public int getRestartCount()
+    {
+        return restartCount;
     }
 }
