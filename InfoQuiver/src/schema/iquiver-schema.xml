@@ -117,7 +117,7 @@
         <column name="TRANSPORT_NAME" required="true" type="VARCHAR" size="32"/>
         <column name="TRANSPORT_TYPE" required="true" type="TINYINT" description="RECEIVER=0|SENDER=1|BOTH=2"/>
         <column name="TRANSPORT_DESC" type="VARCHAR" size="255"/>
-        <column name="TRANSPORT_START_TIMEOUT" type="TIMESTAMP"/>        
+        <column name="TRANSPORT_START_TIMEOUT" type="INTEGER" size="32"/>
         <column name="TRANSPORT_IMPLEMENTATION" required="true" type="VARCHAR" size="255" description="complete name of corresponding java class"/>
         <column name="IS_AUTHENTIFICATION_REQUIRED" type="BOOLEANINT" description="does the transport require authentification?"/>
     </table>
@@ -282,4 +282,13 @@
             <index-column name="CONTENT_AUTHOR"/>
         </index>                                                     
     </table>
+    <!--
+    <table name="iq_lucene_index" javaName="LuceneIndex" idMethod="none">
+        <column name="DIRECTORY_NAME" type="VARCHAR" size="100" primaryKey="true" required="true"/>
+        <column name="NAME" type="VARCHAR" size="100" primaryKey="true" required="true"/>
+        <column name="MODIFIED" type="INTEGER" size="128" required="true"/>
+        <column name="LENGTH" type="INTEGER" size="32" required="true"/>
+        <column name="DATA" type="BLOB"/>
+    </table>
+    -->
 </database>
