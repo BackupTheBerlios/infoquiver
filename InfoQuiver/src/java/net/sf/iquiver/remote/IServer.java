@@ -3,13 +3,13 @@
  */
 package net.sf.iquiver.remote;
 
-import net.sf.iquiver.configuration.Configuration;
+import net.sf.iquiver.configuration.Configurable;
 
 /**
  * @author netseeker aka Michael Manske
  */
-public interface IServer
+public interface IServer extends Configurable
 {
-    public void start( Configuration config );
+    public void start();
     public void stop();
 }
