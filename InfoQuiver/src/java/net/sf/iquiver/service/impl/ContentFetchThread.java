@@ -2,8 +2,8 @@
  * ContentFetchThread.java
  * created on 22.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/ContentFetchThread.java,v $
- * $Date: 2004/07/22 18:26:28 $
- * $Revision: 1.1 $
+ * $Date: 2004/07/22 20:09:28 $
+ * $Revision: 1.2 $
  *********************************************************************/
 
 package net.sf.iquiver.service.impl;
@@ -86,6 +86,7 @@ class ContentFetchThread extends TimerTask
             if (checkForUpdate())
             {
                 ContentSource source = fetcher.getFetchLocation();
+                List contents = null;
                 String contentType = null;
                 //does the content source explicit overwrite the content type?
                 try
@@ -104,6 +105,7 @@ class ContentFetchThread extends TimerTask
                 List documents = null;
                 try
                 {
+                    contents = source.getContents();
                     documents = fetcher.fetch();
                     //restet failure count on success
                     if (failures != 0)
@@ -167,6 +169,13 @@ class ContentFetchThread extends TimerTask
                                 + String.valueOf( source.getContentSourceId() ) );
                         scheduler.scheduleForIndexing( contentDocs );
                     }
+                    
+                    //mark old contents as outdated
+                    for ( Iterator it = contents.iterator(); it.hasNext(); )
+                    {
+                        Content tmp = (Content)it.next();
+                        tmp.setContentToDelete( true );
+                    }                    
                 }
                 catch ( TransportException e )
                 {
@@ -186,6 +195,10 @@ class ContentFetchThread extends TimerTask
 
                     isRunning = false;
                     return;
+                }
+                catch ( TorqueException e )
+                {
+                    logger.error("Database error occured while fetching already stored contents from database!", e);
                 }
             }
             else
