@@ -46,7 +46,7 @@ public class IndexScheduler extends Thread
 
     public void run()
     {
-        while ( true )
+        while ( !isInterrupted() )
         {
             List docs = (List) _queue.next();
             

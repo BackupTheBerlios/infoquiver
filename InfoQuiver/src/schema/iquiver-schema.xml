@@ -305,7 +305,7 @@
         <column name="CONTENT_TITLE" type="VARCHAR" size="32"/>
         <column name="CONTENT_SHORT_DESCRIPTION" type="VARCHAR" size="200"/>
         <column name="CONTENT_KEYWORDS" type="LONGVARCHAR" size="1000"/>
-        <column name="CONTENT_CONTENT" type="BLOB" size="65536"/>
+        <!-- <column name="CONTENT_CONTENT" type="BLOB" size="65536"/> -->
         <column name="CONTENT_FILE_NAME" type="VARCHAR" size="128"/>
         <column name="CONTENT_TO_DELETE" type="BOOLEANINT"/>
         <foreign-key foreignTable="iq_content">

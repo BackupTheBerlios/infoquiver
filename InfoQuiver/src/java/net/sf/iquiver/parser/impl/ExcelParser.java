@@ -2,8 +2,8 @@
  * ExcelParser.java
  * created on 21.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/parser/impl/ExcelParser.java,v $
- * $Date: 2004/10/23 18:24:47 $
- * $Revision: 1.3 $
+ * $Date: 2004/10/23 19:43:12 $
+ * $Revision: 1.4 $
  *********************************************************************/
 
 package net.sf.iquiver.parser.impl;
@@ -121,6 +121,8 @@ public class ExcelParser extends Parser
                                 sb.append( cell.getErrorCellValue() );
                                 break;      
                         }
+                        
+                        sb.append("\t");
                     }
                     if (rowIt.hasNext())
                     {

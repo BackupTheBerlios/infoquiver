@@ -36,6 +36,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
 
     private List _children;
     private float _score;
+    private byte[] _rawContent;
 
     /**
      * Creates a new instance of Content
@@ -268,12 +269,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
      */
     public byte[] getRawContent()
     {
-        if (getContentContent() != null)
-        {
-            return getContentContent();
-        }
-
-        return null;
+        return this._rawContent;
     }
 
     /*
@@ -285,7 +281,6 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
     {
         this.setContentUid( null );
         this.setContentAuthor( null );
-        this.setContentContent( null );
         this.setContentDateOfCreation( null );
         this.setContentDateOfLastModification( null );
         this.setContentInfoUrl( null );
@@ -293,10 +288,11 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
         this.setContentName( null );
         this.setContentShortDescription( null );
         this.setContentTitle( null );
-        this.setContentKeywords( null );
-        this._children = null;
+        this.setContentKeywords( null );        
         this.setFileName( null );
         this.setScore( 0 );
+        this._rawContent =  null ;
+        this._children = null;
     }
 
     /*
@@ -374,7 +370,7 @@ public class Content extends net.sf.iquiver.om.BaseContent implements Persistent
      */
     public void setRawContent( byte[] content ) throws UnsupportedEncodingException
     {
-        this.setContentContent( content );
+        this._rawContent = content;
     }
 
     /*
