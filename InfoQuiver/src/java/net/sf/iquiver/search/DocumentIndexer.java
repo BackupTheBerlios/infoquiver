@@ -154,7 +154,7 @@ public class DocumentIndexer
      * @param doc the net.sf.iquiver.metaformat.Document object
      * @throws IOException if the index can't be accessed
      */
-    public void indexDocument( Document doc ) throws IOException
+    public synchronized void indexDocument( Document doc ) throws IOException
     {
         org.apache.lucene.document.Document lDoc = convertDocument( doc );
         IndexReader reader = IndexReader.open( _directory );
@@ -185,7 +185,7 @@ public class DocumentIndexer
      * @param reader
      * @throws IOException
      */
-    private void deleteDocument( Document doc, IndexReader reader) throws IOException
+    private synchronized void deleteDocument( Document doc, IndexReader reader) throws IOException
     {
         reader.delete( new Term( "uid", doc.getUID() ) );        
         if( doc.hasChildren() )
@@ -234,7 +234,7 @@ public class DocumentIndexer
      * @param docs list of net.sf.iquiver.metaformat.Document objects
      * @throws IOException if the index can't be accessed
      */
-    public void indexDocuments( List docs ) throws IOException
+    public synchronized void indexDocuments( List docs ) throws IOException
     {
         Analyzer analyzer = null;
         IndexWriter writer = null;

@@ -74,7 +74,7 @@ public class IndexScheduler extends Thread
      * @param index
      * @return
      */
-    public static IndexScheduler getInstance( String index )
+    public static synchronized IndexScheduler getInstance( String index )
     {
         IndexScheduler scheduler = (IndexScheduler) _schedulers.get( index );
 
