@@ -203,6 +203,7 @@
     ContentId CDATA #REQUIRED
     ContentTypeId CDATA #REQUIRED
     ContentSourceId CDATA #REQUIRED
+    ContentUid CDATA #IMPLIED
     ContentReceiveDatetime CDATA #IMPLIED
     ContentLocale CDATA #IMPLIED
     ContentDateOfCreation CDATA #IMPLIED
