@@ -2,8 +2,8 @@
  * ReportGenerator.java
  * created on 16.07.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/service/impl/Attic/ReportGenerator.java,v $
- * $Date: 2004/07/18 14:01:17 $
- * $Revision: 1.1 $
+ * $Date: 2004/07/18 17:45:40 $
+ * $Revision: 1.2 $
  *********************************************************************/
 
 package net.sf.iquiver.service.impl;
@@ -78,6 +78,7 @@ public class ReportGenerator extends Thread
             JasperPrint data = JasperFillManager.fillReport( _template, parameters, dataSource );
             JasperExportManager.exportReportToPdfFile( data, path + ".pdf" );
             JasperExportManager.exportReportToHtmlFile( data, path + ".html" );
+            JasperExportManager.exportReportToXmlFile( data, path + ".xml", true );
         }
         catch ( JRException e )
         {
