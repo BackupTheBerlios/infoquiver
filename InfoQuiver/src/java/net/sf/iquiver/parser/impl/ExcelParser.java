@@ -2,8 +2,8 @@
  * ExcelParser.java
  * created on 21.10.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/InfoQuiver/src/java/net/sf/iquiver/parser/impl/ExcelParser.java,v $
- * $Date: 2004/10/23 14:03:08 $
- * $Revision: 1.1 $
+ * $Date: 2004/10/23 16:59:13 $
+ * $Revision: 1.2 $
  *********************************************************************/
 
 package net.sf.iquiver.parser.impl;
@@ -105,14 +105,21 @@ public class ExcelParser extends Parser
                         HSSFCell cell = (HSSFCell) cellIt.next();
                         switch ( cell.getCellType() )
                         {
+                            case HSSFCell.CELL_TYPE_STRING:
+                                sb.append( cell.getStringCellValue() );
+                                break;
                             case HSSFCell.CELL_TYPE_BOOLEAN:
                                 sb.append( cell.getBooleanCellValue() );
                                 break;
                             case HSSFCell.CELL_TYPE_NUMERIC:
                                 sb.append( cell.getNumericCellValue() );
                                 break;
-                            default:
-                                sb.append( cell.getStringCellValue() );
+                            case HSSFCell.CELL_TYPE_FORMULA:
+                                sb.append( cell.getCellFormula() );
+                                break;
+                            case HSSFCell.CELL_TYPE_ERROR:
+                                sb.append( cell.getErrorCellValue() );
+                                break;      
                         }
                     }
                     if (rowIt.hasNext())
