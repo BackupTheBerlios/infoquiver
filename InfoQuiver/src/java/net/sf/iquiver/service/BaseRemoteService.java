@@ -136,14 +136,15 @@ public abstract class BaseRemoteService extends BaseService
      * @param objectType
      * @param object
      */
-    public void doDelete( String sessionId, String objectType, String object )
+    public void doDelete( String sessionId, String object )
     {
         Object obj = ObjectSerializer.xmlToObject( object );        
         
         try
         {
-	        Class objClass = Class.forName( objectType );
-            Class peerClass = Class.forName(objectType + "Peer");
+            String objClassName = obj.getClass().getName();
+            Class objClass = Class.forName( objClassName );
+            Class peerClass = Class.forName(objClassName + "Peer");
 	        Method method = peerClass.getMethod( "doDelete" , new Class[] {objClass}) ;        
 	        method.invoke( null, new Object[]{ obj } );	        	                    
         }
@@ -159,7 +160,7 @@ public abstract class BaseRemoteService extends BaseService
      * @param object
      * @return
      */
-    public String doSave( String sessionId, String objectType, String object )
+    public String doSave( String sessionId, String object )
     {
         Object obj = ObjectSerializer.xmlToObject( object );
         

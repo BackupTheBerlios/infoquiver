@@ -1,14 +1,7 @@
-#*
- * index.vm
- * created on 2004/11/30 by netseeker
- * $$Source: index.vm//RCS/295,v $$
- * $$Date: 2004/06/24 19:27:21 $$
- * $$Revision: 0.00 $$
- *#
- 
 <table>
 	<tr>
 		<td>
+			hallo
 		</td>
 	</tr>
 </table>

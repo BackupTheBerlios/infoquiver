@@ -1,18 +1,33 @@
 <html>
 <head>
   <title>$!page_title</title>
-  <link rel="stylesheet" type="text/css" href="/infoquiver/styles.css" />
-  <script language="javascript" src="/infoquiver/main.js"></script>
+  <link rel="stylesheet" type="text/css" href="$link.setRelative("main.css")" />
+  <script language="javascript" src="$link.setRelative("main.js")"></script>
+  <meta name="author" content="netseeker aka Michael Manske">
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body>
-	<table border="0" width="100%>
+	<table border="0" cellpading="0" cellspacing="0" width="100%">
     <tr>
-		<td>
-			
+		<td width="30%">
+			<a href="http://developer.berlios.de/projects/infoquiver/">
+				<img src="$link.setRelative("img/iquiver.gif")" alt="InfoQuiver" border="0" vspace="2" hspace="2"/>
+			</a>
+		</td>
+		<td with="70%" align="right" valign="top">			
+			#parse('layout/navigation.vm')
 		</td>
 	</tr>
+	<tr>
+		<td>&nbsp;</td>
+	</tr>
   	<tr>
-		<td>$screen_content</td>
+		<td colspan="2">$screen_content</td>
+	</tr>
+	<tr>
+		<td colspan="2" with="100%" align="center">
+			#parse('layout/footer.vm')
+		</td>		
 	</tr>
 	</table>
 </body>

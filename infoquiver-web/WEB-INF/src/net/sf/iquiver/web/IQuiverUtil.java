@@ -2,8 +2,8 @@
  * IQuiverUtil.java
  * created on 30.11.2004 by netseeker
  * $Source: /home/xubuntu/berlios_backup/github/tmp-cvs/infoquiver/Repository/infoquiver-web/WEB-INF/src/net/sf/iquiver/web/IQuiverUtil.java,v $
- * $Date: 2004/11/29 23:44:41 $
- * $Revision: 1.1 $
+ * $Date: 2004/11/30 22:42:53 $
+ * $Revision: 1.2 $
  *********************************************************************/
 
 package net.sf.iquiver.web;
@@ -35,6 +35,8 @@ public class IQuiverUtil
         Hashtable bundles = new Hashtable();
         String path = context.getRealPath( "/" );
         File file = new File( path + "WEB-INF/resources" );
+        if( file.exists() )
+        {
         File[] files = file.listFiles();
         for (int i = 0; i < files.length; i++)
         {
@@ -56,7 +58,11 @@ public class IQuiverUtil
                 }
             }
         }
-
+        }
+        else
+        {
+            Velocity.error("Resource directory " + path + "WEB-INF/resources could not be found!");
+        }
         context.setAttribute( "net.sf.iquiver.web.RESOURCES", bundles );
     }
 
