@@ -113,6 +113,7 @@ public class LoginPanelBuilder extends AdminPanelBuilder
          */
         public void actionPerformed(ActionEvent evt)
         {
+            /*
             User user = UserPeer.doLogin( inp_login.getText(), inp_pwd.getText());
             if ( user != null )
             {
@@ -122,6 +123,7 @@ public class LoginPanelBuilder extends AdminPanelBuilder
             {
                 displayErrorMessage( "Authenification failed. Please try again.");
             }
+            */
         }
         
         private void displayErrorMessage( String msg )

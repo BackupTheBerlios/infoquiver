@@ -116,12 +116,6 @@ dbprops.idMethod = $dbprops.get("idMethod")
         #end
       #end
     #end
-
-	## BEGIN IBASEWEBSERVICE GENERATION
-    ##set ( $fname = "IBaseWebService.java" )
-    ##set ( $path = "net/sf/iquiver/remote/soap/$fname" )
-      ##$generator.parse("remote/IBaseWebService.vm",$path);
-	## END IBASEWEBSERVICE GENERATION
 	
   #end
 #end

@@ -224,6 +224,9 @@
         <foreign-key foreignTable="iq_content_source">
             <reference local="CONTENT_SOURCE_ID" foreign="CONTENT_SOURCE_ID" />
         </foreign-key>   
+        <foreign-key foreignTable="iq_content_type">
+            <reference local="CONTENT_TYPE_ID" foreign="CONTENT_TYPE_ID" />
+        </foreign-key>           
         <index name="IQ_CONTENT_TYPE_FKI">
             <index-column name="CONTENT_TYPE_ID"/>
         </index>                

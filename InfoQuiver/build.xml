@@ -22,14 +22,6 @@
 
 	</path>
 
-	<taskdef name="java2wsdl" classname="org.apache.axis.tools.ant.wsdl.Java2WsdlAntTask" classpath="${compile.dir}">
-		<classpath refid="compile.classpath" />
-	</taskdef>
-
-	<taskdef name="wsdl2java" classname="org.apache.axis.tools.ant.wsdl.Wsdl2javaAntTask" classpath="${compile.dir}">
-		<classpath refid="compile.classpath" />
-	</taskdef>
-
 	<taskdef name="package2path" classname="org.apache.torque.task.PackageAsPathTask" classpath="${compile.dir}">
 		<classpath refid="compile.classpath" />
 	</taskdef>
@@ -134,59 +126,6 @@
 		<ant antfile="build-torque.xml" target="insert-sql" inheritAll="false" />
 	</target>
 
-
-	<!-- ================================================================================================= -->
-	<target name="generate_soap_skeleton" description="Creates SOAP stubs and skeletons for server and client">
-		<java2wsdl bindingname="IQuiverSoapBinding" 
-            classname="net.sf.iquiver.remote.soap.IWebService"
-            location="http://localhost:8080/simpleservice/services/IQuiver"
-            namespace="http://iquiver"
-            output="${torque.schema.dir}/iquiver.wsdl"
-            porttypename="IQuiver"
-            stopclasses="java.*,javax.*,org.apache.torque.*">
-			<!-- <mapping namespace="http://iquiver" package="net.sf.iquiver.remote.soap.impl" /> -->
-            <mapping namespace="http://iquiver" package="net.sf.iquiver" />
-            <!--
-            <mapping namespace="http://iquiver.om" package="net.sf.iquiver.om" />
-            <mapping namespace="http://iquiver.om.cache" package="net.sf.iquiver.om.cache" />
-            <mapping namespace="http://iquiver.util.om" package="net.sf.iquiver.util.om" />
-            <mapping namespace="http://iquiver.torque.om" package="org.apache.torque.om" />
-            <mapping namespace="http://iquiver.torque.util" package="org.apache.torque.util" />            
-            -->
-		</java2wsdl>
-        
-		<ant target="awk" inheritAll="false">
-			<property name="awk.scriptfile" value="src/awk/wsdl.awk" />
-			<property name="awk.targetfile" value="${torque.schema.dir}/iquiver.wsdl" />
-		</ant>
-        
-		<!--
-        <package2path name="soapPackagePath" package="${remote.soap.pkg}.impl" />
-		<echo message="Using path: ${soapPackagePath}" />
-        -->
-
-        <wsdl2java debug="false" 
-            helperGen="false" 
-            noimports="false" 
-            output="src/tmp" 
-            url="${torque.schema.dir}/iquiver.wsdl" 
-            skeletondeploy="true"
-            serverside="true"
-            verbose="true">
-	            <mapping namespace="http://iquiver-impl" package="${remote.soap.pkg}.impl"/>
-	            <mapping namespace="http://iquiver-intf" package="${remote.soap.pkg}.impl"/>
-	            <mapping namespace="http://iquiver" package="${remote.soap.pkg}.impl"/>
-                <!--
-                <mapping namespace="http://iquiver.om" package="${remote.soap.pkg}.impl.om" />
-                <mapping namespace="http://iquiver.om.cache" package="${remote.soap.pkg}.impl.om.cache" />
-                <mapping namespace="http://iquiver.util.om" package="${remote.soap.pkg}.impl.util.om" />
-                <mapping namespace="http://iquiver.torque.om" package="${remote.soap.pkg}.impl.torque.om" />
-                <mapping namespace="http://iquiver.torque.util" package="${remote.soap.pkg}.impl.torque.util" />            
-                <mapping namespace="http://xml.apache.org/xml-soap" package="${remote.soap.pkg}.impl.xml_soap" />                                            
-                -->
-            </wsdl2java>
-
-	</target>
 
 	<!-- ================================================================================================= -->
 	<target name="awk-direct" description="exec awk with direct script command">
