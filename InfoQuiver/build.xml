@@ -21,6 +21,10 @@
     </fileset>
 
   </path>
+    
+  <taskdef name="java2wsdl" classname="org.apache.axis.tools.ant.wsdl.Java2WsdlAntTask" classpath="${compile.dir}">
+        <classpath refid="compile.classpath"/>
+  </taskdef>
 
 <!-- ================================================================================================= -->
   <target name="prepare">
@@ -135,4 +139,19 @@
 		</ant>
 		<ant antfile="build-torque.xml" target="insert-sql" inheritAll="false"/>
 	</target>	
+    
+
+<!-- ================================================================================================= -->    
+    <target name="generate_soap_skeleton" description="Creates SOAP stubs and skeletons for server and client">
+        <java2wsdl bindingname="IQuiverSoapBinding"
+            classname="net.sf.iquiver.remote.soap.IWebService"
+            location="http://localhost:8080/simpleservice/services/IQuiver"
+            namespace="http://iquiver"
+            output="iquiver.wsdl"
+            porttypename="IQuiver"            
+            stopclasses="java.*,javax.*,"
+            useinheritedmethods="false">
+            <mapping namespace="http://iquiver" package="net.sf.iquiver.remote.soap"/>
+        </java2wsdl>
+    </target>
 </project>
