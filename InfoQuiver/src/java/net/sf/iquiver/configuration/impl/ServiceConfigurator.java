@@ -56,6 +56,7 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
         _timers = new ArrayList();
         _services = new ArrayList();
         String nextKey = null;
+        Date today = new Date();
 
         for (Iterator it = config.getKeys(); it.hasNext();)
         {
@@ -86,9 +87,12 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
             }
 
             //SCHEDULING REQUIRED?
-            if (!autostart && schedule != null)
+            if (schedule != null && schedule.length > 0)
             {
-                if (schedule.length == 2)
+                long now = System.currentTimeMillis();
+                Date date = null;                
+                
+                if( schedule.length > 1)
                 {
                     period = schedule[1];
                 }
@@ -104,45 +108,52 @@ public class ServiceConfigurator implements Reconfigurable, Disposable
                     else if (period.equalsIgnoreCase( "EVERY" ))
                     {
                         df.applyPattern( "HH:mm:ss" );
-                        Date date = df.parse( schedule[0] );
-                        long now = System.currentTimeMillis();
+                        date = df.parse( schedule[0] );
                         long start = date.getHours() * 60 * 60 * 1000;
                         start += date.getMinutes() * 60 * 1000;
                         start += date.getSeconds() * 1000;
-                        startTime = start + now;
+                        startTime = now;
                         schedulePeriod = start;
                     }
                     else if (period.equalsIgnoreCase( "DAYLY" ))
                     {
                         df.applyPattern( "HH:mm:ss" );
-                        startTime = df.parse( schedule[0] ).getTime();
+                        date = df.parse( schedule[0] );
+                        date.setYear(today.getYear());
+                        date.setMonth(today.getMonth());
+                        date.setDate(today.getDate());
+                        startTime = date.getTime();
                         schedulePeriod = 24 * 60 * 60 * 1000;
                     }
                     else if (period.equalsIgnoreCase( "WEEKLY" ))
                     {
                         df.applyPattern( "EEE, HH:mm:ss" );
-                        startTime = df.parse( schedule[0] ).getTime();
+                        date = df.parse( schedule[0] );
+                        date.setYear(today.getYear());
+                        date.setMonth(today.getMonth());
+                        date.setDate(today.getDate());
+                        startTime = date.getTime();
                         schedulePeriod = 7 * 24 * 60 * 60 * 1000;
                     }
+                    
+                    Timer timer = new Timer();
+                    if (schedulePeriod != -1)
+                    {
+                        timer.scheduleAtFixedRate( new ServiceTask( service, restartOnFailure ), startTime, schedulePeriod );
+                        logger.info("Scheduled service " + currentKey + ". First start: " + new Date(startTime).toLocaleString() + " Then every: " + (schedulePeriod/1000/60) + " minutes" );
+                    }
+                    else
+                    {
+                        timer.schedule( new ServiceTask( service, restartOnFailure ), new Date( startTime ) );
+                        logger.info("Scheduled service for single start" + currentKey + ". Start: " + new Date(startTime).toLocaleString());                    
+                    }
+
+                    _timers.add( timer );                    
                 }
                 catch ( ParseException e )
                 {
-                    logger.error( "Error while parsing start time for service " + clazz, e );
+                    logger.error( "Error while parsing start time for service " + clazz + "! The service will not be scheduled, please review your configuration.", e );
                 }
-
-                Timer timer = new Timer();
-                if (schedulePeriod != -1)
-                {
-                    timer.scheduleAtFixedRate( new ServiceTask( service, restartOnFailure ), startTime, schedulePeriod );
-                    logger.info("Scheduled service " + currentKey + ". First start: " + new Date(startTime).toLocaleString() + " Then every: " + (schedulePeriod * 1000 * 60) + "minutes" );
-                }
-                else
-                {
-                    timer.schedule( new ServiceTask( service, restartOnFailure ), new Date( startTime ) );
-                    logger.info("Scheduled service for single start" + currentKey + ". Start: " + new Date(startTime).toLocaleString());                    
-                }
-
-                _timers.add( timer );
             }
             //NO SCHEDULING REQUIRED, START SERVICE IMMEDIATELY BUT ONLY ONCE
             else if (autostart)
