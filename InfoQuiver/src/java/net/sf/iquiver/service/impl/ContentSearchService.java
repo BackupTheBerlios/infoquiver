@@ -1,10 +1,6 @@
-/*********************************************************************
- * ContentSearchService.java
- * created on 15.07.2004 by netseeker
- * $Source: ContentSearchService.java//RCS/295,v
- * $Date: 2003/07/24 19:27:21
- * $Revision: 1.14
-*********************************************************************/
+/*
+ * Created on 15.07.2004
+ */
 package net.sf.iquiver.service.impl;
 
 import java.util.Iterator;
