@@ -27,6 +27,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.torque.TorqueException;
 
 /**
+ * A transport for retrieving documents via HTTP
  * @author netseeker aka Michael Manske
  */
 public class HTTPTransport implements Fetcher
