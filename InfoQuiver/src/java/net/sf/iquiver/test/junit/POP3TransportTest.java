@@ -37,7 +37,10 @@ public class POP3TransportTest extends BaseIQuiverTestCase
         {
             transport.setFetchLocation(source);
             List list = transport.fetch();
-            Document doc = (Document)list.get(0);            
+            assertNotNull( list );
+            assertFalse( list.isEmpty() );           
+            Document doc = (Document)list.get(0);
+            assertNotNull( doc.getRawContent() );                                         
         }
         catch ( TransportConfigurationException e1 )
         {

@@ -24,6 +24,9 @@ public class QueryTaskTest extends BaseIQuiverTestCase
             List docs = QueryTask.search( indexDirectory, "torque AND cache" );
             assertNotNull( docs );
             assertFalse( docs.isEmpty() );
+            
+            docs = QueryTask.search( indexDirectory, "schubidu AND lalelu" );
+            assertTrue( docs.isEmpty() );            
         }
         catch ( IOException e )
         {

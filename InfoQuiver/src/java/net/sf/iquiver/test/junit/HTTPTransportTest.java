@@ -51,7 +51,10 @@ public class HTTPTransportTest extends BaseIQuiverTestCase
             Document doc = (Document)list.get(0);            
             transport.setFetchLocation(sourcePdf);
             list = transport.fetch();
+            assertNotNull( list );
+            assertFalse( list.isEmpty() );           
             doc = (Document)list.get(0);
+            assertNotNull( doc.getRawContent() );
         }
         catch ( TransportConfigurationException e1 )
         {

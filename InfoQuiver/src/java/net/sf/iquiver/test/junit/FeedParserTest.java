@@ -27,9 +27,9 @@ public class FeedParserTest extends BaseIQuiverTestCase
             DataInputStream input = new DataInputStream(connection.getInputStream());
             Document doc = parser.parse( IOUtils.toByteArray( input ) );
             input.close();
-            System.out.println( doc.getRawContent() );
+            assertNotNull( doc.getRawContent() );
             String stripped = parser.getStripped( doc.getRawContent() );
-            System.out.println( stripped );
+            assertNotNull( stripped );
         }
         catch ( Exception e )
         {
@@ -46,9 +46,9 @@ public class FeedParserTest extends BaseIQuiverTestCase
             DataInputStream input = new DataInputStream(connection.getInputStream());
             Document doc = parser.parse( IOUtils.toByteArray( input ) );
             input.close();
-            System.out.println( doc.getRawContent() );
+            assertNotNull( doc.getRawContent() );
             String stripped = parser.getStripped( doc.getRawContent() );
-            System.out.println( stripped );
+            assertNotNull( stripped );
         }
         catch ( Exception e )
         {
@@ -64,10 +64,9 @@ public class FeedParserTest extends BaseIQuiverTestCase
             DataInputStream input = new DataInputStream(connection.getInputStream());
             Document doc = parser.parse( IOUtils.toByteArray( input ) );
             input.close();
-            System.out.println(doc.getRawContent());
+            assertNotNull( doc.getRawContent() );
             String stripped = parser.getStripped( doc.getRawContent() );
-            System.out.println( stripped );
-            
+            assertNotNull( stripped );
         }
         catch ( Exception e )
         {
@@ -83,9 +82,9 @@ public class FeedParserTest extends BaseIQuiverTestCase
             DataInputStream input = new DataInputStream(connection.getInputStream());
             Document doc = parser.parse( IOUtils.toByteArray( input ) );
             input.close();
-            System.out.println( doc.getRawContent() );
+            assertNotNull( doc.getRawContent() );
             String stripped = parser.getStripped( doc.getRawContent() );
-            System.out.println( stripped );
+            assertNotNull( stripped );
         }
         catch ( Exception e )
         {

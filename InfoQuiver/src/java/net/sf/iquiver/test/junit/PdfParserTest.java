@@ -31,8 +31,9 @@ public class PdfParserTest extends BaseIQuiverTestCase
             URLConnection connection = url.openConnection();
             DataInputStream input = new DataInputStream(connection.getInputStream());
             Document doc = parser.parse( IOUtils.toByteArray( input ) );
-            input.close();
-            System.out.println(doc.getRawContent());
+            assertNotNull( doc.getRawContent() );
+            String stripped = parser.getStripped( doc.getRawContent() );
+            assertNotNull( stripped );
         }
         catch ( Exception e )
         {

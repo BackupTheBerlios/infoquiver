@@ -32,7 +32,9 @@ public class HtmlParserTest extends BaseIQuiverTestCase
             DataInputStream input = new DataInputStream(connection.getInputStream());
             Document doc = parser.parse( IOUtils.toByteArray( input ) );
             input.close();
-            System.out.println(doc.getRawContent());
+            assertNotNull( doc.getRawContent() );
+            String stripped = parser.getStripped( doc.getRawContent() );
+            assertNotNull( stripped );
         }
         catch ( Exception e )
         {
