@@ -3,12 +3,6 @@
  */
 package net.sf.iquiver.parser.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
 import net.sf.iquiver.metaformat.Document;
@@ -17,8 +11,8 @@ import net.sf.iquiver.metaformat.impl.DefaultDocument;
 import net.sf.iquiver.parser.Parser;
 import net.sf.iquiver.parser.ParsingException;
 
-import org.dom4j.io.HTMLWriter;
-import org.dom4j.io.SAXReader;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author netseeker aka Michael Manske
@@ -70,14 +64,10 @@ public class RawXmlParser extends Parser
         {
             try
             {
-                SAXReader reader = new SAXReader();
-                StringWriter sw = new StringWriter();
-                HTMLWriter writer = new HTMLWriter( sw );
-                org.dom4j.Document doc = reader
-                        .read( new BufferedInputStream( new ByteArrayInputStream( rawContent ) ) );
-                writer.write( doc );
-                writer.flush();
-                result = new HtmlParser().getStripped( sw.toString().getBytes() );
+                result = new String( rawContent ).replaceAll("</[^</]+>" , "\n" );
+                result = result.replaceAll("<", "");
+                result = result.replaceAll("/>", "\n");
+                result = result.replaceAll(">", "\n");
             }
             catch ( Exception e )
             {
