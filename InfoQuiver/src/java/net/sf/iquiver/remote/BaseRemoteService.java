@@ -39,11 +39,12 @@ public abstract class BaseRemoteService
     }
     
     /**
+     * @param sessionId
      * @param objectType
      * @param key
      * @return
      */
-    public String retrieveByPk( String objectType, String key )
+    public String retrieveByPk( String sessionId, String objectType, String key )
     {
         ComboKey keyObject = (ComboKey)ObjectSerializer.xmlToObject( key );
         Object resultObject = null;
@@ -68,11 +69,12 @@ public abstract class BaseRemoteService
     }
     
     /**
+     * @param sessionId
      * @param objectType
      * @param keys
      * @return
      */
-    public String retrieveByPks( String objectType, String keys )
+    public String retrieveByPks( String sessionId, String objectType, String keys )
     {        
         Object resultObject = null;
         List keyObjects = (List)ObjectSerializer.xmlToObject( keys );
@@ -97,11 +99,12 @@ public abstract class BaseRemoteService
     }
     
     /**
+     * @param sessionId
      * @param objectType
      * @param criteria
      * @return
      */
-    public String doSelect( String objectType, String criteria )
+    public String doSelect( String sessionId, String objectType, String criteria )
     {
         Object resultObject = null;
         SimpleCriteria crit = (SimpleCriteria)ObjectSerializer.xmlToObject( criteria );
@@ -126,10 +129,11 @@ public abstract class BaseRemoteService
     }
     
     /**
+     * @param sessionId
      * @param objectType
      * @param object
      */
-    public void doDelete( String objectType, String object )
+    public void doDelete( String sessionId, String objectType, String object )
     {
         Object obj = ObjectSerializer.xmlToObject( object );        
         
@@ -144,5 +148,5 @@ public abstract class BaseRemoteService
         {
             throw new RemoteException( e );
         }        
-    }
+    }    
 }
