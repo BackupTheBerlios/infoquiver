@@ -28,6 +28,40 @@
             </p>
         </p>
       </subsection>
+      <subsection name="Does the POP3Transport include support for spam filtering?">
+        <p>
+            No, InfoQuiver doesn't include support for spam filtering itself. However you can use
+            a spam filter which includes a "POP3 Proxy", eg. <a href="http://spambayes.sourceforge.net/">SpamBayes</a>.
+            Such a proxy acts as local POP3 client + server, so you have to set up the proxy as client for the
+            targeted POP3 inbox and then configure the POP3 transport attributes in InfoQuiver to use "localhost" as POP3 Server.
+        </p>
+      </subsection>
+      <subsection name="I would like to use format xyz, but InfoQuiver doesn't provide a adequate parser. What can i do?">
+        <p>
+            In such a case there are two options:
+            <ol>
+                <li>Write your own parser, see <a href="extend/extend.html">the extension guide</a></li>
+                <li>If there exists an application which is able to parse format xyz and output the result 
+                    to your systems standard output, you can use InfoQuivers DelegateParser to invoke that application,
+                    all you need to do is to add an content type for your information source, set up DelegateParser as parser
+                    for this content type and insert the command used for invoking the external application in the "Parser arguments"
+                    field.                    
+                </li>
+            </ol>
+        </p>
+      </subsection>
+      <subsection name="I would like to use protocoll xyz to fetch a content source, but InfoQuiver doesn't provide a adequate transport. What can i do?">
+        <p>
+            <ol>
+                <li>You could write your own transport, see <a href="extend/extend.html">the extension guide</a></li>
+                <li>If there exists an application which is able to fetch information via protocol xyz and output the result 
+                    to your systems standard output, you can use InfoQuivers DelegateTransport to invoke that application.<br/>
+                    If the application can output the content only to the filesystem you could schedule the application outside of
+                    InfoQuiver, eg. via cron or at task, and use InfoQuivers FSTransport to get the contents into InfoQuiver.
+                </li>
+            </ol>
+        </p>
+      </subsection>
     </section>
   </body>
 </document>

@@ -282,6 +282,7 @@
         <column name="CONTENT_TYPE_NAME" required="true" type="VARCHAR" size="32"/>
         <column name="CONTENT_TYPE_DESC" type="VARCHAR" size="255"/>
         <column name="CONTENT_PARSER_ID" type="INTEGER" required="true"/>
+        <column name="CONTENT_PARSER_ARGS" type="VARCHAR" size="255"/>
         <foreign-key foreignTable="iq_content_parser">
             <reference local="CONTENT_PARSER_ID" foreign="CONTENT_PARSER_ID" />
         </foreign-key>                
