@@ -3,6 +3,9 @@
  */
 package net.sf.iquiver.util;
 
+import java.util.Iterator;
+import java.util.List;
+
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
@@ -53,4 +56,53 @@ public class ObjectSerializer
         return xstream.fromXML( xml );
     }
     
+    /**
+     * Converts an instance of net.sf.iquiver.util.Introspectable into an xml representation
+     * @param obj the object to convert to xml string
+     * @return a string containing the xml represantation of <code>obj</code>
+     */
+    public static String objectToXmlString( Introspectable obj )
+    {
+        List fieldNames = obj.getMemberNames();
+        StringBuffer sb = new StringBuffer();
+        String[] nameTokens = obj.getClass().getName().split(".");        
+        
+        sb.append("<");
+        sb.append( nameTokens[ nameTokens.length - 2 ] );
+        sb.append(">");
+        
+        for( Iterator it = fieldNames.iterator(); it.hasNext(); )
+        {
+            String name = (String)it.next();
+            appendXmlIfNotNull( sb, name, obj.getMemberValueByName( name ) );
+        }
+        
+        sb.append("</");
+        sb.append( nameTokens[ nameTokens.length - 2 ] );
+        sb.append(">");    
+
+        return sb.toString();
+    }
+    
+    
+    
+    private static void appendXmlIfNotNull( StringBuffer sb, String name, Object value )
+    {
+        sb.append( "<" );
+        sb.append( name );
+        if (value != null)
+        {
+            sb.append( ">" );
+            sb.append( value );
+            sb.append( "</" );
+            sb.append( name );
+            sb.append( ">" );
+        }
+        else
+        {
+            sb.append( "/>" );
+        }
+
+        sb.append( "\n" );
+    }    
 }
