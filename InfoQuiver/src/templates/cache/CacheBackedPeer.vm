@@ -926,5 +926,40 @@ public abstract class CacheBacked${table.JavaName}Peer
 		{
 			addObjectToCache(obj.getPrimaryKey(), obj);		
 		}
-	}		
+	}
+	
+    /**
+     * Updates an $table.JavaName obj in the database<br>
+     * As the case may be this method will add the fetched object to the cache (insert)<br>
+     * or updates the object in the cache (update)
+     * @param obj
+     * @throws TorqueException
+     */
+	public static void doUpdate($table.JavaName obj) throws TorqueException
+	{		
+		removeObjectFromCache(obj.getPrimaryKey());
+		${package}.$basePrefix${table.JavaName}Peer.doUpdate(obj);
+		if(obj != null)
+		{
+			addObjectToCache(obj.getPrimaryKey(), obj);		
+		}
+	}	
+
+    /**
+     * Updates an $table.JavaName obj in the database<br>
+     * As the case may be this method will add the fetched object to the cache (insert)<br>
+     * or updates the object in the cache (update)<br>
+     * This method uses a existing Transaction                    
+     * @param obj
+     * @throws TorqueException
+     */
+	public static void doUpdate($table.JavaName obj, Connection con) throws TorqueException
+	{
+		removeObjectFromCache(obj.getPrimaryKey());
+		${package}.$basePrefix${table.JavaName}Peer.doUpdate(obj, con);
+		if(obj != null)
+		{
+			addObjectToCache(obj.getPrimaryKey(), obj);		
+		}
+	}			
 }
