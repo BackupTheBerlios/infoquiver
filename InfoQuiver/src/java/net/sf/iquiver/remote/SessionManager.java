@@ -9,7 +9,6 @@ import net.sf.iquiver.service.BaseService;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 
 /**
  * @author netseeker aka Michael Manske
@@ -21,26 +20,31 @@ public class SessionManager extends BaseService
      */
     private static final Log logger = LogFactory.getLog(SessionManager.class);
     
+    /**
+     * Default session timeout in milliseconds
+     */
+    public static final long DEFAULT_SESSION_TIMEOUT_MILLIS = 900000;
+    
+    /**
+     * Default supported max. amount of concurrent sessions 
+     */
+    public static final int DEFAULT_MAX_SESSIONS = 10;
+    
     private int restartCount = -1;
     private long startTime;
     private boolean isRunning = false; 
-    private GenericKeyedObjectPool sessions;
+    private SessionPool sessions;
     private long idCounter = 0;
-    /**
-     * session timeout, default is 15 min
-     */
-    private long timeout = 900000;
-    
-    /**
-     * max. supported amount of concurrent sessions, default is 10
-     */
-    private int maxSessions = 10;
+    private long timeout;
+    private int maxSessions;
     
     /**
      * Constructs a new instance of SessionManager with default values for session timeout and max active sessions
      */
     public SessionManager()
-    {       
+    {
+        timeout = DEFAULT_SESSION_TIMEOUT_MILLIS;
+        maxSessions = DEFAULT_MAX_SESSIONS;
     }
     
     /**
@@ -76,7 +80,7 @@ public class SessionManager extends BaseService
     public void start() throws Exception
     {
         logger.info("Starting Session Manager");
-        sessions = new GenericKeyedObjectPool(new SessionPoolFactory(this.timeout));
+        sessions = new SessionPool(new SessionPoolFactory(this.timeout), maxSessions, timeout);
         isRunning = true;
     }
 
@@ -105,7 +109,7 @@ public class SessionManager extends BaseService
        
         try
         {
-            sessions.addObject(uid);
+            sessions.addSession(uid);
         }
         catch ( Exception e )
         {
@@ -115,11 +119,15 @@ public class SessionManager extends BaseService
         return uid;
     }
     
+    /**
+     * @param id
+     * @return
+     */
     public synchronized Session getSession(String id)
     {
         try
         {
-            return (Session) sessions.borrowObject(id);
+            return (Session) sessions.getSession(id);
         }
         catch ( Exception e )
         {

@@ -35,9 +35,9 @@ public class SessionPoolFactory implements KeyedPoolableObjectFactory
     /* (non-Javadoc)
      * @see org.apache.commons.pool.KeyedPoolableObjectFactory#destroyObject(java.lang.Object, java.lang.Object)
      */
-    public void destroyObject( Object key, Object session ) throws Exception
+    public void destroyObject( Object key, Object session )  throws Exception
     {
-        
+        session = null;
     }
 
     /* (non-Javadoc)
