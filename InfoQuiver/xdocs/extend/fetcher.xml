@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <document>
   <properties>
-    <title>Creating Custom Tranports :: Fetcher</title>
+    <title>Creating Custom Tranports :: Fetcher Transports</title>
     <author email="netseeker@manskes.de">Michael Manske</author>
   </properties>
   <body>
-    <section name="Fetcher">
+    <section name="Fetcher Transports">
         <p>
             In this guide you will learn how to create your own custom fetcher transport. The ready to use
             sample class used in this guide comes with the default InfoQuiver distribution.
