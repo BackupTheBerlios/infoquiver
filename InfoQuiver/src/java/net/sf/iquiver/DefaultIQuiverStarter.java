@@ -11,12 +11,12 @@ import net.sf.iquiver.configuration.ConfigurationConstants;
 import net.sf.iquiver.configuration.impl.DefaultProperiesConfiguration;
 
 import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.PosixParser;
 
 /**
  * @author netseeker aka Michael Manske
@@ -32,7 +32,7 @@ public class DefaultIQuiverStarter
             createOptions();
         }
 
-        CommandLineParser parser = new PosixParser();
+        CommandLineParser parser = new BasicParser();
 
         try
         {
