@@ -60,7 +60,7 @@ public class LoginPanelBuilder extends AdminPanelBuilder
         });
 
         FormLayout layout = new FormLayout( "pref, 4dlu, 75dlu, 4dlu, pref", "pref, 2dlu, pref, 2dlu, pref, 2dlu, pref" );
-        PanelBuilder builder = new PanelBuilder( panel, layout );
+        PanelBuilder builder = new PanelBuilder( layout );
         CellConstraints cc = new CellConstraints();
         
         builder.add(lbl_msg, cc.xywh( 1, 3, 3, 1));
