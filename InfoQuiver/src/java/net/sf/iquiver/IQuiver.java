@@ -36,7 +36,7 @@ public class IQuiver extends Thread implements Disposable, Configurable, Startab
     /**
      * The one and only version information
      */
-    public static final String VERSION = "0.1.0";
+    public static final String VERSION = "0.9.0";
 
     /**
      * temporarily storage for all kinds of application wide variables and objects
