@@ -66,20 +66,20 @@ public abstract class CacheBacked${table.JavaName}Peer
 	static
 	{
 		logger = LogFactory.getLog(CacheBacked${table.JavaName}Peer.class);
-		CACHE_KEY = "${targetDBOPackage}.torque.${databaseName}.om.${table.JavaName}";
+		CACHE_KEY = "${package}.om.${table.JavaName}";
 		useCache = false;
 		clear_crit = new Criteria();
 
 		if(CacheBackedPeer.isEnabledAtStartup())
 		{
-    		if(CacheBackedPeer.getExcludeEnableAtStartUp() != null && !ArrayUtil.containsMatchingRegExString(CacheBackedPeer.getExcludeEnableAtStartUp(), "de.dat.u3.db.dbo.torque.cd.om.${table.JavaName}Peer"))
+    		if(CacheBackedPeer.getExcludeEnableAtStartUp() != null && !ArrayUtil.containsMatchingRegExString(CacheBackedPeer.getExcludeEnableAtStartUp(), "${package}.${table.JavaName}Peer"))
     		{
 				enableCache(true);
         	    if(CacheBackedPeer.isEnableCacheForCriteriaSelects())
         	    {
         	    	if(CacheBackedPeer.getExcludeEnableCacheForCriteriaSelects() != null)
     				{
-    					enableCacheForCriteriaSelects(!ArrayUtil.containsMatchingRegExString(CacheBackedPeer.getExcludeEnableCacheForCriteriaSelects(), "de.dat.u3.db.dbo.torque.cd.om.${table.JavaName}Peer"));
+    					enableCacheForCriteriaSelects(!ArrayUtil.containsMatchingRegExString(CacheBackedPeer.getExcludeEnableCacheForCriteriaSelects(), "${package}.${table.JavaName}Peer"));
     				}
     				else
     				{
