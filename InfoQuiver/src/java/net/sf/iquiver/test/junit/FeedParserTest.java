@@ -3,10 +3,14 @@
  */
 package net.sf.iquiver.test.junit;
 
+import java.io.DataInputStream;
+import java.net.URL;
+import java.net.URLConnection;
+
 import net.sf.iquiver.metaformat.Document;
-import net.sf.iquiver.om.Content;
-import net.sf.iquiver.om.ContentPeer;
 import net.sf.iquiver.parser.impl.FeedParser;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * @author netseeker aka Michael Manske
@@ -19,9 +23,13 @@ public class FeedParserTest extends BaseIQuiverTestCase
     {
         try
         {
-            Content content = ContentPeer.retrieveByPK(1001);
-            Document doc = parser.parse( content );
-            System.out.println(doc.getRawContent());
+            URLConnection connection = openConnection(new URL( "http://www.golem.de/rss.php?tp=inet&feed=RSS0.91" ));
+            DataInputStream input = new DataInputStream(connection.getInputStream());
+            Document doc = parser.parse( IOUtils.toByteArray( input ) );
+            input.close();
+            System.out.println( doc.getRawContent() );
+            String stripped = parser.getStripped( doc.getRawContent() );
+            System.out.println( stripped );
         }
         catch ( Exception e )
         {
@@ -34,9 +42,13 @@ public class FeedParserTest extends BaseIQuiverTestCase
     {
         try
         {
-            Content content = ContentPeer.retrieveByPK(1001);
-            Document doc = parser.parse( content );
-            System.out.println(doc.getRawContent());
+            URLConnection connection = openConnection(new URL( "http://www.golem.de/rss.php?tp=inet&feed=RSS1.0" ));
+            DataInputStream input = new DataInputStream(connection.getInputStream());
+            Document doc = parser.parse( IOUtils.toByteArray( input ) );
+            input.close();
+            System.out.println( doc.getRawContent() );
+            String stripped = parser.getStripped( doc.getRawContent() );
+            System.out.println( stripped );
         }
         catch ( Exception e )
         {
@@ -48,9 +60,14 @@ public class FeedParserTest extends BaseIQuiverTestCase
     {
         try
         {
-            Content content = ContentPeer.retrieveByPK(1001);
-            Document doc = parser.parse( content );
+            URLConnection connection = openConnection(new URL( "http://www.golem.de/rss.php?tp=inet&feed=RSS2.0" ));
+            DataInputStream input = new DataInputStream(connection.getInputStream());
+            Document doc = parser.parse( IOUtils.toByteArray( input ) );
+            input.close();
             System.out.println(doc.getRawContent());
+            String stripped = parser.getStripped( doc.getRawContent() );
+            System.out.println( stripped );
+            
         }
         catch ( Exception e )
         {
@@ -61,29 +78,18 @@ public class FeedParserTest extends BaseIQuiverTestCase
     public void testATOM_03()
     {
         try
-        {
-            Content content = ContentPeer.retrieveByPK(1001);
-            Document doc = parser.parse( content );
-            System.out.println(doc.getRawContent());
+        {            
+            URLConnection connection = openConnection(new URL( "http://www.golem.de/rss.php?tp=inet&feed=ATOM0.3" ));
+            DataInputStream input = new DataInputStream(connection.getInputStream());
+            Document doc = parser.parse( IOUtils.toByteArray( input ) );
+            input.close();
+            System.out.println( doc.getRawContent() );
+            String stripped = parser.getStripped( doc.getRawContent() );
+            System.out.println( stripped );
         }
         catch ( Exception e )
         {
             e.printStackTrace();
         }        
-    }
-
-    public void testOPML_10()
-    {
-        try
-        {
-            Content content = ContentPeer.retrieveByPK(1001);
-            Document doc = parser.parse( content );
-            System.out.println(doc.getRawContent());
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
-        }        
-    }
-    
+    }    
 }

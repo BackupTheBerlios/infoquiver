@@ -3,11 +3,14 @@
  */
 package net.sf.iquiver.test.junit;
 
-import java.io.IOException;
+import java.io.DataInputStream;
 import java.net.URL;
+import java.net.URLConnection;
 
-import de.nava.informa.core.ParseException;
-import de.nava.informa.parsers.OPMLParser;
+import net.sf.iquiver.metaformat.Document;
+import net.sf.iquiver.parser.impl.OpmlParser;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * @author netseeker aka Michael Manske
@@ -18,15 +21,18 @@ public class OpmlParserTest extends BaseIQuiverTestCase
     {
         try
         {
-            OPMLParser.parse(new URL("http://www.golem.de/rss.php?tp=inet&feed=OPML"));
+            OpmlParser parser = new OpmlParser();
+            URLConnection connection = openConnection( new URL( "http://www.golem.de/rss.php?tp=inet&feed=OPML" ) );
+            DataInputStream input = new DataInputStream( connection.getInputStream() );
+            Document doc = parser.parse( IOUtils.toByteArray( input ) );
+            input.close();
+            System.out.println( doc.getRawContent() );
+            String stripped = parser.getStripped( doc.getRawContent() );
+            System.out.println( stripped );
         }
-        catch ( IOException e )
+        catch ( Exception e )
         {
             e.printStackTrace();
         }
-        catch ( ParseException e )
-        {
-            e.printStackTrace();
-        }        
     }
 }

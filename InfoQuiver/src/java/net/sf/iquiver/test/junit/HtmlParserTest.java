@@ -3,10 +3,14 @@
  */
 package net.sf.iquiver.test.junit;
 
+import java.io.DataInputStream;
+import java.net.URL;
+import java.net.URLConnection;
+
 import net.sf.iquiver.metaformat.Document;
-import net.sf.iquiver.om.Content;
-import net.sf.iquiver.om.ContentPeer;
 import net.sf.iquiver.parser.impl.HtmlParser;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * @author netseeker aka Michael Manske
@@ -23,8 +27,11 @@ public class HtmlParserTest extends BaseIQuiverTestCase
         
         try
         {
-            Content content = ContentPeer.retrieveByPK(1001);
-            Document doc = parser.parse( content );
+            URL url = new URL( "http://www.manskes.de/iquiver/" );
+            URLConnection connection = url.openConnection();
+            DataInputStream input = new DataInputStream(connection.getInputStream());
+            Document doc = parser.parse( IOUtils.toByteArray( input ) );
+            input.close();
             System.out.println(doc.getRawContent());
         }
         catch ( Exception e )
